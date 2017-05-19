@@ -10,6 +10,10 @@ Webcam::Webcam()
 }
 void Webcam::runWebCam(){
 
+    // Variables initial of matching template
+    int xInit=0;
+    int yInit=0;
+
     VideoCapture cap(0); // open the default camera
     if(!cap.isOpened())  // check if we succeeded
     {
@@ -44,7 +48,7 @@ void Webcam::runWebCam(){
     Mat frame;         // frame Mat
     while (waitKey(10)<0)
     {
-        this->active_=true;
+
         if (cap.read(frame)) // get a new frame from camera
         {
 
@@ -100,8 +104,17 @@ void Webcam::runWebCam(){
             cvtColor(normResultImage,normResultImage,CV_GRAY2RGB);
             // Draw a red square
             rectangle(normResultImage,Rect(maxLoc.x,maxLoc.y,3,3),Scalar( 0, 0, 1),2,8,0);
-            setxPostion(maxLoc.x);
-            setyPostion(maxLoc.y);
+            if (firstPassage_==true){
+                active_=true;
+                firstPassage_=false;
+                xInit=maxLoc.x;
+                yInit=maxLoc.y;
+                 qDebug()<<"xpos= "<<xInit<<" et ypos=  "<<yInit;
+            }
+            setxPostion(maxLoc.x-xInit);
+            setyPostion(maxLoc.y-yInit);
+
+           // qDebug()<<"xpos= "<<xPosition_<<" et ypos=  "<<yPosition_;
             // Show image
           //  imshow("matchTemplate result",normResultImage);
 
@@ -113,6 +126,7 @@ void Webcam::runWebCam(){
 
         }
     }
+ firstPassage_=true;
 }
 
 int Webcam::getxPosition(){
@@ -122,10 +136,10 @@ int Webcam::getyPosition(){
     return yPosition_;
 }
 void Webcam::setxPostion(int x){
-    this->xPosition_=x;
+    xPosition_=x;
 }
 void Webcam::setyPostion(int y){
-    this->yPosition_=y;
+    yPosition_=y;
 }
 
 bool Webcam::getActive(){

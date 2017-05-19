@@ -68,12 +68,13 @@ private:
     void drawLevierBois();
     void drawCorde();
     void drawTrebuchetComplet();
+    void drawGrid();
 
     //Coordonnées de la scène globale
-    int xScene_=-110;
+    int xScene_=-100;
     int yScene_=0;
-    int zScene_=0;
-    int zoomScene_=1;
+    int zScene_=180;
+    int zoomScene_=2;
 
     int xRot;
     int yRot;
@@ -98,6 +99,8 @@ private:
     GLuint levierBois;
     GLuint corde;
     GLuint trebuchetComplet;
+    GLuint grid;
+    GLuint gridPart;
 
     GLUquadric* corde1;
 

@@ -11,6 +11,7 @@
 #include <GL/glu.h>
 #include <QDebug>
 #include <cmath>
+#include "grid.h"
 #include"webcam.h"
 #include"textures.h"
 using namespace std;
@@ -18,7 +19,7 @@ using namespace std;
 MyGLWidget::MyGLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
-    xRot = 0;
+    xRot = 180;
     yRot = -20;
     zRot = 180;
     force = -20;
@@ -52,7 +53,7 @@ void MyGLWidget::setValue()
     if (w->getActive()){
         zRot=w->getxPosition();
         yRot=w->getyPosition();
-        qDebug()<<"x="<<xRot<<" y ="<<zRot;
+        qDebug()<<"x="<<zRot<<" y ="<<yRot;
 
 
         updateGL();
@@ -157,13 +158,9 @@ void MyGLWidget::lancerBoutonClicked()
         */
 
         // ORIENTATION DE LA CAMERA
-        if (zRot<=180)
-        {
-            final_xRot = 180-zRot;
-        } else
-        {
-            final_xRot = 540-zRot; // 540 = 360 + 180
-        }
+
+        final_xRot = 360-zRot;
+
         //qDebug(" - %d - %d", final_xRot, angle);
         while(final_xRot!=angle)
         {
@@ -179,6 +176,7 @@ void MyGLWidget::lancerBoutonClicked()
             if (angle != xRot)
             {
                 xRot = angle;
+                zScene_=angle;
                 emit xRotationChanged(angle);
                 gluDeleteQuadric(corde1);
                 // corde1 = gluNewQuadric();
@@ -230,6 +228,8 @@ void MyGLWidget::lancerBoutonClicked()
             // corde1 = gluNewQuadric();
             updateGL();
 
+
+
             delay(12);
         }
         delay(1000);
@@ -246,6 +246,7 @@ void MyGLWidget::setForce(int angle)
     qNormalizeAngle(angle);
     if (angle != yRot && !lancement_) {
         yRot = angle;
+
         force = angle;
         emit yRotationChanged(angle);
         emit forceChanged(angle);
@@ -261,6 +262,7 @@ void MyGLWidget::setXRotation(int angle) // Zone
     qNormalizeAngle(angle);
     if (angle != xRot) {
         xRot = angle;
+        zScene_ = angle;
         emit xRotationChanged(angle);
 
         gluDeleteQuadric(corde1);
@@ -452,17 +454,21 @@ void MyGLWidget::draw()
 {
     qglColor(Qt::white);
 
+    glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawCorde();
+    drawLevierBois();
     drawBoxBois();
     drawPelouse();
-    drawLevierBois();
-    drawCorde();
+    drawGrid();
     drawTrebuchetComplet();
 
     // Debut affichage
 
 
     glPushMatrix();
-    for (int colonne=-10; colonne<10; colonne++)
+    glTranslatef(0, 10, 0);
+    for (int colonne=12; colonne<8; colonne++)
     {
         for (int ligne=-5; ligne<5; ligne++)
         {
@@ -473,26 +479,52 @@ void MyGLWidget::draw()
         }
     }
 
+    glTranslatef(0, -10, 0);
     glPushMatrix();
-    glRotatef(zRot,0,0,1);
-    glPushMatrix();
-    glScalef(2,2,2);
+        glRotatef(zRot,0,0,1);
+        glPushMatrix();
+        glScalef(2,2,2);
 
-    glCallList(trebuchetComplet);
-    glPopMatrix();
+        glCallList(trebuchetComplet);
 
+        glPopMatrix();
 
-    glDeleteLists(boxBois, 1);
-    glDeleteLists(pelouse, 1);
-    glDeleteLists(levierBois, 1);
-    glDeleteLists(corde, 1);
-    glDeleteLists(trebuchetComplet, 1);
+        glPopMatrix();
 
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
+        //Draw grid
+        glPushMatrix();
+            glRotatef(90,1,0,0);
+            glPushMatrix();
+                glTranslatef(2,0,2);
+                glRotatef(70,0,1,0);
+                glScalef(0.5,0.2,0.75);
+                glCallList(grid);
+        glPopMatrix();
+        glPopMatrix();
 
-    glPopMatrix();
-    glPopMatrix();
+        glPushMatrix();
+
+        glRotatef(90,1,0,0);
+        glPushMatrix();
+        glTranslatef(-2,0,2);
+        glRotatef(110,0,1,0);
+        glScalef(0.5,0.2,0.75);
+        glCallList(grid);
+        glPopMatrix();
+        glPopMatrix();
+        //end Draw grid
+        glDeleteLists(boxBois, 1);
+        glDeleteLists(pelouse, 1);
+        glDeleteLists(levierBois, 1);
+        glDeleteLists(corde, 1);
+        glDeleteLists(trebuchetComplet, 1);
+
+        glDeleteLists(grid, 1);
+
+        glDisable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+
+        glPopMatrix();
 }
 
 void MyGLWidget::drawBoxBois(){
@@ -503,7 +535,8 @@ void MyGLWidget::drawBoxBois(){
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture[0]);
-    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
+
     glDepthMask(GL_TRUE); // disable transparency
     glDisable(GL_DEPTH_TEST);
     glBegin(GL_QUADS);
@@ -590,7 +623,7 @@ void MyGLWidget::drawPelouse(){
     glNewList(pelouse, GL_COMPILE);
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, texture[1]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
@@ -619,7 +652,7 @@ void MyGLWidget::drawLevierBois(){
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture[2]);
-    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
 
     glBegin(GL_QUADS);
     // glNormal3f(0,0,-1);
@@ -891,18 +924,18 @@ void MyGLWidget::drawCorde(){
     glScalef( 1, 1, 0.5);
 
     glPushMatrix();
-    glTranslatef( .5, 0, 2);
-    glRotatef( 35, 0, 1, 0);
-    glScalef( 1, 1, 10);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
-    glScalef( 1, 1, 0.1);
+        glTranslatef( .5, 0, 2);
+        glRotatef( 35, 0, 1, 0);
+        glScalef( 1, 1, 10);
+        gluCylinder(corde1, 1, 1, 1, 30, 30);
+        glScalef( 1, 1, 0.1);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-.5, 0, 2);
-    glRotatef( -35, 0, 1, 0);
-    glScalef( 1, 1, 10);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
-    glScalef( 1, 1, 0.1);
+        glTranslatef(-.5, 0, 2);
+        glRotatef( -35, 0, 1, 0);
+        glScalef( 1, 1, 10);
+        gluCylinder(corde1, 1, 1, 1, 30, 30);
+        glScalef( 1, 1, 0.1);
     glPopMatrix();
 
     if (!bouletLance_)
@@ -994,6 +1027,11 @@ void MyGLWidget::drawTrebuchetComplet(){
     glDisable(GL_TEXTURE_2D);
 
     glEndList();
+}
+
+void MyGLWidget::drawGrid(){
+    Grid *g=new Grid(25,75,0.01);
+    grid=g->getCompleteGrid();
 }
 
 

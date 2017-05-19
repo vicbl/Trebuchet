@@ -19,6 +19,7 @@ private:
     int xPosition_=0;
     int yPosition_=0;
     bool active_=false;
+    bool firstPassage_=true;
 };
 
 #endif // WEBCAM_H
