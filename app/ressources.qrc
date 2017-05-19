@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>bois.bmp</file>
+        <file>bois2.bmp</file>
+        <file>cible.bmp</file>
+        <file>pelouse.bmp</file>
+    </qresource>
+</RCC>
