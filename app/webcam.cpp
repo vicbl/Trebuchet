@@ -109,12 +109,11 @@ void Webcam::runWebCam(){
                 firstPassage_=false;
                 xInit=maxLoc.x;
                 yInit=maxLoc.y;
-                 qDebug()<<"xpos= "<<xInit<<" et ypos=  "<<yInit;
             }
             setxPostion(maxLoc.x-xInit);
             setyPostion(maxLoc.y-yInit);
 
-           // qDebug()<<"xpos= "<<xPosition_<<" et ypos=  "<<yPosition_;
+       //     qDebug()<<"xpos= "<<xPosition_<<" et ypos=  "<<yPosition_;
             // Show image
           //  imshow("matchTemplate result",normResultImage);
 
@@ -126,7 +125,6 @@ void Webcam::runWebCam(){
 
         }
     }
- firstPassage_=true;
 }
 
 int Webcam::getxPosition(){

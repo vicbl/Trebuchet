@@ -158,7 +158,7 @@ void MyGLWidget::lancerBoutonClicked()
         */
 
         // ORIENTATION DE LA CAMERA
-
+/*
         final_xRot = 360-zRot;
 
         //qDebug(" - %d - %d", final_xRot, angle);
@@ -186,7 +186,7 @@ void MyGLWidget::lancerBoutonClicked()
             delay(15);
         }
 
-
+*/
         // FIN ORIENTATION DE LA CAMERA
 
         delay(600);
@@ -467,10 +467,9 @@ void MyGLWidget::draw()
 
 
     glPushMatrix();
-    glTranslatef(0, 10, 0);
-    for (int colonne=12; colonne<8; colonne++)
+    for (int colonne=-5; colonne<14; colonne++)
     {
-        for (int ligne=-5; ligne<5; ligne++)
+        for (int ligne=-3; ligne<3; ligne++)
         {
             glPushMatrix();
             glTranslatef(10*ligne,10*colonne,0);
@@ -479,7 +478,7 @@ void MyGLWidget::draw()
         }
     }
 
-    glTranslatef(0, -10, 0);
+    glTranslatef(0, -15, 0);
     glPushMatrix();
         glRotatef(zRot,0,0,1);
         glPushMatrix();
@@ -942,11 +941,11 @@ void MyGLWidget::drawCorde(){
     {
 
         glPushMatrix();
-        glTranslatef(0, 0, 2);
-        glScalef( 1, 1, 10);
-        gluCylinder(corde1, 1, 1, 1, 30, 30);
-        glScalef( 1, 1, 0.1);
+        glColor3f(.2, .2, .2);
+        GLUquadric* bou = gluNewQuadric();
+        gluSphere(bou, 3, 30, 30);
         glPopMatrix();
+
     }
 
     glPopMatrix();

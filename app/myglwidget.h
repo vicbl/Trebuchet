@@ -71,7 +71,7 @@ private:
     void drawGrid();
 
     //Coordonnées de la scène globale
-    int xScene_=-100;
+    int xScene_=-101;
     int yScene_=0;
     int zScene_=180;
     int zoomScene_=2;
