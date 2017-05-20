@@ -13,8 +13,6 @@
 #include <cmath>
 
 
-
-
 #include"textures.h"
 using namespace std;
 
@@ -358,28 +356,19 @@ void MyGLWidget::setZRotation(int angle) // Axe
 
 void MyGLWidget::initializeGL()
 {
+    qglClearColor(Qt::white);
 
     loadTextures();
-    qglClearColor(Qt::white);
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
     glEnable(GL_DEPTH_TEST);
-    /* glEnable( GL_BLEND );
-    //glEnable(GL_DEPTH_TEST);
 
-    glEnable(GL_CULL_FACE);
-    glShadeModel(GL_SMOOTH);*/
+    glShadeModel(GL_SMOOTH);
     glEnable(GL_TEXTURE_2D);
-    glDepthFunc( GL_LEQUAL );
-
     glHint( GL_PERSPECTIVE_CORRECTION_HINT , GL_NICEST );
-    //glEnable(GL_LIGHTING);
-    // glEnable(GL_LIGHT0);
+    /*glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
 
-    static GLfloat lightPosition[4] = { 0, 0, 4, 1.0 };
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
-
+        static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);*/
 }
 
 void MyGLWidget::paintGL()
@@ -475,7 +464,7 @@ void MyGLWidget::draw()
     qglColor(Qt::white);
 
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
 
     drawCorde();
 
@@ -499,18 +488,20 @@ void MyGLWidget::draw()
         }
     }
 
+
+    //Draw Cible
     if (start_==true) {
         glPushMatrix();
-        glTranslatef(0,distanceTrebuchet_,0);
+        glTranslatef(0,distanceTrebuchet_,.65);
         glPushMatrix();
         glTranslatef(posXCible_,posYCible_,0);
         glScalef(1,1,1);
-
         glCallList(cible);
-
         glPopMatrix();
         glPopMatrix();
     }
+    //End draw cible
+
     glTranslatef(0, -15, 0);
     glPushMatrix();
     glRotatef(zRot,0,0,1);
@@ -562,10 +553,10 @@ void MyGLWidget::draw()
 
     glDeleteLists(cible, 1);
 
-    glDisable(GL_TEXTURE_2D);
+
 
     glPopMatrix();
-    glFlush();
+
 
 }
 
@@ -592,7 +583,6 @@ void MyGLWidget::drawPelouse(){
 
 
     glDisable(GL_TEXTURE_2D);
-
     glPopMatrix();
     glEndList();
 }
@@ -603,7 +593,6 @@ void MyGLWidget::drawCorde(){
 
     corde = glGenLists(1);
     glNewList(corde, GL_COMPILE);
-
 
     gluDeleteQuadric(corde1);
     corde1 = gluNewQuadric();

@@ -34,11 +34,11 @@ void Window::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Z){
         qDebug()<<"Z";
         int xScene=ui->myGLWidget->getXScene()+1;
-        if (xScene<-90 && xScene>-270)
+       /* if (xScene<-90 && xScene>-270)
         {
-            ui->myGLWidget->setXScene(xScene);
-        }
 
+        }*/
+ ui->myGLWidget->setXScene(xScene);
         ui->myGLWidget-> updateGL();
         qDebug()<<xScene;
     }
@@ -53,10 +53,10 @@ void Window::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_S){
         qDebug()<<"S";
         int xScene=ui->myGLWidget->getXScene()-1;
-        if (xScene<-90 && xScene>-270)
-        {
+       // if (xScene<-90 && xScene>-270)
+     //   {
             ui->myGLWidget->setXScene(xScene);
-        }
+      //z  }
         ui->myGLWidget-> updateGL();
         qDebug()<<xScene;
     }

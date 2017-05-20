@@ -39,8 +39,7 @@ void Cible::drawPart(){
     glBindTexture(GL_TEXTURE_2D, texture_[2]);
 
 
-    glDepthMask(GL_TRUE); // disable transparency
-    glDisable(GL_DEPTH_TEST);
+
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(0,0,0);

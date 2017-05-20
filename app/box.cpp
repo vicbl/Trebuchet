@@ -12,6 +12,8 @@ Box::~Box(){
     glDeleteLists(completeBox_, 1);
 }
 void Box::draw(){
+
+
     completeBox_ = glGenLists(1);
     glNewList(completeBox_, GL_COMPILE);
     glPushMatrix();
@@ -20,9 +22,6 @@ void Box::draw(){
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_);
 
-
-    glDepthMask(GL_TRUE); // disable transparency
-    glDisable(GL_DEPTH_TEST);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(0,0,0);
@@ -89,10 +88,11 @@ void Box::draw(){
     glEnd();
     glPopMatrix();
 
-
     glDisable(GL_TEXTURE_2D);
 
     glEndList();
+
+
 }
 
 GLuint Box::getCompleteBox(){
