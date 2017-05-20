@@ -11,14 +11,17 @@
 #include <GL/glu.h>
 #include <QDebug>
 #include <cmath>
-#include "grid.h"
-#include"webcam.h"
+
+
+
+
 #include"textures.h"
 using namespace std;
 
 MyGLWidget::MyGLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
+
     xRot = 180;
     yRot = -20;
     zRot = 180;
@@ -43,6 +46,10 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     lancement_ = false;
 
     // corde1 = gluNewQuadric();
+
+    grid_= new Grid(25,75,0.01);
+    trebuchet_=new Trebuchet();
+    cible_=new Cible();
 }
 
 MyGLWidget::~MyGLWidget()
@@ -158,7 +165,7 @@ void MyGLWidget::lancerBoutonClicked()
         */
 
         // ORIENTATION DE LA CAMERA
-/*
+        /*
         final_xRot = 360-zRot;
 
         //qDebug(" - %d - %d", final_xRot, angle);
@@ -234,8 +241,6 @@ void MyGLWidget::lancerBoutonClicked()
         }
         delay(1000);
         reInitialize();
-
-
     }
     lancement_=false;
 
@@ -331,9 +336,10 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
         {
             bouletLance_=false;
         }
-
         updateGL();
+
     }
+
 }
 
 void MyGLWidget::setZRotation(int angle) // Axe
@@ -355,7 +361,9 @@ void MyGLWidget::initializeGL()
 
     loadTextures();
     qglClearColor(Qt::white);
-    glDisable(GL_DEPTH_TEST);
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glEnable(GL_DEPTH_TEST);
     /* glEnable( GL_BLEND );
     //glEnable(GL_DEPTH_TEST);
 
@@ -448,6 +456,18 @@ void MyGLWidget::webcam_clicked()
     w->runWebCam();
 }
 
+void MyGLWidget::jouer_clicked()
+{
+    game_=new Game(5);
+    game_->newPostion();
+    start_=true;
+    posXCible_=game_->getCiblePositionX();
+    posYCible_=game_->getCiblePositionY();
+    distanceTrebuchet_=game_->getDistanceTrebuchet();
+    qDebug()<<"Jouuuuuuuuuuuuuuuuuuuer xx="<<posXCible_<<" et y="<<posYCible_;
+    updateGL();
+}
+
 
 
 void MyGLWidget::draw()
@@ -455,13 +475,14 @@ void MyGLWidget::draw()
     qglColor(Qt::white);
 
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
     drawCorde();
-    drawLevierBois();
-    drawBoxBois();
+
     drawPelouse();
-    drawGrid();
-    drawTrebuchetComplet();
+    GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
+    GLuint grid=grid_->draw();
+    GLuint cible=cible_->draw();
 
     // Debut affichage
 
@@ -478,151 +499,84 @@ void MyGLWidget::draw()
         }
     }
 
+    if (start_==true) {
+        glPushMatrix();
+        glTranslatef(0,distanceTrebuchet_,0);
+        glPushMatrix();
+        glTranslatef(posXCible_,posYCible_,0);
+        glScalef(1,1,1);
+
+        glCallList(cible);
+
+        glPopMatrix();
+        glPopMatrix();
+    }
     glTranslatef(0, -15, 0);
     glPushMatrix();
-        glRotatef(zRot,0,0,1);
-        glPushMatrix();
-        glScalef(2,2,2);
-
-        glCallList(trebuchetComplet);
-
-        glPopMatrix();
-
-        glPopMatrix();
-
-        //Draw grid
-        glPushMatrix();
-            glRotatef(90,1,0,0);
-            glPushMatrix();
-                glTranslatef(2,0,2);
-                glRotatef(70,0,1,0);
-                glScalef(0.5,0.2,0.75);
-                glCallList(grid);
-        glPopMatrix();
-        glPopMatrix();
-
-        glPushMatrix();
-
-        glRotatef(90,1,0,0);
-        glPushMatrix();
-        glTranslatef(-2,0,2);
-        glRotatef(110,0,1,0);
-        glScalef(0.5,0.2,0.75);
-        glCallList(grid);
-        glPopMatrix();
-        glPopMatrix();
-        //end Draw grid
-        glDeleteLists(boxBois, 1);
-        glDeleteLists(pelouse, 1);
-        glDeleteLists(levierBois, 1);
-        glDeleteLists(corde, 1);
-        glDeleteLists(trebuchetComplet, 1);
-
-        glDeleteLists(grid, 1);
-
-        glDisable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-
-        glPopMatrix();
-}
-
-void MyGLWidget::drawBoxBois(){
-    boxBois = glGenLists(1);
-    glNewList(boxBois, GL_COMPILE);         // Box en bois pour constituer le trebuchet
+    glRotatef(zRot,0,0,1);
     glPushMatrix();
-    glTranslatef(-0.5, -.5, -.5);
+    glScalef(2,2,2);
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture[0]);
-    glDisable(GL_BLEND);
+    glCallList(trebuchetComplet);
 
-    glDepthMask(GL_TRUE); // disable transparency
-    glDisable(GL_DEPTH_TEST);
-    glBegin(GL_QUADS);
-    // glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,0,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,0);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,1,0);
-    glEnd();
-
-
-    glBegin(GL_QUADS);
-    //    glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,0,0);
-    glEnd();
-
-
-    glBegin(GL_QUADS);
-    //  glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,1,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,0,1);
-    glEnd();
-    glBegin(GL_QUADS);
-    //   glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,1,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,1,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glEnd();
-    glBegin(GL_QUADS);
-    // glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(1,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,1,0);
-    glEnd();
-    glBegin(GL_QUADS);
-    //  glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glEnd();
     glPopMatrix();
 
-    glDepthMask(GL_FALSE); // enable transparency
-    glDisable(GL_BLEND);
+
+
+
+    glPopMatrix();
+
+    //Draw grid
+    glPushMatrix();
+
+    glPushMatrix();
+    glRotatef(90,1,0,0);
+    glPushMatrix();
+    glTranslatef(2,0,2);
+    glRotatef(70,0,1,0);
+    glScalef(0.5,0.2,0.75);
+    glCallList(grid);
+    glPopMatrix();
+    glPopMatrix();
+
+    glPushMatrix();
+
+    glRotatef(90,1,0,0);
+    glPushMatrix();
+    glTranslatef(-2,0,2);
+    glRotatef(110,0,1,0);
+    glScalef(0.5,0.2,0.75);
+    glCallList(grid);
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    //end Draw grid
+
+
+    glDeleteLists(pelouse, 1);
+
+    glDeleteLists(corde, 1);
+    glDeleteLists(trebuchetComplet, 1);
+
+    glDeleteLists(grid, 1);
+
+    glDeleteLists(cible, 1);
+
     glDisable(GL_TEXTURE_2D);
 
-    glEndList();
+    glPopMatrix();
+    glFlush();
+
 }
+
+
 void MyGLWidget::drawPelouse(){
     qglColor(Qt::white);
     pelouse = glGenLists(1);
     glNewList(pelouse, GL_COMPILE);
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+
     glBindTexture(GL_TEXTURE_2D, texture[1]);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
@@ -636,102 +590,17 @@ void MyGLWidget::drawPelouse(){
 
     glEnd();
 
-    glDisable(GL_BLEND);
+
     glDisable(GL_TEXTURE_2D);
 
     glPopMatrix();
     glEndList();
 }
 
-void MyGLWidget::drawLevierBois(){
-    levierBois = glGenLists(1);
-    glNewList(levierBois, GL_COMPILE);          // Levier du trébuchet
-    glPushMatrix();
-    glTranslatef(-0.5, -.5, -.5);
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture[2]);
-    glDisable(GL_BLEND);
-
-    glBegin(GL_QUADS);
-    // glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,0,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,0);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,1,0);
-    glEnd();
-
-
-    glBegin(GL_QUADS);
-    //    glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,0,0);
-    glEnd();
-
-
-    glBegin(GL_QUADS);
-    //  glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,1,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,0,1);
-    glEnd();
-    glBegin(GL_QUADS);
-    //   glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0,1,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,1,0);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glEnd();
-    glBegin(GL_QUADS);
-    // glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(1,0,0);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,1,0);
-    glEnd();
-    glBegin(GL_QUADS);
-    //  glNormal3f(0,0,-1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(1,0,1);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0,0,1);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0,1,1);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(1,1,1);
-    glEnd();
-    glPopMatrix();
-
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-
-    glEndList();
-}
 
 void MyGLWidget::drawCorde(){
+
     corde = glGenLists(1);
     glNewList(corde, GL_COMPILE);
 
@@ -923,18 +792,18 @@ void MyGLWidget::drawCorde(){
     glScalef( 1, 1, 0.5);
 
     glPushMatrix();
-        glTranslatef( .5, 0, 2);
-        glRotatef( 35, 0, 1, 0);
-        glScalef( 1, 1, 10);
-        gluCylinder(corde1, 1, 1, 1, 30, 30);
-        glScalef( 1, 1, 0.1);
+    glTranslatef( .5, 0, 2);
+    glRotatef( 35, 0, 1, 0);
+    glScalef( 1, 1, 10);
+    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    glScalef( 1, 1, 0.1);
     glPopMatrix();
     glPushMatrix();
-        glTranslatef(-.5, 0, 2);
-        glRotatef( -35, 0, 1, 0);
-        glScalef( 1, 1, 10);
-        gluCylinder(corde1, 1, 1, 1, 30, 30);
-        glScalef( 1, 1, 0.1);
+    glTranslatef(-.5, 0, 2);
+    glRotatef( -35, 0, 1, 0);
+    glScalef( 1, 1, 10);
+    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    glScalef( 1, 1, 0.1);
     glPopMatrix();
 
     if (!bouletLance_)
@@ -951,87 +820,6 @@ void MyGLWidget::drawCorde(){
     glPopMatrix();
 
     glEndList();
-    // Fin corde
+    // Fin corde*/
 }
-
-void MyGLWidget::drawTrebuchetComplet(){
-
-    trebuchetComplet = glGenLists(1);        // Ensemble du trébuchet
-
-
-    glNewList(trebuchetComplet, GL_COMPILE);
-    //  glTranslatef(1,1,0.05);
-    // socle
-    glScalef(0.5,1,0.05);
-    glCallList(boxBois);
-    glPushMatrix();
-    glScalef(2,1,20);
-    // pieds
-    glPushMatrix();
-    glTranslatef( .22, -0.23, .43);
-    glRotatef( 62, 1, 0, 0);
-    glScalef( 0.05 ,1 ,.05);
-    glCallList(boxBois);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef( .22, 0.23, .43);
-    glRotatef( -62, 1, 0, 0);
-    glScalef( 0.05 ,1 ,.05);
-    glCallList(boxBois);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef( -.22, -0.23, .43);
-    glRotatef( 62, 1, 0, 0);
-    glScalef( 0.05 ,1 ,.05);
-    glCallList(boxBois);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef( -.22, 0.23, .43);
-    glRotatef( -62, 1, 0, 0);
-    glScalef( 0.05 ,1 ,.05);
-    glCallList(boxBois);
-    glPopMatrix();
-
-    // bascule
-    glPushMatrix ();
-    glTranslatef(0,0,0.85);
-    glRotatef(90,0,1,0);
-    glScalef(0.02,0.02,0.5);
-    glCallList(levierBois);
-    // levier
-    glPushMatrix ();
-    glScalef(5,5,0.2);
-    glRotatef(yRot,0,0,1);
-    glPushMatrix ();
-    glTranslatef(0,4,0);
-    glScalef(1,20,1);
-    //glColor3f(0,0,0);
-    glCallList(levierBois);
-    glPopMatrix();
-
-    // corde
-
-    glPushMatrix ();
-    glTranslatef(.5, 13.5, 0);
-    glCallList(corde);
-    glPopMatrix();
-
-    glPopMatrix ();
-    glPopMatrix();
-    glPopMatrix();
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-
-    glEndList();
-}
-
-void MyGLWidget::drawGrid(){
-    Grid *g=new Grid(25,75,0.01);
-    grid=g->getCompleteGrid();
-}
-
-
 

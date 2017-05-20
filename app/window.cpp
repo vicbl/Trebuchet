@@ -19,7 +19,7 @@ Window::Window(QWidget *parent) :
     connect(ui->myGLWidget, SIGNAL(forceChanged(int)), ui->forceSlider, SLOT(setValue(int)));
     connect(this, SIGNAL(on_lancerBouton_clicked()), ui->myGLWidget, SLOT(lancerBoutonClicked()));
     connect(this, SIGNAL(on_Webcam_clicked()), ui->myGLWidget, SLOT(webcam_clicked()));
-
+    connect(this, SIGNAL(on_jouer_clicked()), ui->myGLWidget, SLOT(jouer_clicked()));
 
 }
 

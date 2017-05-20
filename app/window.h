@@ -24,6 +24,7 @@ protected:
 signals:
     void on_lancerBouton_clicked();
     void on_Webcam_clicked();
+    void on_jouer_clicked();
 
 private slots:
 

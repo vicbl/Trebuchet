@@ -7,8 +7,7 @@ Grid::Grid(int nbLines,int nbColumns, double width)
     this->nbLines_=nbLines;
     this->nbColumns_=nbColumns;
     this->width_=width;
-    this->drawGridPart();
-    this->draw();
+
 }
 Grid::~Grid(){
     glDeleteLists(gridPart_, 1);
@@ -22,6 +21,9 @@ void Grid::drawGridPart(){
     glNewList(gridPart_, GL_COMPILE);
 
     glPushMatrix();
+
+
+
     glScalef(1,1,0.05);
     glColor3f(0,0,0);
     glBegin(GL_QUADS);
@@ -127,10 +129,15 @@ void Grid::drawGridPart(){
 
 }
 
-void Grid::draw(){
+GLuint Grid::draw(){
+     this->drawGridPart();
     completeGrid_ = glGenLists(1);
     glNewList(completeGrid_, GL_COMPILE);
+
     glPushMatrix();
+
+
+
     for (int column=0; column<nbColumns_; column++)
     {
         for (int line=0; line<nbLines_; line++)
@@ -141,8 +148,11 @@ void Grid::draw(){
             glPopMatrix();
         }
     }
+
     glPopMatrix();
+
     glEndList();
+    return completeGrid_;
 
 }
 GLuint Grid::getCompleteGrid(){

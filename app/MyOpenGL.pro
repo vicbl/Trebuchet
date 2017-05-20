@@ -17,13 +17,21 @@ SOURCES += main.cpp\
     myglwidget.cpp \
     webcam.cpp \
     textures.cpp \
-    grid.cpp
+    grid.cpp \
+    box.cpp \
+    trebuchet.cpp \
+    cible.cpp \
+    game.cpp
 
 HEADERS  += window.h \
     myglwidget.h \
     webcam.h \
     textures.h \
-    grid.h
+    .\objects\grid.h \
+    box.h \
+    trebuchet.h \
+    cible.h \
+    game.h
 
 FORMS    += window.ui
 INCLUDEPATH +=$$(OPENCV_DIR)\..\..\include

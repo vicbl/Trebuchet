@@ -7,10 +7,11 @@ class Grid
 {
 public:
     Grid(int nbLines,int nbColumns, double width);
+    GLuint draw();
     GLuint getCompleteGrid();
     ~Grid();
 private:
-    void draw();
+
     void drawGridPart();
 
     double width_;//width of the grid between 0 and 1

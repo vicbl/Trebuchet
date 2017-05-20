@@ -5,8 +5,12 @@
 
 #include <QGLWidget>
 #include <GL/glu.h>
+#include "grid.h"
+#include "trebuchet.h"
+#include "cible.h"
+#include "webcam.h"
+#include "game.h"
 
-#include"webcam.h"
 class MyGLWidget : public QGLWidget
 {
     Q_OBJECT
@@ -48,6 +52,7 @@ public slots:
     void setForce(int angle);
     void lancerBoutonClicked();
     void webcam_clicked();
+    void jouer_clicked();
     void setValue();
 
 signals:
@@ -55,6 +60,7 @@ signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+    void on_jouer_clicked(int);
     void forceChanged(int angle);
 
 
@@ -63,11 +69,11 @@ private:
     void draw();
     void loadTextures();
     void reInitialize();
-    void drawBoxBois();
+
     void drawPelouse();
-    void drawLevierBois();
+
     void drawCorde();
-    void drawTrebuchetComplet();
+
     void drawGrid();
 
     //Coordonnées de la scène globale
@@ -94,13 +100,14 @@ private:
     double angle4;
     double angle5;
 
-    GLuint boxBois;
     GLuint pelouse;
-    GLuint levierBois;
+
     GLuint corde;
-    GLuint trebuchetComplet;
-    GLuint grid;
-    GLuint gridPart;
+
+    Cible * cible_;
+
+    Trebuchet *trebuchet_;
+    Grid *grid_;
 
     GLUquadric* corde1;
 
@@ -110,6 +117,13 @@ private:
     GLuint texture[];
 
     QPoint lastPos;
+
+    //Variable of the game
+    Game *game_;
+    bool start_=false;
+    int distanceTrebuchet_;
+    int posXCible_;
+    int posYCible_;
 };
 
 #endif // MYGLWIDGET_H
