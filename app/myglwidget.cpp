@@ -14,6 +14,7 @@
 
 
 #include"textures.h"
+#define PI 3.14159265
 using namespace std;
 
 MyGLWidget::MyGLWidget(QWidget *parent)
@@ -388,15 +389,21 @@ void MyGLWidget::paintGL()
 void MyGLWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
+    qDebug()<<"width "<<width<<" height "<<height;
+    glViewport(0, 0, width, height);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-#ifdef QT_OPENGL_ES_1
+    float aspectRatio = width / height;
+       glMatrixMode(GL_PROJECTION);
+       glLoadIdentity();
+       gluPerspective(45.0, aspectRatio, 1.0, 1000.0);
+      /* #ifdef QT_OPENGL_ES_1
     glOrthof(-2, +2, -2, +2, 0.0, 20.0);
 #else
-    glOrtho(-2, +2, -2, +2, 0.0, 20.0);
-#endif
+   glOrtho(-2, +2, -2, +2, 0.0, 20.0);
+    //gluOrtho2D(0.0, width, 0.0, height);
+#endif*/
+
+
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -453,7 +460,7 @@ void MyGLWidget::jouer_clicked()
     posXCible_=game_->getCiblePositionX();
     posYCible_=game_->getCiblePositionY();
     distanceTrebuchet_=game_->getDistanceTrebuchet();
-    qDebug()<<"Jouuuuuuuuuuuuuuuuuuuer xx="<<posXCible_<<" et y="<<posYCible_;
+
     updateGL();
 }
 
@@ -475,7 +482,8 @@ void MyGLWidget::draw()
 
     // Debut affichage
 
-
+glPushMatrix();
+glTranslatef(0,-15,0);
     glPushMatrix();
     for (int colonne=-5; colonne<14; colonne++)
     {
@@ -491,11 +499,14 @@ void MyGLWidget::draw()
 
     //Draw Cible
     if (start_==true) {
+        qDebug()<<"Jouuuuuuuuuuuuuuuuuuuer xx="<<posXCible_<<" et y="<<posYCible_;
+        double angleRotationCible = atan ((posXCible_*1.0/(posYCible_*1.0+distanceTrebuchet_*1.0))) * 180 / PI;
         glPushMatrix();
         glTranslatef(0,distanceTrebuchet_,.65);
         glPushMatrix();
         glTranslatef(posXCible_,posYCible_,0);
         glScalef(1,1,1);
+        glRotatef(-angleRotationCible,0,0,1);
         glCallList(cible);
         glPopMatrix();
         glPopMatrix();
@@ -511,8 +522,6 @@ void MyGLWidget::draw()
     glCallList(trebuchetComplet);
 
     glPopMatrix();
-
-
 
 
     glPopMatrix();
@@ -555,6 +564,7 @@ void MyGLWidget::draw()
 
 
 
+    glPopMatrix();
     glPopMatrix();
 
 
