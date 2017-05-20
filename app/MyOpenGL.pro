@@ -27,7 +27,7 @@ HEADERS  += window.h \
     myglwidget.h \
     webcam.h \
     textures.h \
-    .\objects\grid.h \
+    grid.h \
     box.h \
     trebuchet.h \
     cible.h \
