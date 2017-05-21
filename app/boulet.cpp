@@ -28,12 +28,11 @@ GLuint Boulet::draw()
 
     float cosa = cos(3.1415*20/180);
     float sina = sin(3.1415*20/180);
+
     float newx = 1.7 + v0*cosa*t;               // x = x0 + v0*cos(a)*t
-    float newy = 7 + v0*sina*t-.01*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
-    qDebug() << "Boulet : " << newx << " / " << newy;
+    float newy = 7 + v0*sina*t-.02*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
 
-
-    if(newy>0)
+    if(newy>0 && !finTrajectoire)
     {
         coord_x = newx;
         coord_y = newy;
@@ -41,7 +40,12 @@ GLuint Boulet::draw()
     } else
     {
         finTrajectoire = true;
+        coord_y = 0.2;
     }
+
+
+
+    qDebug() << "Boulet : " << coord_x << " / " << coord_y;
 
     glNewList(boulet, GL_COMPILE);
 
@@ -56,22 +60,12 @@ GLuint Boulet::draw()
 
             if(finTrajectoire)
             {
-                glTranslatef(0, 0, -coord_y+0.5);
+                glTranslatef(0, 0, -1.9);
                 glColor3f(1, 0, 0);
                 glRotatef(45, 0, 0, 1);
-                glBegin(GL_QUADS);
-                    glVertex3f(2, .5, 0);
-                    glVertex3f(2, -.5, 0);
-                    glVertex3f(-2, -.5, 0);
-                    glVertex3f(-2, .5, 0);
-                glEnd();
+                glRectf(-6, -2.5, 6, 2.5);
                 glRotatef(90, 0, 0, 1);
-                glBegin(GL_QUADS);
-                    glVertex3f(2, .5, 0);
-                    glVertex3f(2, -.5, 0);
-                    glVertex3f(-2, -.5, 0);
-                    glVertex3f(-2, .5, 0);
-                glEnd();
+                glRectf(-6, -2.5, 6, 2.5);
 
             }
             glScalef(10, 10, 10);
@@ -88,7 +82,6 @@ GLuint Boulet::draw()
 void Boulet::reset()
 {
     t = 0;
-    v0 = 0;
     coord_x = 1.7;
     coord_y = 7;
     axe = 180;

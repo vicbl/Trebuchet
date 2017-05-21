@@ -8,7 +8,7 @@ class Boulet
 private:
     GLfloat coord_y = 7; // hauteur
     GLfloat coord_x = 1.7; // distance au trébuchet
-    int v0 = 0;
+    int v0;
     int axe = 180;
     float t = 0;
     bool finTrajectoire = false;

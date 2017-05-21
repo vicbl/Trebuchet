@@ -31,10 +31,6 @@ public:
     void setZScene(int z);
     void setZoomScene(int zoom);
 
-signals:
-
-public slots:
-
 protected:
     void initializeGL();
     void paintGL();
@@ -43,7 +39,6 @@ protected:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
 
 
 public slots:
@@ -57,6 +52,7 @@ public slots:
     void jouer_clicked();
     void startButton_clicked();
     void setValue();
+    void vueChanged();
 
 signals:
     // signaling rotation from mouse movement
@@ -86,7 +82,7 @@ private:
     int zoomScene_=2;
 
     int xRot;
-    int yRot;
+    int yRot;   // angle du levier
     int zRot;
 
     int force;
@@ -106,6 +102,7 @@ private:
     GLuint pelouse;
     GLuint corde;
     GLuint CIBLE;
+    GLuint LOGOTELECOM;
 
 
     Cible * cible_;
@@ -119,6 +116,7 @@ private:
     boolean bouletLance_;
     boolean lancement_;
     boolean finCourseCorde_;
+    boolean vueSuivie_=true;
 
     GLuint texture[];
 
@@ -126,7 +124,7 @@ private:
 
     //Variable of the game
     Game *game_;
-    int difficulty_;
+    int difficulty_=1;
     bool start_=false;
     int distanceTrebuchet_;
     int posXCible_;

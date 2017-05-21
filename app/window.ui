@@ -27,27 +27,27 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label_4">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Force</string>
+          <string>Zone </string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="forceSlider">
-         <property name="minimum">
-          <number>-20</number>
-         </property>
+        <widget class="QSlider" name="rotXSlider">
          <property name="maximum">
-          <number>1</number>
+          <number>360</number>
+         </property>
+         <property name="singleStep">
+          <number>13</number>
+         </property>
+         <property name="pageStep">
+          <number>15</number>
          </property>
          <property name="value">
-          <number>-20</number>
+          <number>180</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -56,20 +56,7 @@
           <enum>QSlider::TicksAbove</enum>
          </property>
          <property name="tickInterval">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="lancerBouton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Lancer</string>
+          <number>30</number>
          </property>
         </widget>
        </item>
@@ -121,27 +108,33 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_4">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="text">
-          <string>Zone </string>
+          <string>Force</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="rotXSlider">
+        <widget class="QSlider" name="forceSlider">
+         <property name="minimum">
+          <number>-20</number>
+         </property>
          <property name="maximum">
-          <number>360</number>
+          <number>-10</number>
          </property>
          <property name="singleStep">
-          <number>13</number>
+          <number>1</number>
          </property>
          <property name="pageStep">
-          <number>15</number>
+          <number>5</number>
          </property>
          <property name="value">
-          <number>180</number>
+          <number>-20</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -150,7 +143,7 @@
           <enum>QSlider::TicksAbove</enum>
          </property>
          <property name="tickInterval">
-          <number>30</number>
+          <number>2</number>
          </property>
         </widget>
        </item>
@@ -196,30 +189,70 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="vueSuivie">
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="text">
+          <string>Vue suivie : </string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QPushButton" name="startButton">
+         <property name="text">
+          <string>Paramètres partie</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="jouer">
+         <property name="text">
+          <string>Lancer partie</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Webcam">
+         <property name="text">
+          <string>Webcam</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="lancerBouton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Lancer</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QPushButton" name="Webcam">
-     <property name="text">
-      <string>Webcam</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="startButton">
-     <property name="text">
-      <string>Commencer Partie</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="jouer">
-     <property name="text">
-      <string>Jouer</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
@@ -284,22 +317,6 @@
     <hint type="destinationlabel">
      <x>227</x>
      <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>forceSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>myGLWidget</receiver>
-   <slot>setYRotation(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>199</x>
-     <y>384</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>110</y>
     </hint>
    </hints>
   </connection>

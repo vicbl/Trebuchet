@@ -21,6 +21,7 @@ Window::Window(QWidget *parent) :
     connect(this, SIGNAL(on_Webcam_clicked()), ui->myGLWidget, SLOT(webcam_clicked()));
     connect(this, SIGNAL(on_jouer_clicked()), ui->myGLWidget, SLOT(jouer_clicked()));
     connect(this, SIGNAL(on_startButton_clicked()), ui->myGLWidget, SLOT(startButton_clicked()));
+    connect(this, SIGNAL(on_vueSuivie_stateChanged()), ui->myGLWidget, SLOT(vueChanged()));
 
 }
 
@@ -86,3 +87,7 @@ void Window::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void Window::on_forceSlider_valueChanged(int value)
+{
+    ui->myGLWidget->setForce(value);
+}
