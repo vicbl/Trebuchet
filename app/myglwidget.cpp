@@ -11,7 +11,7 @@
 #include <GL/glu.h>
 #include <QDebug>
 #include <cmath>
-
+#include "newgamedialog.h"
 
 #include"textures.h"
 #define PI 3.14159265
@@ -25,9 +25,6 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     yRot = -20;
     zRot = 180;
     force = -20;
-
-    xBoulet = 0;
-    yBoulet = 0;
 
     angle_ = 0;
     angle1 = 3;
@@ -43,12 +40,15 @@ MyGLWidget::MyGLWidget(QWidget *parent)
 
     bouletLance_ = false;
     lancement_ = false;
+    finCourseCorde_=false;
 
     // corde1 = gluNewQuadric();
 
     grid_= new Grid(25,75,0.01);
     trebuchet_=new Trebuchet();
     cible_=new Cible();
+    boulet_=new Boulet ();
+    logoTelecom_=new LogoTelecom();
 }
 
 MyGLWidget::~MyGLWidget()
@@ -84,7 +84,7 @@ void MyGLWidget::reInitialize()
         // corde1 = gluNewQuadric();
         updateGL();
 
-        delay(10);
+        delay(6);
     }
     force = 0;
 }
@@ -149,14 +149,13 @@ void MyGLWidget::lancerBoutonClicked()
         // INITIALISATION
 
         lancement_=true;
-        int final_xRot;     // xRot final pour être derrière le trébuchet
+        //int final_xRot;     // xRot final pour être derrière le trébuchet
         int angle = xRot;   // Angle de rotation du trébuchet
+        boulet_->reset();
 
-        int vitesse = -force;   // V0 du boulet
-        int angle_tir = 20;     // Angle a0 de V0 au départ du boulet
-        int g = 1;              // Force g du poids
-        int pos_treb = 0;       // position trigonométrique du trébuchet autour de son axe de rotation
-
+        boulet_->set_v0(-force/20);   // V0 du boulet
+        qDebug("v0 = %d", -force/20);
+        int pos_treb = 0;       // position trigonométrique du levier autour de son axe de rotation
 
         /*
          * zRot = angle = [100 - 180 - 260]
@@ -195,19 +194,24 @@ void MyGLWidget::lancerBoutonClicked()
 */
         // FIN ORIENTATION DE LA CAMERA
 
-        delay(600);
+        delay(400);
 
         // LANCEMENT
 
+        bool aller = true;
         while (pos_treb<420)
         {
-            // chopper coordonées fin de la corde
             if (pos_treb<170)
             {
-                yRot++;
-                // qDebug("%d",yRot);
+                yRot+=3;
+                if (yRot >= 110)
+                {
+                    bouletLance_=true;
+                }
+
             } else if (pos_treb<265)
             {
+                aller = false;
                 yRot--;
             } else if (pos_treb<325)
             {
@@ -226,17 +230,23 @@ void MyGLWidget::lancerBoutonClicked()
                 yRot++;
             }
 
-            pos_treb++;
+            if (aller)
+            {
+                pos_treb+=3;
+            } else
+            {
+                pos_treb++;
+            }
+
 
             angle = yRot;
             emit yRotationChanged(angle);
             gluDeleteQuadric(corde1);
+
             // corde1 = gluNewQuadric();
             updateGL();
 
-
-
-            delay(12);
+           delay(6);
         }
         delay(1000);
         reInitialize();
@@ -267,6 +277,16 @@ void MyGLWidget::setXRotation(int angle) // Zone
     if (angle != xRot) {
         xRot = angle;
         zScene_ = angle;
+        if (angle == 361)
+        {
+            xRot = 1;
+            zScene_=1;
+        }
+        if (angle == -1)
+        {
+            xRot = 359;
+            zScene_=359;
+        }
         emit xRotationChanged(angle);
 
         gluDeleteQuadric(corde1);
@@ -287,7 +307,7 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
         // emit yRotationChanged(angle);
     }
 
-    if (!bouletLance_)
+    if (!finCourseCorde_)
     {
         angle_ = round((angle+20)*3); // angle_ va de 0 à 360, puis lacher de boulet, puis oscille entre 540 et 180 jusquà arrêt
 
@@ -299,7 +319,7 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 
         if (angle_ == 510)
         {
-            bouletLance_=true;
+            finCourseCorde_=true;
         }
     } else
     {
@@ -333,9 +353,9 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
         }
         if (angle_ <= -18)
         {
-            bouletLance_=false;
+            finCourseCorde_=false;
         }
-        updateGL();
+
 
     }
 
@@ -346,6 +366,7 @@ void MyGLWidget::setZRotation(int angle) // Axe
     qNormalizeAngle(angle);
     if (angle != zRot && !lancement_) {
         zRot = angle;
+        boulet_->set_axe(zRot);
 
         //emit zRotationChanged(angle);
 
@@ -376,9 +397,15 @@ void MyGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0);
+    glRotatef(-180, 0.0, 0.0, 1.0);
+    glTranslatef(0.0, 1.0,  -4.0);
+
+        if(bouletLance_)
+        {
+            glTranslatef(0, boulet_->get_x()/20, boulet_->get_x()/8);
+        }
     double scale=abs(zoomScene_*0.1);
-    qDebug()<<scale;
+    //qDebug()<<scale;
     glScalef(scale, scale, scale);
     glRotatef(xScene_ , 1.0, 0.0, 00);
     glRotatef(yScene_, 0.0, 1.0, 0.0);
@@ -452,6 +479,16 @@ void MyGLWidget::webcam_clicked()
     w->runWebCam();
 }
 
+void MyGLWidget::startButton_clicked()
+{
+    NewGameDialog dial(this);
+    if (dial.exec() == QDialog::Accepted ) {
+        qDebug() << "You pressed OK!";
+          qDebug() <<dial.getName();
+              qDebug() <<dial.getDifficulty();
+    }
+    qDebug()<<"start button";
+}
 void MyGLWidget::jouer_clicked()
 {
     game_=new Game(5);
@@ -460,6 +497,8 @@ void MyGLWidget::jouer_clicked()
     posXCible_=game_->getCiblePositionX();
     posYCible_=game_->getCiblePositionY();
     distanceTrebuchet_=game_->getDistanceTrebuchet();
+
+    CIBLE =cible_->draw();
 
     updateGL();
 }
@@ -472,20 +511,26 @@ void MyGLWidget::draw()
 
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
 
-
     drawCorde();
-
     drawPelouse();
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
     GLuint grid=grid_->draw();
-    GLuint cible=cible_->draw();
+    GLuint logoTelecom=logoTelecom_->draw();
+
+/*
+    QTime myTimer;
+    myTimer.start();
+
+    int t5 = myTimer.elapsed();
+    qDebug("temps de PELOUSE' : %d", t5);
+*/
 
     // Debut affichage
 
 glPushMatrix();
-glTranslatef(0,-15,0);
+
     glPushMatrix();
-    for (int colonne=-5; colonne<14; colonne++)
+    for (int colonne=-2; colonne<14; colonne++)
     {
         for (int ligne=-3; ligne<3; ligne++)
         {
@@ -495,11 +540,17 @@ glTranslatef(0,-15,0);
             glPopMatrix();
         }
     }
+    // Draw Boulet
+    if (bouletLance_)
+    {
+        GLuint boulet=boulet_->draw();
+        glCallList(boulet);
 
+    }
 
     //Draw Cible
     if (start_==true) {
-        qDebug()<<"Jouuuuuuuuuuuuuuuuuuuer xx="<<posXCible_<<" et y="<<posYCible_;
+        qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
         double angleRotationCible = atan ((posXCible_*1.0/(posYCible_*1.0+distanceTrebuchet_*1.0))) * 180 / PI;
         glPushMatrix();
         glTranslatef(0,distanceTrebuchet_,.65);
@@ -507,17 +558,31 @@ glTranslatef(0,-15,0);
         glTranslatef(posXCible_,posYCible_,0);
         glScalef(1,1,1);
         glRotatef(-angleRotationCible,0,0,1);
-        glCallList(cible);
+        glCallList(CIBLE);
         glPopMatrix();
         glPopMatrix();
     }
     //End draw cible
 
-    glTranslatef(0, -15, 0);
+    //*************Draw Logo***************
+        glPushMatrix();
+            glTranslatef(-5, -2, 1);
+            glScalef(2,2,2);
+            glCallList(logoTelecom);
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(5, -2, 1);
+            glScalef(2,2,2);
+            glCallList(logoTelecom);
+        glPopMatrix();
+    //*************End Draw Logo***************
+
     glPushMatrix();
     glRotatef(zRot,0,0,1);
     glPushMatrix();
     glScalef(2,2,2);
+
+
 
     glCallList(trebuchetComplet);
 
@@ -560,8 +625,6 @@ glTranslatef(0,-15,0);
 
     glDeleteLists(grid, 1);
 
-    glDeleteLists(cible, 1);
-
 
 
     glPopMatrix();
@@ -574,6 +637,7 @@ glTranslatef(0,-15,0);
 void MyGLWidget::drawPelouse(){
     qglColor(Qt::white);
     pelouse = glGenLists(1);
+
     glNewList(pelouse, GL_COMPILE);
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
@@ -604,7 +668,10 @@ void MyGLWidget::drawCorde(){
     corde = glGenLists(1);
     glNewList(corde, GL_COMPILE);
 
-    gluDeleteQuadric(corde1);
+    xBoulet = 0;
+    yBoulet = 0;
+
+
     corde1 = gluNewQuadric();
 
     glColor4f (1, 1, 1, 0.8);
@@ -615,7 +682,7 @@ void MyGLWidget::drawCorde(){
     glRotatef( -90, 1, 0, 0);
 
     glScalef( 0.2, 0.2, 0.4);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
@@ -623,14 +690,14 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -9, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle5, 1, 0, 0);
     // glRotatef( -9, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
@@ -638,21 +705,21 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -7, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle4, 1, 0, 0);
     // glRotatef( -7, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle4, 1, 0, 0);
     // glRotatef( -7, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle4, 1, 0, 0);
@@ -660,35 +727,35 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -5, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle3, 1, 0, 0);
     // glRotatef( -5, 1, 0 ,0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle3, 1, 0, 0);
     // glRotatef( -5, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle3, 1, 0, 0);
     // glRotatef( -5, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle3, 1, 0, 0);
     // glRotatef( -5, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
@@ -696,35 +763,35 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -3, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle2, 1, 0, 0);
     // glRotatef( -3, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle2, 1, 0, 0);
     // glRotatef( -3, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle2, 1, 0, 0);
     // glRotatef( -3, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle2, 1, 0, 0);
     // glRotatef( -3, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
@@ -732,14 +799,14 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( angle1, 1, 0, 0);
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
@@ -747,45 +814,45 @@ void MyGLWidget::drawCorde(){
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( 0, 1, 0, 0);
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( 0, 1, 0, 0);
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 0.5);
     glScalef( 1, 1, 0.5);
     glRotatef( 0, 1, 0, 0);
     // glRotatef( -2, 1, 0, 0);
     glScalef( 1, 1, 2);
     glTranslatef(0, 0, 0.5);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glTranslatef(0, 0, 1);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
 
     glColor4f (.75, .55, .34, 0.8);
     glScalef( 1, 1, 0.5);
@@ -794,29 +861,31 @@ void MyGLWidget::drawCorde(){
     glTranslatef( .5, 0, 2);
     glRotatef( 35, 0, 1, 0);
     glScalef( 1, 1, 10);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glScalef( 1, 1, 0.1);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-.5, 0, 2);
     glRotatef( -35, 0, 1, 0);
     glScalef( 1, 1, 10);
-    gluCylinder(corde1, 1, 1, 1, 30, 30);
+    gluCylinder(corde1, 1, 1, 1, 10, 10);
     glScalef( 1, 1, 0.1);
     glPopMatrix();
 
     if (!bouletLance_)
     {
-
+        glTranslatef(0, 0, 12);
         glPushMatrix();
-        glColor3f(.2, .2, .2);
-        GLUquadric* bou = gluNewQuadric();
-        gluSphere(bou, 3, 30, 30);
+            glColor3f(.35, .35, .35);
+            GLUquadric* bou = gluNewQuadric();
+            gluSphere(bou, 5, 10, 10);
+            gluDeleteQuadric(bou);
         glPopMatrix();
 
     }
 
     glPopMatrix();
+    gluDeleteQuadric(corde1);
 
     glEndList();
     // Fin corde*/

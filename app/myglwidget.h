@@ -10,6 +10,8 @@
 #include "cible.h"
 #include "webcam.h"
 #include "game.h"
+#include "boulet.h"
+#include "logotelecom.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -53,6 +55,7 @@ public slots:
     void lancerBoutonClicked();
     void webcam_clicked();
     void jouer_clicked();
+    void startButton_clicked();
     void setValue();
 
 signals:
@@ -77,9 +80,9 @@ private:
     void drawGrid();
 
     //Coordonnées de la scène globale
-    int xScene_=-80;
+    int xScene_=80;
     int yScene_=0;
-    int zScene_=0;
+    int zScene_=180;
     int zoomScene_=2;
 
     int xRot;
@@ -101,11 +104,13 @@ private:
     double angle5;
 
     GLuint pelouse;
-
     GLuint corde;
+    GLuint CIBLE;
+
 
     Cible * cible_;
-
+    Boulet* boulet_;
+    LogoTelecom * logoTelecom_;
     Trebuchet *trebuchet_;
     Grid *grid_;
 
@@ -113,6 +118,7 @@ private:
 
     boolean bouletLance_;
     boolean lancement_;
+    boolean finCourseCorde_;
 
     GLuint texture[];
 
@@ -120,6 +126,7 @@ private:
 
     //Variable of the game
     Game *game_;
+    int difficulty_;
     bool start_=false;
     int distanceTrebuchet_;
     int posXCible_;

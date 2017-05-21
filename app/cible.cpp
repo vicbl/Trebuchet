@@ -38,8 +38,6 @@ void Cible::drawPart(){
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_[2]);
 
-
-
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(0,0,0);

@@ -4,5 +4,8 @@
         <file>bois2.bmp</file>
         <file>cible.bmp</file>
         <file>pelouse.bmp</file>
+		<file>TSE.bmp</file>
+		<file>TSE2.bmp</file>
+		<file>UJM.bmp</file>
     </qresource>
 </RCC>

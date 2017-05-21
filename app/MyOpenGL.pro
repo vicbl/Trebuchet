@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     box.cpp \
     trebuchet.cpp \
     cible.cpp \
-    game.cpp
+    game.cpp \
+    logotelecom.cpp \
+    newgamedialog.cpp \
+    boulet.cpp
 
 HEADERS  += window.h \
     myglwidget.h \
@@ -31,9 +34,13 @@ HEADERS  += window.h \
     box.h \
     trebuchet.h \
     cible.h \
-    game.h
+    game.h \
+    logotelecom.h \
+    newgamedialog.h \
+    boulet.h
 
-FORMS    += window.ui
+FORMS    += window.ui \
+    newgamedialog.ui
 INCLUDEPATH +=$$(OPENCV_DIR)\..\..\include
 LIBS += -lOpengl32 \
      -lglu32 \
