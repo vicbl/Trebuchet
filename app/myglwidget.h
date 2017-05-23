@@ -5,6 +5,7 @@
 
 #include <QGLWidget>
 #include <GL/glu.h>
+#include <QTime>
 #include "grid.h"
 #include "trebuchet.h"
 #include "cible.h"
@@ -61,6 +62,8 @@ signals:
     void zRotationChanged(int angle);
     void on_jouer_clicked(int);
     void forceChanged(int angle);
+    void chrono1Refresh(QString tpPartie);
+    void chrono2Refresh(QString tpTotal);
 
 
 
@@ -91,6 +94,8 @@ private:
     int xBoulet;
     int yBoulet;
 
+    QTime tempsPartie_;
+    QTime tempsTotal_;
     int angle_;
 
     double angle1;

@@ -17,6 +17,8 @@ Window::Window(QWidget *parent) :
     connect(ui->myGLWidget, SIGNAL(yRotationChanged(int)), ui->rotYSlider, SLOT(setValue(int)));
     connect(ui->myGLWidget, SIGNAL(zRotationChanged(int)), ui->rotZSlider, SLOT(setValue(int)));
     connect(ui->myGLWidget, SIGNAL(forceChanged(int)), ui->forceSlider, SLOT(setValue(int)));
+    connect(ui->myGLWidget, SIGNAL(chrono1Refresh(QString)), ui->chronoPartie, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(chrono2Refresh(QString)), ui->chronoTotal, SLOT(setText(QString)));
     connect(this, SIGNAL(on_lancerBouton_clicked()), ui->myGLWidget, SLOT(lancerBoutonClicked()));
     connect(this, SIGNAL(on_Webcam_clicked()), ui->myGLWidget, SLOT(webcam_clicked()));
     connect(this, SIGNAL(on_jouer_clicked()), ui->myGLWidget, SLOT(jouer_clicked()));

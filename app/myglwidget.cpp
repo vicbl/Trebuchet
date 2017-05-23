@@ -52,6 +52,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     logoTelecom_=new LogoTelecom();
 
 
+    LOGOTELECOM =logoTelecom_->draw();
 }
 
 MyGLWidget::~MyGLWidget()
@@ -67,7 +68,12 @@ void MyGLWidget::setValue()
 
         updateGL();
     }
+    chrono1Refresh(QString(tempsPartie_.elapsed()));
+    chrono2Refresh(QString(tempsTotal_.elapsed()));
 }
+
+
+
 // Fonction de 'sleep' : qSleep() appartient au module QtTest
 static void delay(int tp)
 {
@@ -260,8 +266,11 @@ void MyGLWidget::lancerBoutonClicked()
         }
         delay(1000);
         reInitialize();
-        delay(2000);
+        delay(1000);
         bouletLance_=false;
+
+        tempsPartie_.restart();
+
         lancement_=false;
     }
 
@@ -483,8 +492,6 @@ void MyGLWidget::jouer_clicked()
 {
     if (!lancement_)
     {
-
-        LOGOTELECOM =logoTelecom_->draw();
         CIBLE =cible_->draw();
 
         game_=new Game(difficulty_);
@@ -493,6 +500,8 @@ void MyGLWidget::jouer_clicked()
         posXCible_=game_->getCiblePositionX();
         posYCible_=game_->getCiblePositionY();
         distanceTrebuchet_=game_->getDistanceTrebuchet();
+        tempsPartie_.start();
+        tempsTotal_.start();
         updateGL();
     }
 }
@@ -869,7 +878,7 @@ void MyGLWidget::drawCorde(){
     {
         glTranslatef(0, 0, 12);
         glPushMatrix();
-            glColor3f(.35, .35, .35);
+            glColor3f(.55, .55, .55);
             GLUquadric* bou = gluNewQuadric();
             gluSphere(bou, 5, 10, 10);
             gluDeleteQuadric(bou);

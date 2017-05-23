@@ -53,7 +53,7 @@ GLuint Boulet::draw()
 
             glRotatef(axe-180, 0, 0, 1);
             glTranslatef(0, coord_x, coord_y);
-            glColor3f(.35, .35, .35);
+            glColor3f(.55, .55, .55);
             GLUquadric* bou = gluNewQuadric();
             glScalef(.1, .1, .1);
             gluSphere(bou, 3, 10, 10);
