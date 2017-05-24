@@ -73,9 +73,7 @@ private:
     void reInitialize();
 
     void drawPelouse();
-
     void drawCorde();
-
     void drawGrid();
 
     //Coordonnées de la scène globale

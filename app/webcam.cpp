@@ -107,11 +107,11 @@ void Webcam::runWebCam(){
             if (firstPassage_==true){
                 active_=true;
                 firstPassage_=false;
-                xInit=maxLoc.x;
-                yInit=maxLoc.y;
+               // xInit=maxLoc.x;
+               // yInit=maxLoc.y;
             }
-            setxPostion(maxLoc.x-xInit);
-            setyPostion(maxLoc.y-yInit);
+            setxPostion(maxLoc.x);
+            setyPostion(maxLoc.y);
 
        //     qDebug()<<"xpos= "<<xPosition_<<" et ypos=  "<<yPosition_;
             // Show image

@@ -22,7 +22,6 @@
        <height>200</height>
       </size>
      </property>
-     <zorder></zorder>
     </widget>
    </item>
    <item>
@@ -40,6 +39,17 @@
          </item>
          <item>
           <widget class="QLabel" name="chronoPartie">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>MS Gothic</family>
+            </font>
+           </property>
            <property name="text">
             <string> 0.0 </string>
            </property>
@@ -58,6 +68,17 @@
          </item>
          <item>
           <widget class="QLabel" name="chronoTotal">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>MS Gothic</family>
+            </font>
+           </property>
            <property name="text">
             <string> 0.0 </string>
            </property>
