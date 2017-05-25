@@ -6,7 +6,7 @@ class LogoTelecom
 {
 public:
     LogoTelecom();
-    GLuint draw();
+    void draw();
     void setTexture();
     void drawPartUJM();
     void drawPartTSE();
@@ -15,9 +15,11 @@ public:
 private:
     GLuint logoTelecom_;
     GLuint logoUJM_;
-    GLuint texture_[];
+    GLuint textureBois_;
+    GLuint textureTSE_;
+    GLuint textureUJM_;
     GLuint completeLogoTelecom_;
-
+    GLuint boxBois;
 };
 
 #endif // LOGOTELECOM_H

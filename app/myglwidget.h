@@ -104,9 +104,8 @@ private:
 
     GLuint pelouse;
     GLuint corde;
-    GLuint CIBLE;
-    GLuint LOGOTELECOM;
 
+     GLuint texturePelouse_;
 
     Cible * cible_;
     Boulet* boulet_;
@@ -121,7 +120,6 @@ private:
     boolean finCourseCorde_;
     boolean vueSuivie_=true;
 
-    GLuint texture[];
 
     QPoint lastPos;
 

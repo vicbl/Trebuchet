@@ -400,9 +400,14 @@ void MyGLWidget::setZRotation(int angle) // Axe
 
 void MyGLWidget::initializeGL()
 {
+
+    texturePelouse_=(Textures(":/images/pelouse.bmp")).getTextures();
+    logoTelecom_->draw();
+    grid_->draw();
+    cible_->draw();
     qglClearColor(Qt::white);
 
-    loadTextures();
+
     glEnable(GL_DEPTH_TEST);
 
     glShadeModel(GL_SMOOTH);
@@ -460,22 +465,6 @@ void MyGLWidget::mousePressEvent(QMouseEvent *event)
     lastPos = event->pos();
 }
 
-void MyGLWidget::loadTextures()
-{
-    QString chemin[3];
-
-    const QString CHEMIN = ":/images";
-
-    chemin[0]=CHEMIN+"/bois.bmp";
-    chemin[1]=CHEMIN+"/pelouse.bmp";
-    chemin[2]=CHEMIN+"/bois2.bmp";
-
-    for(int i = 0;i<3;i++){
-        Textures *tex=new Textures(chemin[i]);
-        texture[i]=tex->getTextures();
-        delete tex;
-    }
-}
 
 void MyGLWidget::webcam_clicked()
 {
@@ -495,9 +484,6 @@ void MyGLWidget::jouer_clicked()
 {
     if (!lancement_)
     {
-        CIBLE = cible_->draw();
-        LOGOTELECOM = logoTelecom_->draw();
-
         game_=new Game(difficulty_);
         game_->newPostion();
         start_=true;
@@ -521,7 +507,7 @@ void MyGLWidget::draw()
     drawCorde();
     drawPelouse();
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
-    GLuint grid=grid_->draw();
+
 
 /*
     QTime myTimer;
@@ -567,7 +553,7 @@ void MyGLWidget::draw()
                 glTranslatef(posXCible_,posYCible_,0);
                 glScalef(1,1,1);
                 glRotatef(-angleRotationCible,0,0,1);
-                glCallList(CIBLE);
+                glCallList(cible_->getCompleteCible());
             glPopMatrix();
         glPopMatrix();
     }
@@ -577,12 +563,12 @@ void MyGLWidget::draw()
         glPushMatrix();
             glTranslatef(-5, -2, 1);
             glScalef(2,2,2);
-            glCallList(LOGOTELECOM);
+            glCallList(logoTelecom_->getCompleteLogoTelecom());
         glPopMatrix();
         glPushMatrix();
             glTranslatef(5, -2, 1);
             glScalef(2,2,2);
-            glCallList(LOGOTELECOM);
+            glCallList(logoTelecom_->getCompleteLogoTelecom());
         glPopMatrix();
     //*************End Draw Logo***************
 
@@ -607,7 +593,7 @@ void MyGLWidget::draw()
                 glTranslatef(2,0,2);
                 glRotatef(70,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid);
+                glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();
 
@@ -617,7 +603,7 @@ void MyGLWidget::draw()
                 glTranslatef(-2,0,2);
                 glRotatef(110,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid);
+                glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();
     glPopMatrix();
@@ -627,7 +613,7 @@ void MyGLWidget::draw()
     glDeleteLists(pelouse, 1);
     glDeleteLists(corde, 1);
     glDeleteLists(trebuchetComplet, 1);
-    glDeleteLists(grid, 1);
+
 
     glPopMatrix();
 
@@ -642,7 +628,7 @@ void MyGLWidget::drawPelouse(){
     glNewList(pelouse, GL_COMPILE);
     glPushMatrix();
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture[1]);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse_);
 
         glBegin(GL_QUADS);
             glTexCoord2f(0.0f, 0.0f);

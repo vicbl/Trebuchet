@@ -9,14 +9,15 @@ class Cible
 {
 public:
     Cible();
-    GLuint draw();
+    void draw();
     void setTexture();
     void drawPart();
     GLuint getCompleteCible();
     ~Cible();
 private:
     GLuint cible_;
-    GLuint texture_[];
+    GLuint textureBois_;
+    GLuint textureCible_;
     GLuint completeCible_;
 
 };
