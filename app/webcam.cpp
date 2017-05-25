@@ -93,7 +93,7 @@ void Webcam::runWebCam(){
             // Localize the best match with minMaxLoc
             double minVal; double maxVal; Point minLoc; Point maxLoc;
             minMaxLoc( resultImage, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-            // Save the location fo the matched rect
+            // Save the location of the matched rect
             resultRect=Rect(maxLoc.x,maxLoc.y,templateWidth,templateHeight);
 
             // Show the result

@@ -25,7 +25,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     xRot = 180; // angle de vue
     yRot = -20; // angle du levier
     zRot = 180; // axe du trébuchet
-    force = -20;
+    force = -40;
 
     angle_ = 0;
     angle1 = 3;
@@ -63,7 +63,7 @@ void MyGLWidget::setValue()
     if (w->getActive()){
         zRot=w->getxPosition();
         yRot=w->getyPosition();
-        qDebug()<<"x = "<<zRot<<" y = "<<yRot;
+        //qDebug()<<"x = "<<zRot<<" y = "<<yRot;
 
 
         updateGL();
@@ -71,7 +71,7 @@ void MyGLWidget::setValue()
 
     QTime t1 = QTime(0,0,0,0).addMSecs(tempsPartie_.elapsed());
     QTime t2 = QTime(0,0,0,0).addMSecs(tempsTotal_.elapsed());
-    QString st1 = QString::number(t1.minute()) + ":" + QString::number(t1.second()) + "." + QString::number(round(t1.msec()/1000)) ;
+    QString st1 = QString::number(t1.minute()) + ":" + QString::number(t1.second()) + "." + QString::number(round(t1.msec()/100)) ;
     QString st2 = QString::number(t2.minute()) + ":" + QString::number(t2.second()) ;
 
     chrono1Refresh(st1);
@@ -107,7 +107,7 @@ void MyGLWidget::reInitialize()
 
         delay(6);
     }
-    force = -20;
+    force = -40;
 }
 
 int MyGLWidget::getXScene()
@@ -174,8 +174,8 @@ void MyGLWidget::lancerBoutonClicked()
         //int final_xRot;       // xRot final pour être derrière le trébuchet
         int angle = xRot;       // Angle de rotation du trébuchet
         boulet_->reset();
-        float v0 = float(30+force)/8;
-        boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [.33 / 2], coord_x_final = [29 - 80]
+        float v0 = float(28+(force/4-10))/8;
+        boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
         boulet_->set_axe(zRot);
         qDebug() << "Force = " << force << " v0 = " << v0;
         int pos_treb = 0;       // position trigonométrique du levier autour de son axe de rotation
@@ -287,10 +287,10 @@ void MyGLWidget::lancerBoutonClicked()
 void MyGLWidget::setForce(int angle)
 {
     qNormalizeAngle(angle);
-    if (-30-angle != yRot && !lancement_) {
-        yRot = -30-angle;
+    if (angle/2 != yRot && !lancement_) {
+        yRot = angle/2;
         force = angle;
-        emit yRotationChanged(angle);
+        emit yRotationChanged(angle/2);
         emit forceChanged(angle);
 
         gluDeleteQuadric(corde1);
@@ -403,9 +403,6 @@ void MyGLWidget::setZRotation(int angle) // Axe
 
 void MyGLWidget::initializeGL()
 {
-    logoTelecom_->draw();
-    grid_->draw();
-    cible_->draw();
     qglClearColor(Qt::white);
 
     loadTextures();
@@ -423,7 +420,6 @@ void MyGLWidget::initializeGL()
 
 void MyGLWidget::paintGL()
 {
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     glRotatef(-180, 0.0, 0.0, 1.0);
@@ -493,9 +489,8 @@ void MyGLWidget::startButton_clicked()
 {
     NewGameDialog dial(this);
     if (dial.exec() == QDialog::Accepted ) {
-        qDebug() << "You pressed OK!";
-          qDebug() <<dial.getName();
-              qDebug() <<dial.getDifficulty();
+          qDebug() <<dial.getName()<<" : "<<dial.getDifficulty();
+          difficulty_=dial.getDifficulty();
     }
     qDebug()<<"start button";
 }
@@ -503,6 +498,9 @@ void MyGLWidget::jouer_clicked()
 {
     if (!lancement_)
     {
+        CIBLE = cible_->draw();
+        LOGOTELECOM = logoTelecom_->draw();
+
         game_=new Game(difficulty_);
         game_->newPostion();
         start_=true;
@@ -526,8 +524,7 @@ void MyGLWidget::draw()
     drawCorde();
     drawPelouse();
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
-
-
+    GLuint grid=grid_->draw();
 
 /*
     QTime myTimer;
@@ -554,11 +551,18 @@ void MyGLWidget::draw()
     }
     //************** End Draw Gazon *************
 
+    //************** Draw Boulet ****************
+    if (bouletLance_)
+    {
+        GLuint boulet=boulet_->draw();
+        glCallList(boulet);
+    }
+    //************ End Draw Boulet ***************
 
 
     //********** Draw Cible ***************
     if (start_==true) {
-        qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
+        //qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
         double angleRotationCible = atan ((posXCible_*1.0/(posYCible_*1.0+distanceTrebuchet_*1.0))) * 180 / PI;
         glPushMatrix();
             glTranslatef(0,distanceTrebuchet_,.65);
@@ -566,7 +570,7 @@ void MyGLWidget::draw()
                 glTranslatef(posXCible_,posYCible_,0);
                 glScalef(1,1,1);
                 glRotatef(-angleRotationCible,0,0,1);
-                glCallList(cible_->getCompleteCible());
+                glCallList(CIBLE);
             glPopMatrix();
         glPopMatrix();
     }
@@ -576,15 +580,13 @@ void MyGLWidget::draw()
         glPushMatrix();
             glTranslatef(-5, -2, 1);
             glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
-
+            glCallList(LOGOTELECOM);
         glPopMatrix();
         glPushMatrix();
             glTranslatef(5, -2, 1);
             glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
+            glCallList(LOGOTELECOM);
         glPopMatrix();
-
     //*************End Draw Logo***************
 
 
@@ -601,13 +603,14 @@ void MyGLWidget::draw()
 
     //**************** Draw grid *********************
     glPushMatrix();
+
         glPushMatrix();
             glRotatef(90,1,0,0);
             glPushMatrix();
                 glTranslatef(2,0,2);
                 glRotatef(70,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid_->getCompleteGrid());
+                glCallList(grid);
             glPopMatrix();
         glPopMatrix();
 
@@ -617,26 +620,18 @@ void MyGLWidget::draw()
                 glTranslatef(-2,0,2);
                 glRotatef(110,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid_->getCompleteGrid());
+                glCallList(grid);
             glPopMatrix();
         glPopMatrix();
     glPopMatrix();
     //*************** End Draw grid *********************
 
-    //************** Draw Boulet ****************
-    if (bouletLance_)
-    {
-        GLuint boulet=boulet_->draw();
-        glCallList(boulet);
-        glDeleteLists(boulet, 1);
-    }
-    //************ End Draw Boulet ***************
-
-   // glDeleteLists(logotel, 1);
 
     glDeleteLists(pelouse, 1);
     glDeleteLists(corde, 1);
     glDeleteLists(trebuchetComplet, 1);
+    glDeleteLists(grid, 1);
+
     glPopMatrix();
 
 

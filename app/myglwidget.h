@@ -104,7 +104,8 @@ private:
 
     GLuint pelouse;
     GLuint corde;
-
+    GLuint CIBLE;
+    GLuint LOGOTELECOM;
 
 
     Cible * cible_;
