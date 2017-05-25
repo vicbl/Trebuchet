@@ -107,7 +107,6 @@ void MyGLWidget::reInitialize()
 
         delay(6);
     }
-    force = -40;
 }
 
 int MyGLWidget::getXScene()
@@ -174,7 +173,7 @@ void MyGLWidget::lancerBoutonClicked()
         //int final_xRot;       // xRot final pour être derrière le trébuchet
         int angle = xRot;       // Angle de rotation du trébuchet
         boulet_->reset();
-        float v0 = float(28+(force/4-10))/8;
+        float v0 = float(28+(float(force)/4-10))/8;
         boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
         boulet_->set_axe(zRot);
         qDebug() << "Force = " << force << " v0 = " << v0;
@@ -393,10 +392,8 @@ void MyGLWidget::setZRotation(int angle) // Axe
     if (angle != zRot && !lancement_) {
         zRot = angle;
 
-        //emit zRotationChanged(angle);
+        emit zRotationChanged(angle);
 
-        gluDeleteQuadric(corde1);
-        // corde1 = gluNewQuadric();
         updateGL();
     }
 }
