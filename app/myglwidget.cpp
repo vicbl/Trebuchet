@@ -50,7 +50,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     cible_=new Cible();
     boulet_=new Boulet ();
     logoTelecom_=new LogoTelecom();
-
+    traj_ =new Trajectory();
 }
 
 MyGLWidget::~MyGLWidget()
@@ -540,9 +540,12 @@ void MyGLWidget::draw()
     drawCorde();
     drawPelouse();
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
+    float v0 = float(28+(float(force)/4-10))/8;
+    traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
+    traj_->set_axe(zRot);
+    GLuint traject=traj_->draw();
 
-
-/*
+    /*
     QTime myTimer;
     myTimer.start();
 
@@ -569,6 +572,8 @@ void MyGLWidget::draw()
         }
     }
     //************** End Draw Gazon *************
+
+ glCallList(traject);
 
     //************** Draw Boulet ****************
     if (bouletLance_)

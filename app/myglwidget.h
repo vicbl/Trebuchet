@@ -13,6 +13,7 @@
 #include "game.h"
 #include "boulet.h"
 #include "logotelecom.h"
+#include "trajectory.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -113,6 +114,7 @@ private:
     LogoTelecom * logoTelecom_;
     Trebuchet *trebuchet_;
     Grid *grid_;
+    Trajectory *traj_;
 
     GLUquadric* corde1;
 

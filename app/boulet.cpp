@@ -3,7 +3,7 @@
 #include <GL/glu.h>
 #include <QtOpenGL/qgl.h>
 #include <QDebug>
-
+#define PI 3.14159265
 Boulet::Boulet()
 {
 
@@ -26,8 +26,8 @@ GLuint Boulet::draw()
 
     // Calcul des nouvelles coordonnées
 
-    float cosa = cos(3.1415*20/180);
-    float sina = sin(3.1415*20/180);
+    float cosa = cos(PI*20/180);
+    float sina = sin(PI*20/180);
 
     float newx = 1.7 + v0*cosa*t;               // x = x0 + v0*cos(a)*t
     float newy = 7 + v0*sina*t-.02*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
