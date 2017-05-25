@@ -5,8 +5,7 @@
 #include "textures.h"
 Cible::Cible()
 {
-
-
+    this->setTexture();
 }
 
 Cible::~Cible(){
@@ -38,10 +37,10 @@ void Cible::drawPart(){
             glDisable(GL_TEXTURE_2D);
         glPopMatrix();
     glEndList();
+    glDeleteLists(cible_, 1);
 }
 
 void Cible::draw(){
-    this->setTexture();
     this->drawPart();
     Box *a=new Box(1,1,1, textureBois_);
     GLuint boxBois=a->getCompleteBox();
@@ -83,6 +82,7 @@ void Cible::draw(){
            //************End Draw Support********
         glPopMatrix();
     glEndList();
+
 }
 GLuint Cible::getCompleteCible(){
     return completeCible_;

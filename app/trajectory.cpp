@@ -26,16 +26,15 @@ GLuint Trajectory::draw()
         GLUquadric* bou = gluNewQuadric();
         glPushMatrix();
             glRotatef(axe-180, 0, 0, 1);
-            glColor3f(.55, .55, .55);
+            glColor3f(.9, .9, .9);
             while (coord_y>0){
                 glPushMatrix();
-                    qDebug()<<"x="<<coord_x<<"y="<<coord_y;
                     coord_x = 1.7 + v0*cosa*i;
                     coord_y = 7 + v0*sina*i-.02*pow(i,2);
                     i=i+0.1;
                     glTranslatef(0, coord_x, coord_y);
                     glScalef(.05, .05, .05);
-                    gluSphere(bou, 3, 10, 10);
+                    gluSphere(bou, 1, 10, 10);
                     glScalef(10, 10, 10);
                 glPopMatrix();
             }
@@ -44,6 +43,7 @@ GLuint Trajectory::draw()
         glPopMatrix();
     glEndList();
     return trajectory_;
+    glDeleteLists(trajectory_, 1);
 }
 
 

@@ -7,11 +7,10 @@
 Trebuchet::Trebuchet()
 {
 
-
 }
 
 Trebuchet::~Trebuchet(){
-   // glDeleteLists(completeTrebuchet_, 1);
+   glDeleteLists(completeTrebuchet_, 1);
 
 }
 
@@ -25,7 +24,7 @@ void Trebuchet::setTexture(){
     for(int i = 0;i<3;i++){
         Textures *tex=new Textures(chemin[i]);
        texture_[i]=tex->getTextures();
-        //delete tex;
+        delete tex;
     }
 
 
@@ -43,7 +42,6 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
     Box *g=new Box(1,1,1, texture_[2]);
 
     GLuint levierBois=g->getCompleteBox();
-
     GLuint boxBois=a->getCompleteBox();
 
     completeTrebuchet_ = glGenLists(1);
@@ -117,8 +115,18 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
 
 
     glEndList();
+/*
+    delete g;
+    delete a;
+    delete &levierBois;
+    delete &boxBois;
+*/
 
      return completeTrebuchet_;
+     glDeleteLists(completeTrebuchet_, 1);
+     glDeleteLists(levierBois, 1);
+     glDeleteLists(boxBois, 1);
+
 }
 GLuint Trebuchet::getCompleteTrebuchet(){
     return completeTrebuchet_;

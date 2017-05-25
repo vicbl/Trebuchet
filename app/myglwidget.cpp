@@ -277,6 +277,8 @@ void MyGLWidget::lancerBoutonClicked()
 
         lancement_=false;
 
+        updateGL();
+
         // si la partie a commencée permet de calculé les scores
         if (start_){
             qDebug()<<"score  ============="<<game_->getScore();
@@ -580,6 +582,7 @@ void MyGLWidget::draw()
     {
         GLuint boulet=boulet_->draw();
         glCallList(boulet);
+        glDeleteLists(boulet, 1);
     }
     //************ End Draw Boulet ***************
 
@@ -600,6 +603,7 @@ void MyGLWidget::draw()
                 glCallList(cible_->getCompleteCible());
             glPopMatrix();
         glPopMatrix();
+        delete &angleRotationCible;
     }
     //*********** End draw cible **********
 
@@ -657,6 +661,8 @@ void MyGLWidget::draw()
     glDeleteLists(pelouse, 1);
     glDeleteLists(corde, 1);
     glDeleteLists(trebuchetComplet, 1);
+    glDeleteLists(traject, 1);
+
 
 
     glPopMatrix();
