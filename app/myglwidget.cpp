@@ -403,6 +403,9 @@ void MyGLWidget::setZRotation(int angle) // Axe
 
 void MyGLWidget::initializeGL()
 {
+    logoTelecom_->draw();
+    grid_->draw();
+    cible_->draw();
     qglClearColor(Qt::white);
 
     loadTextures();
@@ -420,6 +423,7 @@ void MyGLWidget::initializeGL()
 
 void MyGLWidget::paintGL()
 {
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     glRotatef(-180, 0.0, 0.0, 1.0);
@@ -499,9 +503,6 @@ void MyGLWidget::jouer_clicked()
 {
     if (!lancement_)
     {
-        CIBLE = cible_->draw();
-        LOGOTELECOM = logoTelecom_->draw();
-
         game_=new Game(difficulty_);
         game_->newPostion();
         start_=true;
@@ -525,7 +526,8 @@ void MyGLWidget::draw()
     drawCorde();
     drawPelouse();
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
-    GLuint grid=grid_->draw();
+
+
 
 /*
     QTime myTimer;
@@ -552,13 +554,6 @@ void MyGLWidget::draw()
     }
     //************** End Draw Gazon *************
 
-    //************** Draw Boulet ****************
-    if (bouletLance_)
-    {
-        GLuint boulet=boulet_->draw();
-        glCallList(boulet);
-    }
-    //************ End Draw Boulet ***************
 
 
     //********** Draw Cible ***************
@@ -571,7 +566,7 @@ void MyGLWidget::draw()
                 glTranslatef(posXCible_,posYCible_,0);
                 glScalef(1,1,1);
                 glRotatef(-angleRotationCible,0,0,1);
-                glCallList(CIBLE);
+                glCallList(cible_->getCompleteCible());
             glPopMatrix();
         glPopMatrix();
     }
@@ -581,13 +576,15 @@ void MyGLWidget::draw()
         glPushMatrix();
             glTranslatef(-5, -2, 1);
             glScalef(2,2,2);
-            glCallList(LOGOTELECOM);
+            glCallList(logoTelecom_->getCompleteLogoTelecom());
+
         glPopMatrix();
         glPushMatrix();
             glTranslatef(5, -2, 1);
             glScalef(2,2,2);
-            glCallList(LOGOTELECOM);
+            glCallList(logoTelecom_->getCompleteLogoTelecom());
         glPopMatrix();
+
     //*************End Draw Logo***************
 
 
@@ -604,14 +601,13 @@ void MyGLWidget::draw()
 
     //**************** Draw grid *********************
     glPushMatrix();
-
         glPushMatrix();
             glRotatef(90,1,0,0);
             glPushMatrix();
                 glTranslatef(2,0,2);
                 glRotatef(70,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid);
+                glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();
 
@@ -621,18 +617,26 @@ void MyGLWidget::draw()
                 glTranslatef(-2,0,2);
                 glRotatef(110,0,1,0);
                 glScalef(0.5,0.2,0.75);
-                glCallList(grid);
+                glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();
     glPopMatrix();
     //*************** End Draw grid *********************
 
+    //************** Draw Boulet ****************
+    if (bouletLance_)
+    {
+        GLuint boulet=boulet_->draw();
+        glCallList(boulet);
+        glDeleteLists(boulet, 1);
+    }
+    //************ End Draw Boulet ***************
+
+   // glDeleteLists(logotel, 1);
 
     glDeleteLists(pelouse, 1);
     glDeleteLists(corde, 1);
     glDeleteLists(trebuchetComplet, 1);
-    glDeleteLists(grid, 1);
-
     glPopMatrix();
 
 
