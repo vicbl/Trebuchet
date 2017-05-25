@@ -43,7 +43,6 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     lancement_ = false;
     finCourseCorde_=false;
     vueSuivie_=true;
-
     // corde1 = gluNewQuadric();
 
     grid_= new Grid(25,75,0.01);
@@ -222,54 +221,53 @@ void MyGLWidget::lancerBoutonClicked()
 
         bool aller = true;
         while (pos_treb<420)
-        {
-            if (pos_treb<170)
-            {
-                yRot+=3;
-                if (yRot >= 110)
                 {
-                    bouletLance_=true;
+                    if (pos_treb<172)
+                    {
+                        yRot+=3;
+                        if (yRot >= 110)
+                        {
+                            bouletLance_=true;
+                        }
+
+                    } else if (pos_treb<266)
+                    {
+                        aller = false;
+                        yRot-=2;
+                    } else if (pos_treb<324)
+                    {
+                        yRot+=2;
+                    } else if (pos_treb<370)
+                    {
+                        yRot-=2;
+                    } else if (pos_treb<400)
+                    {
+                        yRot+=2;
+                    } else if (pos_treb<416)
+                    {
+                        yRot-=2;
+                    }else
+                    {
+                        yRot+=2;
+                    }
+
+                    if (aller)
+                    {
+                        pos_treb+=3;
+                    } else
+                    {
+                        pos_treb+=2;
+                    }
+
+
+                    angle = yRot;
+                    emit yRotationChanged(angle);
+                    gluDeleteQuadric(corde1);
+
+                    updateGL();
+
+                   delay(6);
                 }
-
-            } else if (pos_treb<265)
-            {
-                aller = false;
-                yRot--;
-            } else if (pos_treb<325)
-            {
-                yRot++;
-            } else if (pos_treb<370)
-            {
-                yRot--;
-            } else if (pos_treb<400)
-            {
-                yRot++;
-            } else if (pos_treb<415)
-            {
-                yRot--;
-            }else
-            {
-                yRot++;
-            }
-
-            if (aller)
-            {
-                pos_treb+=3;
-            } else
-            {
-                pos_treb++;
-            }
-
-
-            angle = yRot;
-            emit yRotationChanged(angle);
-            gluDeleteQuadric(corde1);
-
-            // corde1 = gluNewQuadric();
-            updateGL();
-
-           delay(6);
-        }
         delay(1000);
         reInitialize();
         delay(1000);
@@ -278,6 +276,12 @@ void MyGLWidget::lancerBoutonClicked()
         tempsPartie_.restart();
 
         lancement_=false;
+
+        // si la partie a commencée permet de calculé les scores
+        if (start_){
+            qDebug()<<"score  ============="<<game_->getScore();
+            calculScores();
+        }
     }
 
 
@@ -477,25 +481,54 @@ void MyGLWidget::startButton_clicked()
     if (dial.exec() == QDialog::Accepted ) {
           qDebug() <<dial.getName()<<" : "<<dial.getDifficulty();
           difficulty_=dial.getDifficulty();
+          name_=dial.getName();
+          game_=new Game(difficulty_,name_);
+          game_->newPostion();
+          start_=true;
+          posXCible_=game_->getCiblePositionX();
+          posYCible_=game_->getCiblePositionY();
+          distanceTrebuchet_=game_->getDistanceTrebuchet();
+          tempsPartie_.start();
+          tempsTotal_.start();
+          updateGL();
     }
+
     qDebug()<<"start button";
 }
 void MyGLWidget::jouer_clicked()
 {
-    if (!lancement_)
-    {
-        game_=new Game(difficulty_);
+  /*  if (!lancement_)
+    {       
         game_->newPostion();
         start_=true;
+        posXCible_=game_->getCiblePositionX();
+        posYCible_=game_->getCiblePositionY();
+        distanceTrebuchet_=game_->getDistanceTrebuchet();
+        qDebug()<<"x cible = "<<posXCible_<<"et y ="<<posYCible_<<" distance treb "<<distanceTrebuchet_;
+        tempsPartie_.start();
+        tempsTotal_.start();
+        updateGL();
+    }*/
+}
+
+void MyGLWidget::calculScores(){
+    game_->calculScore(boulet_->get_x(),zRot);
+    qDebug()<<"fin";
+    if(game_->getCibleTouchee()){
+        game_->newPostion();
+        yBoulet=true;
         posXCible_=game_->getCiblePositionX();
         posYCible_=game_->getCiblePositionY();
         distanceTrebuchet_=game_->getDistanceTrebuchet();
         tempsPartie_.start();
         tempsTotal_.start();
         updateGL();
-    }
-}
 
+    }
+
+
+
+}
 
 
 void MyGLWidget::draw()
@@ -517,8 +550,11 @@ void MyGLWidget::draw()
     qDebug("temps de PELOUSE' : %d", t5);
 */
 
-    // Debut affichage
 
+
+
+
+    // Debut affichage
     glPushMatrix();
 
     //************** Draw Gazon ****************
@@ -541,6 +577,9 @@ void MyGLWidget::draw()
         glCallList(boulet);
     }
     //************ End Draw Boulet ***************
+
+
+
 
 
     //********** Draw Cible ***************

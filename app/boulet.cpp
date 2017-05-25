@@ -45,7 +45,7 @@ GLuint Boulet::draw()
 
 
 
-    qDebug() << "Boulet : " << coord_x << " / " << coord_y;
+   // qDebug() << "Boulet : " << coord_x << " / " << coord_y;
 
     glNewList(boulet, GL_COMPILE);
 

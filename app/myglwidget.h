@@ -31,6 +31,7 @@ public:
     void setYScene(int y);
     void setZScene(int z);
     void setZoomScene(int zoom);
+    void calculScores();
 
 protected:
     void initializeGL();
@@ -105,7 +106,7 @@ private:
     GLuint pelouse;
     GLuint corde;
 
-     GLuint texturePelouse_;
+    GLuint texturePelouse_;
 
     Cible * cible_;
     Boulet* boulet_;
@@ -120,12 +121,12 @@ private:
     boolean finCourseCorde_;
     boolean vueSuivie_=true;
 
-
     QPoint lastPos;
 
     //Variable of the game
     Game *game_;
     int difficulty_=1;
+    QString name_;
     bool start_=false;
     int distanceTrebuchet_;
     int posXCible_;
