@@ -57,6 +57,7 @@ public slots:
     void startButton_clicked();
     void setValue();
     void vueChanged();
+   void trajectoryActived();
 
 signals:
     // signaling rotation from mouse movement
@@ -67,6 +68,11 @@ signals:
     void forceChanged(int angle);
     void chrono1Refresh(QString tpPartie);
     void chrono2Refresh(QString tpTotal);
+    void setName(QString name);
+    void setDifficulty(QString difficulty);
+    void setScore(QString score);
+    void setBestPlayer(QString bestPlayer);
+    void setNbCibles(QString nbCibles);
 
 
 
@@ -77,7 +83,7 @@ private:
 
   //  void drawPelouse();
     void drawCorde();
-    void drawGrid();
+
 
     //Coordonnées de la scène globale
     int xScene_=80;
@@ -123,6 +129,7 @@ private:
     boolean lancement_;
     boolean finCourseCorde_;
     boolean vueSuivie_=true;
+    boolean trajectory_=false;
 
     QPoint lastPos;
 

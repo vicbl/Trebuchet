@@ -94,6 +94,11 @@ void MyGLWidget::vueChanged()
 {
     vueSuivie_=!vueSuivie_;
 }
+void MyGLWidget::trajectoryActived()
+{
+    trajectory_=!trajectory_;
+    updateGL();
+}
 
 void MyGLWidget::reInitialize()
 {
@@ -110,38 +115,15 @@ void MyGLWidget::reInitialize()
     }
 }
 
-int MyGLWidget::getXScene()
-{
-    return xScene_;
-}
-int MyGLWidget::getYScene()
-{
-    return yScene_;
-}
-int MyGLWidget::getZScene()
-{
-    return zScene_;
-}
-int MyGLWidget::getZoomScene()
-{
-    return zoomScene_;
-}
-void MyGLWidget::setXScene( int x)
-{
-    xScene_=x;
-}
-void MyGLWidget::setYScene( int y)
-{
-    yScene_=y;
-}
-void MyGLWidget::setZScene( int z)
-{
-    zScene_=z;
-}
-void MyGLWidget::setZoomScene( int zoom)
-{
-    zoomScene_=zoom;
-}
+int MyGLWidget::getXScene(){return xScene_;}
+int MyGLWidget::getYScene(){return yScene_;}
+int MyGLWidget::getZScene(){return zScene_;}
+int MyGLWidget::getZoomScene(){return zoomScene_;}
+void MyGLWidget::setXScene( int x){xScene_=x;}
+void MyGLWidget::setYScene( int y){yScene_=y;}
+void MyGLWidget::setZScene( int z){zScene_=z;}
+void MyGLWidget::setZoomScene( int zoom){zoomScene_=zoom;}
+
 QSize MyGLWidget::minimumSizeHint() const
 {
     return QSize(50, 50);
@@ -478,11 +460,11 @@ void MyGLWidget::webcam_clicked()
 
 void MyGLWidget::startButton_clicked()
 {
-    NewGameDialog dial(this);
-    if (dial.exec() == QDialog::Accepted ) {
-          qDebug() <<dial.getName()<<" : "<<dial.getDifficulty();
-          difficulty_=dial.getDifficulty();
-          name_=dial.getName();
+    NewGameDialog newGame(this);
+    if (newGame.exec() == QDialog::Accepted ) {
+          qDebug() <<newGame.getName()<<" : "<<newGame.getDifficulty();
+          difficulty_=newGame.getDifficulty();
+          name_=newGame.getName();
           game_=new Game(difficulty_,name_);
           game_->newPostion();
           start_=true;
@@ -491,6 +473,8 @@ void MyGLWidget::startButton_clicked()
           distanceTrebuchet_=game_->getDistanceTrebuchet();
           tempsPartie_.start();
           tempsTotal_.start();
+          setName(name_);
+          setDifficulty( QString::number(difficulty_));
           updateGL();
     }
 
@@ -522,13 +506,12 @@ void MyGLWidget::calculScores(){
         posYCible_=game_->getCiblePositionY();
         distanceTrebuchet_=game_->getDistanceTrebuchet();
         tempsPartie_.start();
-        tempsTotal_.start();
+        setScore( QString::number(game_->getScore()));
+        setNbCibles(QString::number(game_->getNbTotalCible()));
+        zRot = 180; // axe du trébuchet
+        force = -40;
         updateGL();
-
     }
-
-
-
 }
 
 
@@ -540,11 +523,8 @@ void MyGLWidget::draw()
 
     drawCorde();
 
-    GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
-    float v0 = float(28+(float(force)/4-10))/8;
-    traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
-    traj_->set_axe(zRot);
-    GLuint traject=traj_->draw();
+
+
 
     /*
     QTime myTimer;
@@ -573,7 +553,20 @@ void MyGLWidget::draw()
     }
     //************** End Draw Gazon *************
 
- glCallList(traject);
+
+    //************** Draw Trajectory ****************
+    if (trajectory_)
+    {
+        float v0 = float(28+(float(force)/4-10))/8;
+        traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
+        traj_->set_axe(zRot);
+        glCallList(traj_->draw());
+    }
+    //************** End Draw Trajectory *************
+
+
+
+
 
     //************** Draw Boulet ****************
     if (bouletLance_)
@@ -622,7 +615,7 @@ void MyGLWidget::draw()
         glRotatef(zRot,0,0,1);
         glPushMatrix();
             glScalef(2,2,2);
-            glCallList(trebuchetComplet);
+            glCallList(trebuchet_->draw(corde,yRot));
         glPopMatrix();
     glPopMatrix();
 
@@ -656,10 +649,7 @@ void MyGLWidget::draw()
 
 
     glDeleteLists(corde, 1);
-    glDeleteLists(trebuchetComplet, 1);
-    glDeleteLists(traject, 1);
-
-
+   // glDeleteLists(trebuchetComplet, 1);
 
     glPopMatrix();
 

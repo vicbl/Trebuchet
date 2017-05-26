@@ -5,6 +5,7 @@
 #define PI 3.14159265
 Game::Game(int difficulty, QString name)
 {
+    this->nbTotalCible_=0;
     this->difficulty_=difficulty;
     this->name_=name;
     this->score_=0;
@@ -88,6 +89,9 @@ int Game::getDistanceTrebuchet(){
 int Game::getScore(){
     return score_;
 }
+int Game::getNbTotalCible(){
+    return nbTotalCible_;
+}
 
 int Game::calculScore(float distance, float angle){
 
@@ -102,11 +106,13 @@ int Game::calculScore(float distance, float angle){
 
     float xZoneCible=ciblePositionX_-xBoulet;
 
-    //qDebug()<<"xZoneCible"<<xZoneCible<<"    yZoneCible"<<yZoneCible;
+    qDebug()<<"xZoneCible"<<xZoneCible<<"    yZoneCible"<<yZoneCible;
 
     if(abs(xZoneCible)<5 && abs(yZoneCible)<5 && firstPassage_){
         score_++;
         qDebug()<<"*********************Cible touchée, votre score est : "<<score_<<"*****************************";
+
+        nbTotalCible_++;
         cibleTouchee_=true;
         firstPassage_=false;
     }
