@@ -163,7 +163,7 @@ void MyGLWidget::lancerBoutonClicked()
         boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
         boulet_->set_axe(zRot);
         qDebug() << "Force = " << force << " v0 = " << v0;
-        int pos_treb = 0;       // position trigonométrique du levier autour de son axe de rotation
+        int pos_treb = 20+yRot;       // position trigonométrique du levier autour de son axe de rotation
 
         /*
          * zRot = angle = [100 - 180 - 260]
@@ -492,26 +492,40 @@ void MyGLWidget::startButton_clicked()
 
 void MyGLWidget::calculScores(){
 
+    if(nbTotalCible_<4){
+        game_->calculScore(boulet_->get_x(),zRot);
+        qDebug()<<"fin";
 
-    game_->calculScore(boulet_->get_x(),zRot);
-    qDebug()<<"fin";
-
-    if(game_->getCibleTouchee()&& nbTotalCible_<10){
-        game_->newPostion();
-        yBoulet=true;
-        nbTotalCible_++;
-        // nouvelle cible
-        posXCible_=game_->getCiblePositionX();
-        posYCible_=game_->getCiblePositionY();
-        distanceTrebuchet_=game_->getDistanceTrebuchet();
-        tempsPartie_.start();
-        setScore( QString::number(game_->getScore()));
-        setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
-        zRot = 180; // axe du trébuchet
-        force = -40;
-        updateGL();
-        emit yRotationChanged(zRot);
-        emit forceChanged(force);
+        if(game_->getCibleTouchee()){
+            game_->newPostion();
+            yBoulet=true;
+            nbTotalCible_++;
+            // nouvelle cible
+            posXCible_=game_->getCiblePositionX();
+            posYCible_=game_->getCiblePositionY();
+            distanceTrebuchet_=game_->getDistanceTrebuchet();
+            tempsPartie_.start();
+            setScore( QString::number(game_->getScore())+" / "+ QString::number(nbTotalCible_));
+            setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
+            zRot = 180; // axe du trébuchet
+            force = -40;
+            yRot = -20;
+            updateGL();
+            emit zRotationChanged(zRot);
+            emit yRotationChanged(yRot);
+            emit forceChanged(force);
+        }
+        else
+        {
+            nbTotalCible_++;
+            zRot = 180; // axe du trébuchet
+            force = -40; // Puissance de tir
+            yRot = -20; // angle levier
+            emit zRotationChanged(zRot);
+            emit yRotationChanged(yRot);
+            emit forceChanged(force);
+            updateGL();
+        }
     }else{
         qDebug()<<"La partie est terminée";
         QString message="Vous avez marqué "+QString::number(game_->getScore())+" points pour la difficulté "+QString::number(difficulty_);
@@ -527,12 +541,12 @@ void MyGLWidget::calculScores(){
         start_=false;
         zRot = 180; // axe du trébuchet
         force = -40;
-        emit yRotationChanged(zRot);
+        yRot = -20; // angle levier
+        emit zRotationChanged(zRot);
+        emit yRotationChanged(yRot);
         emit forceChanged(force);
         updateGL();
     }
-
-    nbTotalCible_++;
 
 }
 
