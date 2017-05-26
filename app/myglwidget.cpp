@@ -499,33 +499,25 @@ void MyGLWidget::calculScores(){
         if(game_->getCibleTouchee()){
             game_->newPostion();
             yBoulet=true;
-            nbTotalCible_++;
             // nouvelle cible
             posXCible_=game_->getCiblePositionX();
             posYCible_=game_->getCiblePositionY();
             distanceTrebuchet_=game_->getDistanceTrebuchet();
             tempsPartie_.start();
-            setScore( QString::number(game_->getScore())+" / "+ QString::number(nbTotalCible_));
             setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
-            zRot = 180; // axe du trébuchet
-            force = -40;
-            yRot = -20;
-            updateGL();
-            emit zRotationChanged(zRot);
-            emit yRotationChanged(yRot);
-            emit forceChanged(force);
+
         }
-        else
-        {
-            nbTotalCible_++;
-            zRot = 180; // axe du trébuchet
-            force = -40; // Puissance de tir
-            yRot = -20; // angle levier
-            emit zRotationChanged(zRot);
-            emit yRotationChanged(yRot);
-            emit forceChanged(force);
-            updateGL();
-        }
+
+        nbTotalCible_++;
+        setScore( QString::number(game_->getScore())+" / "+ QString::number(nbTotalCible_));
+        zRot = 180; // axe du trébuchet
+        force = -40;
+        yRot = -20;
+        updateGL();
+        emit zRotationChanged(zRot);
+        emit yRotationChanged(yRot);
+        emit forceChanged(force);
+
     }else{
         qDebug()<<"La partie est terminée";
         QString message="Vous avez marqué "+QString::number(game_->getScore())+" points pour la difficulté "+QString::number(difficulty_);
