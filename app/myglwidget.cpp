@@ -523,17 +523,12 @@ void MyGLWidget::draw()
 
     drawCorde();
 
-
-
-
     /*
     QTime myTimer;
     myTimer.start();
     int t5 = myTimer.elapsed();
     qDebug("temps de PELOUSE' : %d", t5);
 */
-
-
 
 
 
@@ -648,7 +643,7 @@ void MyGLWidget::draw()
 
 
 
-    glDeleteLists(corde, 1);
+    glDeleteLists(corde, 100);
    // glDeleteLists(trebuchetComplet, 1);
 
     glPopMatrix();

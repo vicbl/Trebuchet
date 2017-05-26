@@ -48,6 +48,7 @@ GLuint Textures::getTextures(){
     return texture_;
 }
 
+
 Textures::~Textures(){
 
 }
