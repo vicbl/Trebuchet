@@ -12,10 +12,8 @@ class Textures
 private:
  GLuint texture_;
 public:
-
     Textures(const QString ch);
     GLuint getTextures();
-
    ~Textures();
 };
 

@@ -26,7 +26,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="_nomJoueur"/>
+        <widget class="QLineEdit" name="_nomJoueur">
+         <property name="text">
+          <string>Joueur1</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -35,7 +39,7 @@
        <property name="title">
         <string>Difficulté</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>13</x>
@@ -49,6 +53,9 @@
           <widget class="QRadioButton" name="radioButton">
            <property name="text">
             <string>1</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -88,6 +95,9 @@
    </item>
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

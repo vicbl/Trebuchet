@@ -9,7 +9,7 @@ public:
     int getCiblePositionX();
     int getCiblePositionY();
     int getDistanceTrebuchet();
-    int getNbTotalCible();
+    int getNbTotalCibleTouchee();
     int getBestScore();
     bool getCibleTouchee();
     int getScore();
@@ -17,7 +17,7 @@ public:
     int calculScore(float distance, float angle);
 
 private:
-    int nbTotalCible_; // Nombre de cibles touchées
+    int nbTotalCibleTouchee_; // Nombre de cibles touchées
     int difficulty_;
     int distanceTrebuchet_;
     int ciblePositionX_;

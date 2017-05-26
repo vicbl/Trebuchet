@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <cmath>
 #include "newgamedialog.h"
+#include "save.h"
 
 #include"textures.h"
 #define PI 3.14159265
@@ -53,6 +54,8 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     boulet_=new Boulet ();
     logoTelecom_=new LogoTelecom();
     traj_ =new Trajectory();
+
+save_=new Save("D:/Utilisateur/Victor/Bureau/Nouveau dossier/Nouveau dossier/files/BestScores.txt");
 }
 
 MyGLWidget::~MyGLWidget()
@@ -260,7 +263,6 @@ void MyGLWidget::lancerBoutonClicked()
 
         // si la partie a commencée permet de calculé les scores
         if (start_){
-            qDebug()<<"score  ============="<<game_->getScore();
             calculScores();
         }
     }
@@ -461,67 +463,91 @@ void MyGLWidget::webcam_clicked()
 void MyGLWidget::startButton_clicked()
 {
     NewGameDialog newGame(this);
-    if (newGame.exec() == QDialog::Accepted ) {
-          qDebug() <<newGame.getName()<<" : "<<newGame.getDifficulty();
-          difficulty_=newGame.getDifficulty();
-          name_=newGame.getName();
-          game_=new Game(difficulty_,name_);
-          game_->newPostion();
-          start_=true;
-          posXCible_=game_->getCiblePositionX();
-          posYCible_=game_->getCiblePositionY();
-          distanceTrebuchet_=game_->getDistanceTrebuchet();
-          tempsPartie_.start();
-          tempsTotal_.start();
-          setName(name_);
-          setDifficulty( QString::number(difficulty_));
-          updateGL();
-    }
 
-    qDebug()<<"start button";
-}
-void MyGLWidget::jouer_clicked()
-{
-  /*  if (!lancement_)
+
+    if (newGame.exec() == QDialog::Accepted )
     {
+        nbTotalCible_=0;
+        difficulty_=newGame.getDifficulty();
+        name_=newGame.getName();
+        game_=new Game(difficulty_,name_);
         game_->newPostion();
         start_=true;
         posXCible_=game_->getCiblePositionX();
         posYCible_=game_->getCiblePositionY();
         distanceTrebuchet_=game_->getDistanceTrebuchet();
-        qDebug()<<"x cible = "<<posXCible_<<"et y ="<<posYCible_<<" distance treb "<<distanceTrebuchet_;
         tempsPartie_.start();
         tempsTotal_.start();
+        setName(name_);
+        if (save_->getBest(difficulty_)!=""){
+            setBestPlayer(save_->getBest(difficulty_));
+        }
+        setDifficulty( QString::number(difficulty_));
         updateGL();
-    }*/
+    }
+
+
+    qDebug()<<"start button";
 }
 
 void MyGLWidget::calculScores(){
+
+
     game_->calculScore(boulet_->get_x(),zRot);
     qDebug()<<"fin";
-    if(game_->getCibleTouchee()){
+
+    if(game_->getCibleTouchee()&& nbTotalCible_<10){
         game_->newPostion();
         yBoulet=true;
+        nbTotalCible_++;
+        // nouvelle cible
         posXCible_=game_->getCiblePositionX();
         posYCible_=game_->getCiblePositionY();
         distanceTrebuchet_=game_->getDistanceTrebuchet();
         tempsPartie_.start();
         setScore( QString::number(game_->getScore()));
-        setNbCibles(QString::number(game_->getNbTotalCible()));
+        setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
         zRot = 180; // axe du trébuchet
         force = -40;
         updateGL();
+        emit yRotationChanged(zRot);
+        emit forceChanged(force);
+    }else{
+        qDebug()<<"La partie est terminée";
+        QString message="Vous avez marqué "+QString::number(game_->getScore())+" points pour la difficulté "+QString::number(difficulty_);
+        QMessageBox::information(this,tr("Fin de partie"),message);
+
+        save_->saveBest(game_->getScore(),difficulty_,name_);
+
+        // On réinitialise les valeur et l'affichage
+        setScore( QString::number(0));
+        setNbCibles(QString::number(0));
+        setBestPlayer("Pas de meilleur score");
+        setDifficulty( QString::number(0));
+        start_=false;
+        zRot = 180; // axe du trébuchet
+        force = -40;
+        emit yRotationChanged(zRot);
+        emit forceChanged(force);
+        updateGL();
     }
+
+    nbTotalCible_++;
+
 }
 
 
 void MyGLWidget::draw()
 {
+
     qglColor(Qt::white);
 
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
 
     drawCorde();
+
+
+
 
     /*
     QTime myTimer;
@@ -529,6 +555,8 @@ void MyGLWidget::draw()
     int t5 = myTimer.elapsed();
     qDebug("temps de PELOUSE' : %d", t5);
 */
+
+
 
 
 
@@ -572,9 +600,6 @@ void MyGLWidget::draw()
     //************ End Draw Boulet ***************
 
 
-
-
-
     //********** Draw Cible ***************
     if (start_==true) {
         //qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
@@ -583,8 +608,8 @@ void MyGLWidget::draw()
             glTranslatef(0,distanceTrebuchet_,.65);
             glPushMatrix();
                 glTranslatef(posXCible_,posYCible_,0);
-                glScalef(1,1,1);
                 glRotatef(-angleRotationCible,0,0,1);
+                glScalef(1,1,1);
                 glCallList(cible_->getCompleteCible());
             glPopMatrix();
         glPopMatrix();
@@ -648,7 +673,7 @@ void MyGLWidget::draw()
 
     glPopMatrix();
 
-
+glFlush();
 }
 
 

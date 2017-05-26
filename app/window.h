@@ -24,7 +24,6 @@ protected:
 signals:
     void on_lancerBouton_clicked();
     void on_Webcam_clicked();
-    void on_jouer_clicked();
     void on_startButton_clicked();
     void on_vueSuivie_stateChanged();
     void on_trajectory_stateChanged();

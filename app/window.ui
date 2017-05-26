@@ -158,7 +158,7 @@
        <item>
         <widget class="QLabel" name="bestPlayer">
          <property name="text">
-          <string>Name + difficulty + score</string>
+          <string>Pas de meilleur score</string>
          </property>
         </widget>
        </item>
@@ -367,14 +367,7 @@
        <item>
         <widget class="QPushButton" name="startButton">
          <property name="text">
-          <string>Paramètres partie</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="jouer">
-         <property name="text">
-          <string>Lancer partie</string>
+          <string>Nouvelle partie</string>
          </property>
         </widget>
        </item>

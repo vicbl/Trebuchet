@@ -15,6 +15,7 @@
 #include "logotelecom.h"
 #include "trajectory.h"
 #include "pelouse.h"
+#include "save.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -53,7 +54,7 @@ public slots:
     void setForce(int angle);
     void lancerBoutonClicked();
     void webcam_clicked();
-    void jouer_clicked();
+
     void startButton_clicked();
     void setValue();
     void vueChanged();
@@ -141,6 +142,9 @@ private:
     int distanceTrebuchet_;
     int posXCible_;
     int posYCible_;
+    int nbTotalCible_=0;
+
+    Save *save_;
 };
 
 #endif // MYGLWIDGET_H

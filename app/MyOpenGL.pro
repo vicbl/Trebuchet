@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     newgamedialog.cpp \
     boulet.cpp \
     trajectory.cpp \
-    pelouse.cpp
+    pelouse.cpp \
+    save.cpp
 
 HEADERS  += window.h \
     myglwidget.h \
@@ -41,7 +42,8 @@ HEADERS  += window.h \
     newgamedialog.h \
     boulet.h \
     trajectory.h \
-    pelouse.h
+    pelouse.h \
+    save.h
 
 FORMS    += window.ui \
     newgamedialog.ui
