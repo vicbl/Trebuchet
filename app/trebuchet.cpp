@@ -15,31 +15,18 @@ Trebuchet::~Trebuchet(){
 }
 
 void Trebuchet::setTexture(){
-    QString chemin[3];
-    const QString CHEMIN = ":/images";
-    chemin[0]=CHEMIN+"/bois.bmp";
-    chemin[1]=CHEMIN+"/pelouse.bmp";
-    chemin[2]=CHEMIN+"/bois2.bmp";
-
-    for(int i = 0;i<3;i++){
-        Textures *tex=new Textures(chemin[i]);
-       texture_[i]=tex->getTextures();
-        delete tex;
-    }
-
-
+    textureBois_=((Textures(":/images/bois.bmp")).getTextures());
+    textureLevier_=((Textures(":/images/bois2.bmp")).getTextures());
 }
 
 
 
 GLuint Trebuchet::draw(GLuint corde,int levierRotation){
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
 
     this->setTexture();
 
-    Box *a=new Box(1,1,1, texture_[0]);
-    Box *g=new Box(1,1,1, texture_[2]);
+    Box *g=new Box(1,1,1, textureLevier_);
+    Box *a=new Box(1,1,1, textureBois_);
 
     GLuint levierBois=g->getCompleteBox();
     GLuint boxBois=a->getCompleteBox();
@@ -123,6 +110,8 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
 */
 
      return completeTrebuchet_;
+     delete g;
+     delete a;
      glDeleteLists(completeTrebuchet_, 1);
      glDeleteLists(levierBois, 1);
      glDeleteLists(boxBois, 1);

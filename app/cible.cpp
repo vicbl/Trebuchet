@@ -5,7 +5,7 @@
 #include "textures.h"
 Cible::Cible()
 {
-    this->setTexture();
+
 }
 
 Cible::~Cible(){
@@ -37,10 +37,11 @@ void Cible::drawPart(){
             glDisable(GL_TEXTURE_2D);
         glPopMatrix();
     glEndList();
-    glDeleteLists(cible_, 1);
+   // glDeleteLists(cible_, 1);
 }
 
 void Cible::draw(){
+    this->setTexture();
     this->drawPart();
     Box *a=new Box(1,1,1, textureBois_);
     GLuint boxBois=a->getCompleteBox();

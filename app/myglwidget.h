@@ -14,6 +14,7 @@
 #include "boulet.h"
 #include "logotelecom.h"
 #include "trajectory.h"
+#include "pelouse.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -71,10 +72,10 @@ signals:
 
 private:
     void draw();
-    void loadTextures();
+   // void loadTextures();
     void reInitialize();
 
-    void drawPelouse();
+  //  void drawPelouse();
     void drawCorde();
     void drawGrid();
 
@@ -104,11 +105,11 @@ private:
     double angle4;
     double angle5;
 
-    GLuint pelouse;
+
     GLuint corde;
 
-    GLuint texturePelouse_;
 
+    Pelouse * pelouse_;
     Cible * cible_;
     Boulet* boulet_;
     LogoTelecom * logoTelecom_;
@@ -136,4 +137,3 @@ private:
 };
 
 #endif // MYGLWIDGET_H
-

@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     logotelecom.cpp \
     newgamedialog.cpp \
     boulet.cpp \
-    trajectory.cpp
+    trajectory.cpp \
+    pelouse.cpp
 
 HEADERS  += window.h \
     myglwidget.h \
@@ -39,7 +40,8 @@ HEADERS  += window.h \
     logotelecom.h \
     newgamedialog.h \
     boulet.h \
-    trajectory.h
+    trajectory.h \
+    pelouse.h
 
 FORMS    += window.ui \
     newgamedialog.ui

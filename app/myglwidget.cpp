@@ -1,3 +1,4 @@
+
 // myglwidget.cpp
 
 #include <QtWidgets>
@@ -45,6 +46,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     vueSuivie_=true;
     // corde1 = gluNewQuadric();
 
+    pelouse_=new Pelouse();
     grid_= new Grid(25,75,0.01);
     trebuchet_=new Trebuchet();
     cible_=new Cible();
@@ -186,7 +188,6 @@ void MyGLWidget::lancerBoutonClicked()
         // ORIENTATION DE LA CAMERA
         /*
         final_xRot = 360-zRot;
-
         //qDebug(" - %d - %d", final_xRot, angle);
         while(final_xRot!=angle)
         {
@@ -197,7 +198,6 @@ void MyGLWidget::lancerBoutonClicked()
             {
                 angle--;
             }
-
             qNormalizeAngle(angle);
             if (angle != xRot)
             {
@@ -211,7 +211,6 @@ void MyGLWidget::lancerBoutonClicked()
             // qDebug(" - %d", angle);
             delay(15);
         }
-
 */
         // FIN ORIENTATION DE LA CAMERA
 
@@ -276,8 +275,6 @@ void MyGLWidget::lancerBoutonClicked()
         tempsPartie_.restart();
 
         lancement_=false;
-
-        updateGL();
 
         // si la partie a commencée permet de calculé les scores
         if (start_){
@@ -407,10 +404,12 @@ void MyGLWidget::setZRotation(int angle) // Axe
 void MyGLWidget::initializeGL()
 {
 
-    texturePelouse_=(Textures(":/images/pelouse.bmp")).getTextures();
+
     logoTelecom_->draw();
     grid_->draw();
     cible_->draw();
+    pelouse_->draw();
+
     qglClearColor(Qt::white);
 
 
@@ -500,7 +499,7 @@ void MyGLWidget::startButton_clicked()
 void MyGLWidget::jouer_clicked()
 {
   /*  if (!lancement_)
-    {       
+    {
         game_->newPostion();
         start_=true;
         posXCible_=game_->getCiblePositionX();
@@ -540,7 +539,7 @@ void MyGLWidget::draw()
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
 
     drawCorde();
-    drawPelouse();
+
     GLuint trebuchetComplet=trebuchet_->draw(corde,yRot);
     float v0 = float(28+(float(force)/4-10))/8;
     traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
@@ -550,7 +549,6 @@ void MyGLWidget::draw()
     /*
     QTime myTimer;
     myTimer.start();
-
     int t5 = myTimer.elapsed();
     qDebug("temps de PELOUSE' : %d", t5);
 */
@@ -569,7 +567,7 @@ void MyGLWidget::draw()
         {
             glPushMatrix();
                 glTranslatef(10*ligne,10*colonne,0);
-                glCallList(pelouse);
+                glCallList(pelouse_->getPelouse());
             glPopMatrix();
         }
     }
@@ -582,7 +580,6 @@ void MyGLWidget::draw()
     {
         GLuint boulet=boulet_->draw();
         glCallList(boulet);
-        glDeleteLists(boulet, 1);
     }
     //************ End Draw Boulet ***************
 
@@ -603,7 +600,6 @@ void MyGLWidget::draw()
                 glCallList(cible_->getCompleteCible());
             glPopMatrix();
         glPopMatrix();
-        delete &angleRotationCible;
     }
     //*********** End draw cible **********
 
@@ -658,7 +654,7 @@ void MyGLWidget::draw()
     //*************** End Draw grid *********************
 
 
-    glDeleteLists(pelouse, 1);
+
     glDeleteLists(corde, 1);
     glDeleteLists(trebuchetComplet, 1);
     glDeleteLists(traject, 1);
@@ -668,32 +664,6 @@ void MyGLWidget::draw()
     glPopMatrix();
 
 
-}
-
-
-void MyGLWidget::drawPelouse(){
-    qglColor(Qt::white);
-    pelouse = glGenLists(1);
-
-    glNewList(pelouse, GL_COMPILE);
-    glPushMatrix();
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse_);
-
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.0f, 0.0f);
-            glVertex3f(0,0,0);
-            glTexCoord2f(10.0f, 0.0f);
-            glVertex3f(10,0,0);
-            glTexCoord2f(10.0f, 10.0f);
-            glVertex3f(10,10,0);
-            glTexCoord2f(0.0f, 10.0f);
-            glVertex3f(0,10,0);
-        glEnd();
-
-        glDisable(GL_TEXTURE_2D);
-    glPopMatrix();
-    glEndList();
 }
 
 

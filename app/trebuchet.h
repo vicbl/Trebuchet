@@ -12,7 +12,8 @@ public:
     GLuint getCompleteTrebuchet();
     ~Trebuchet();
 private:
-    GLuint texture_[];
+    GLuint textureBois_;
+    GLuint textureLevier_;
     GLuint completeTrebuchet_;
 
 };
