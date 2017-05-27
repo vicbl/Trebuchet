@@ -43,7 +43,6 @@ void Window::keyPressEvent(QKeyEvent *event)
 {
 
     if(event->key() == Qt::Key_Z){
-        qDebug()<<"Z";
         int xScene=ui->myGLWidget->getXScene()+1;
         /* if (xScene<-90 && xScene>-270)
         {
@@ -51,7 +50,6 @@ void Window::keyPressEvent(QKeyEvent *event)
         }*/
         ui->myGLWidget->setXScene(xScene);
         ui->myGLWidget-> updateGL();
-        qDebug()<<xScene;
     }
     if (event->key() == Qt::Key_Q){
         qDebug()<<"Q";
@@ -59,40 +57,35 @@ void Window::keyPressEvent(QKeyEvent *event)
         ui->myGLWidget->setZScene(zScene);
         ui->myGLWidget->xRotationChanged(zScene);
         ui->myGLWidget-> updateGL();
-        qDebug()<<zScene;
     }
     if (event->key() == Qt::Key_S){
-        qDebug()<<"S";
         int xScene=ui->myGLWidget->getXScene()-1;
         // if (xScene<-90 && xScene>-270)
         //   {
         ui->myGLWidget->setXScene(xScene);
         //z  }
         ui->myGLWidget-> updateGL();
-        qDebug()<<xScene;
     }
     if (event->key() == Qt::Key_D){
-        qDebug()<<"D";
         int zScene=ui->myGLWidget->getZScene()+1;
         ui->myGLWidget->setZScene(zScene);
         ui->myGLWidget->xRotationChanged(zScene);
         ui->myGLWidget-> updateGL();
-        qDebug()<<zScene;
     }
     if (event->key() == Qt::Key_A){
-        qDebug()<<"A";
         int zoomScene=ui->myGLWidget->getZoomScene()-1;
         ui->myGLWidget->setZoomScene(zoomScene);
         ui->myGLWidget-> updateGL();
-        qDebug()<<zoomScene;
     }
     if (event->key() == Qt::Key_E){
-        qDebug()<<"E";
         int zoomScene=ui->myGLWidget->getZoomScene()+1;
         ui->myGLWidget->setZoomScene(zoomScene);
 
         ui->myGLWidget-> updateGL();
-        qDebug()<<zoomScene;
+    }
+    // Recentrer derrière le trébuchet
+    if (event->key() == Qt::Key_X){
+        ui->myGLWidget->recentrer();
     }
 }
 

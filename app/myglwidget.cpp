@@ -145,7 +145,39 @@ static void qNormalizeAngle(int &angle)
         angle -= 360 * 16;
 }
 
+void MyGLWidget::recentrer()    // appeler lors de l'appui sur 'x'
+{
 
+    // ORIENTATION DE LA CAMERA
+    int final_xRot;       // xRot final pour être derrière le trébuchet
+    int angle = xRot;       // Angle de rotation du trébuchet
+
+    final_xRot = 360-zRot;
+    //qDebug(" - %d - %d", final_xRot, angle);
+    while(final_xRot!=angle)
+    {
+        if (xRot<final_xRot)
+        {
+            angle++;
+        } else
+        {
+            angle--;
+        }
+        qNormalizeAngle(angle);
+        if (angle != xRot)
+        {
+            xRot = angle;
+            zScene_=angle;
+            emit xRotationChanged(angle);
+            gluDeleteQuadric(corde1);
+            // corde1 = gluNewQuadric();
+            updateGL();
+        }
+        // qDebug(" - %d", angle);
+        delay(6);
+    }
+
+}
 
 void MyGLWidget::lancerBoutonClicked()
 {
@@ -156,7 +188,6 @@ void MyGLWidget::lancerBoutonClicked()
 
         lancement_=true;
 
-        //int final_xRot;       // xRot final pour être derrière le trébuchet
         int angle = xRot;       // Angle de rotation du trébuchet
         boulet_->reset();
         float v0 = float(28+(float(force)/4-10))/8;
@@ -170,33 +201,6 @@ void MyGLWidget::lancerBoutonClicked()
          * xRot = zone  = [ 0  - 180 - 360]
         */
 
-        // ORIENTATION DE LA CAMERA
-        /*
-        final_xRot = 360-zRot;
-        //qDebug(" - %d - %d", final_xRot, angle);
-        while(final_xRot!=angle)
-        {
-            if (xRot<final_xRot)
-            {
-                angle++;
-            } else
-            {
-                angle--;
-            }
-            qNormalizeAngle(angle);
-            if (angle != xRot)
-            {
-                xRot = angle;
-                zScene_=angle;
-                emit xRotationChanged(angle);
-                gluDeleteQuadric(corde1);
-                // corde1 = gluNewQuadric();
-                updateGL();
-            }
-            // qDebug(" - %d", angle);
-            delay(15);
-        }
-*/
         // FIN ORIENTATION DE LA CAMERA
 
         delay(400);
@@ -492,9 +496,9 @@ void MyGLWidget::startButton_clicked()
 
 void MyGLWidget::calculScores(){
 
-    if(nbTotalCible_<4){
+    if(nbTotalCible_<5){
         game_->calculScore(boulet_->get_x(),zRot);
-        qDebug()<<"fin";
+        //qDebug()<<"fin";
 
         if(game_->getCibleTouchee()){
             game_->newPostion();
@@ -513,14 +517,15 @@ void MyGLWidget::calculScores(){
         zRot = 180; // axe du trébuchet
         force = -40;
         yRot = -20;
-        updateGL();
         emit zRotationChanged(zRot);
         emit yRotationChanged(yRot);
         emit forceChanged(force);
+        updateGL();
 
-    }else{
-        qDebug()<<"La partie est terminée";
-        QString message="Vous avez marqué "+QString::number(game_->getScore())+" points pour la difficulté "+QString::number(difficulty_);
+    }
+    if (nbTotalCible_==5){
+        qDebug()<<"Partie terminée";
+        QString message="Vous avez marqué "+QString::number(game_->getScore())+" / "+QString::number(nbTotalCible_)+" points pour la difficulté "+QString::number(difficulty_);
         QMessageBox::information(this,tr("Fin de partie"),message);
 
         save_->saveBest(game_->getScore(),difficulty_,name_);
@@ -654,8 +659,8 @@ void MyGLWidget::draw()
             glRotatef(90,1,0,0);
             glPushMatrix();
                 glTranslatef(2,0,2);
-                glRotatef(70,0,1,0);
-                glScalef(0.5,0.2,0.75);
+                glRotatef(60,0,1,0);
+                glScalef(0.6,0.25,.5);
                 glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();
@@ -664,8 +669,8 @@ void MyGLWidget::draw()
             glRotatef(90,1,0,0);
             glPushMatrix();
                 glTranslatef(-2,0,2);
-                glRotatef(110,0,1,0);
-                glScalef(0.5,0.2,0.75);
+                glRotatef(120,0,1,0);
+                glScalef(0.6,0.25,0.5);
                 glCallList(grid_->getCompleteGrid());
             glPopMatrix();
         glPopMatrix();

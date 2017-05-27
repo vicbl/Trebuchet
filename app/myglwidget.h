@@ -35,6 +35,7 @@ public:
     void setZScene(int z);
     void setZoomScene(int zoom);
     void calculScores();
+    void recentrer();
 
 protected:
     void initializeGL();
