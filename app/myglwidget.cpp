@@ -255,6 +255,7 @@ void MyGLWidget::lancerBoutonClicked()
 
                    delay(6);
                 }
+
         delay(1000);
         reInitialize();
         delay(1000);
@@ -263,11 +264,11 @@ void MyGLWidget::lancerBoutonClicked()
         tempsPartie_.restart();
 
         lancement_=false;
-
         // si la partie a commencée permet de calculé les scores
         if (start_){
             calculScores();
         }
+
     }
 
 
@@ -490,13 +491,10 @@ void MyGLWidget::startButton_clicked()
         setDifficulty( QString::number(difficulty_));
         updateGL();
     }
-
-
     qDebug()<<"start button";
 }
 
 void MyGLWidget::calculScores(){
-
     if(nbTotalCible_<5){
         game_->calculScore(boulet_->get_x(),zRot);
         //qDebug()<<"fin";
@@ -510,7 +508,6 @@ void MyGLWidget::calculScores(){
             distanceTrebuchet_=game_->getDistanceTrebuchet();
             tempsPartie_.start();
             setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
-
         }
 
         nbTotalCible_++;
