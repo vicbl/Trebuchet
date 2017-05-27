@@ -13,18 +13,18 @@ public:
     Webcam();
     int getxPosition();
     int getyPosition();
+    bool getOrdreLancer();
+    void setOrdreLancer(bool ol);
     bool getActive();
     void runWebCam();
     void setxPostion(int x);
     void setyPostion(int y);
-protected:
-    void keyPressEvent(QKeyEvent *event);
 
 private:
     int xPosition_=0;
     int yPosition_=0;
     bool active_=false;
-    bool firstPassage_=true;
+    bool ordreLancer_=false;
     bool ordreFermer_ = false;
 };
 

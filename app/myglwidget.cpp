@@ -65,11 +65,30 @@ MyGLWidget::~MyGLWidget()
 void MyGLWidget::setValue()
 {
     if (w->getActive()){
-        setZRotation(w->getxPosition());
-        setForce(w->getyPosition());
-        //qDebug()<<"x = "<<zRot<<" y = "<<yRot;
 
-        updateGL();
+        /*
+         * pour une webcam 640x480
+         * x -> 510
+         * y -> 350
+         *
+         * z -> 100 - 260
+         * f -> -40 - 0
+         *
+         */
+
+        int z = 100+int(w->getxPosition()*160.0/510);
+        int f = int(w->getyPosition()*(-40.0)/350);
+        bool lancer = w->getOrdreLancer();
+        if(!lancer)
+        {
+            setZRotation(z);
+            setForce(f);
+            //qDebug()<<"x = "<<zRot<<" y = "<<yRot;
+            updateGL();
+        } else
+        {
+            lancerBoutonClicked();
+        }
     }
 
     QTime t1 = QTime(0,0,0,0).addMSecs(tempsPartie_.elapsed());
@@ -264,6 +283,8 @@ void MyGLWidget::lancerBoutonClicked()
         tempsPartie_.restart();
 
         lancement_=false;
+        w->setOrdreLancer(lancement_);
+
         // si la partie a commencée permet de calculé les scores
         if (start_){
             calculScores();
@@ -380,7 +401,7 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 
 void MyGLWidget::setZRotation(int angle) // Axe
 {
-    delay(0);
+    delay(6);
     qNormalizeAngle(angle);
     if (angle != zRot && !lancement_) {
         zRot = angle;

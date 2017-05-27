@@ -11,8 +11,10 @@ Webcam::Webcam()
 void Webcam::runWebCam(){
 
     // Variables initial of matching template
-    //int xInit=0;
-    //int yInit=0;
+    int xInit = 250;
+    int yInit = 330;
+    int xPrev=xInit;
+    int yPrev=yInit;
 
     VideoCapture cap(0); // open the default camera
     if(!cap.isOpened())  // check if we succeeded
@@ -78,7 +80,7 @@ void Webcam::runWebCam(){
 
     // Online template matching
     cout<<"Online template matching, hit a key to stop"<<endl;
-    while (waitKey(5)<0)
+    while (waitKey(5)<0 && !ordreFermer_)
     {
         if (cap.read(frame)) // get a new frame from camera
         {
@@ -122,29 +124,48 @@ void Webcam::runWebCam(){
 
 
         }
-        if (ordreFermer_)
+
+        /*
+         * pour une webcam 640x480
+         * x -> 510
+         * y -> 350
+         *
+         */
+
+        if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
+        {
+            ordreLancer_ = true;
+            xPrev=xInit;
+            yPrev=yInit;
+        }
+
+        if (xPosition_>500 && yPosition_>330)
         {
             active_ = false;
+            ordreFermer_=true;
             cap.release();
-            ordreFermer_=false;
+            resultImage.release();
+            templateImage.release();
         }
+
+        xPrev = xPosition_;
+        yPrev = yPosition_;
+
     }
 }
 
-
-void Webcam::keyPressEvent(QKeyEvent *event)
-{
-
-    if(event->key() == Qt::Key_C ){
-        ordreFermer_ = true;
-    }
-}
 
 int Webcam::getxPosition(){
     return xPosition_;
 }
 int Webcam::getyPosition(){
     return yPosition_;
+}
+bool Webcam::getOrdreLancer(){
+    return ordreLancer_;
+}
+void Webcam::setOrdreLancer(bool ol){
+    ordreLancer_=ol;
 }
 void Webcam::setxPostion(int x){
     xPosition_=x;
