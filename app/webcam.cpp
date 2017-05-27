@@ -11,8 +11,8 @@ Webcam::Webcam()
 void Webcam::runWebCam(){
 
     // Variables initial of matching template
-    int xInit=0;
-    int yInit=0;
+    //int xInit=0;
+    //int yInit=0;
 
     VideoCapture cap(0); // open the default camera
     if(!cap.isOpened())  // check if we succeeded
@@ -104,12 +104,12 @@ void Webcam::runWebCam(){
             cvtColor(normResultImage,normResultImage,CV_GRAY2RGB);
             // Draw a red square
             rectangle(normResultImage,Rect(maxLoc.x,maxLoc.y,3,3),Scalar( 0, 0, 1),2,8,0);
-            if (firstPassage_==true){
+           // if (firstPassage_==true){
                 active_=true;
-                firstPassage_=false;
-                //xInit=maxLoc.x;
-               // yInit=maxLoc.y;
-            }
+           //     firstPassage_=false;
+           //     xInit=maxLoc.x;
+           //     yInit=maxLoc.y;
+           // }
             setxPostion(maxLoc.x/*-xInit*/);
             setyPostion(maxLoc.y/*-yInit*/);
 
@@ -124,6 +124,21 @@ void Webcam::runWebCam(){
 
 
         }
+        if (ordreFermer_)
+        {
+            active_ = false;
+            cap.release();
+            ordreFermer_=false;
+        }
+    }
+}
+
+
+void Webcam::keyPressEvent(QKeyEvent *event)
+{
+
+    if(event->key() == Qt::Key_Escape){
+        ordreFermer_ = true;
     }
 }
 
