@@ -44,15 +44,13 @@ void Window::keyPressEvent(QKeyEvent *event)
 
     if(event->key() == Qt::Key_Z){
         int xScene=ui->myGLWidget->getXScene()+1;
-        /* if (xScene<-90 && xScene>-270)
+        if (xScene<100 && xScene>-70)
         {
-
-        }*/
-        ui->myGLWidget->setXScene(xScene);
-        ui->myGLWidget-> updateGL();
+            ui->myGLWidget->setXScene(xScene);
+            ui->myGLWidget-> updateGL();
+        }
     }
     if (event->key() == Qt::Key_Q){
-        qDebug()<<"Q";
         int zScene=ui->myGLWidget->getZScene()-1;
         ui->myGLWidget->setZScene(zScene);
         ui->myGLWidget->xRotationChanged(zScene);
@@ -60,11 +58,11 @@ void Window::keyPressEvent(QKeyEvent *event)
     }
     if (event->key() == Qt::Key_S){
         int xScene=ui->myGLWidget->getXScene()-1;
-        // if (xScene<-90 && xScene>-270)
-        //   {
-        ui->myGLWidget->setXScene(xScene);
-        //z  }
-        ui->myGLWidget-> updateGL();
+        if (xScene<100 && xScene>-70)
+        {
+            ui->myGLWidget->setXScene(xScene);
+            ui->myGLWidget-> updateGL();
+        }
     }
     if (event->key() == Qt::Key_D){
         int zScene=ui->myGLWidget->getZScene()+1;
