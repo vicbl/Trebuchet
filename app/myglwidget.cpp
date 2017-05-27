@@ -66,7 +66,7 @@ void MyGLWidget::setValue()
 {
     if (w->getActive()){
         setZRotation(w->getxPosition());
-        setYRotation(w->getyPosition());
+        setForce(w->getyPosition());
         //qDebug()<<"x = "<<zRot<<" y = "<<yRot;
 
         updateGL();
@@ -79,11 +79,6 @@ void MyGLWidget::setValue()
 
     chrono1Refresh(st1);
     chrono2Refresh(st2);
-
-    delete &t1;
-    delete &t2;
-    delete &st1;
-    delete &st2;
 
 }
 
@@ -118,7 +113,7 @@ void MyGLWidget::reInitialize()
         // corde1 = gluNewQuadric();
         updateGL();
 
-        delay(6);
+        delay(10);
     }
 }
 
@@ -265,13 +260,13 @@ void MyGLWidget::lancerBoutonClicked()
         delay(1000);
         bouletLance_=false;
 
+        tempsPartie_.restart();
 
         lancement_=false;
 
         // si la partie a commencée permet de calculé les scores
         if (start_){
             calculScores();
-            tempsPartie_.restart();
         }
     }
 
@@ -384,7 +379,7 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 
 void MyGLWidget::setZRotation(int angle) // Axe
 {
-    delay(6);
+    delay(0);
     qNormalizeAngle(angle);
     if (angle != zRot && !lancement_) {
         zRot = angle;

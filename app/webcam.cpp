@@ -23,10 +23,8 @@ void Webcam::runWebCam(){
 
     int frameWidth=cap.get(CV_CAP_PROP_FRAME_WIDTH);
     int frameHeight=cap.get(CV_CAP_PROP_FRAME_HEIGHT);
-    cout<<"width:"<<frameWidth<<endl;
-    cout<<"height:"<<frameHeight<<endl;
-    frameWidth=frameWidth;
-    frameHeight=frameHeight;
+    //cout<<"width:"<<frameWidth<<endl;
+    //cout<<"height:"<<frameHeight<<endl;
     cout<<"Set size to "<<frameWidth<<"x"<<frameHeight<<endl;
     cap.set(CV_CAP_PROP_FRAME_WIDTH,frameWidth);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT,frameHeight);
@@ -137,7 +135,7 @@ void Webcam::runWebCam(){
 void Webcam::keyPressEvent(QKeyEvent *event)
 {
 
-    if(event->key() == Qt::Key_Escape){
+    if(event->key() == Qt::Key_C ){
         ordreFermer_ = true;
     }
 }
