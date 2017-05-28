@@ -15,6 +15,6 @@ private:
     GLuint textureBois_;
     GLuint textureLevier_;
     GLuint completeTrebuchet_;
-
+    GLuint textureContrePoids_;
 };
 #endif // TREBUCHET_H
