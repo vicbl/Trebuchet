@@ -115,6 +115,7 @@ private:
 
 
     GLuint corde;
+    GLuint texturePierre_;
 
 
     Pelouse * pelouse_;

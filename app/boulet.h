@@ -13,12 +13,15 @@ private:
     float t = 0;
     bool finTrajectoire = false;
     GLuint boulet;
+    GLuint texturePierre_;
+
 
 public:
     Boulet();
-
+    void setTexture();
     GLuint draw();
     void reset();
+
 
     void set_v0(float v);
     void set_axe(int a);

@@ -3,6 +3,7 @@
 #include <GL/glu.h>
 #include <QtOpenGL/qgl.h>
 #include <QDebug>
+#include "textures.h"
 #define PI 3.14159265
 Boulet::Boulet()
 {
@@ -20,8 +21,15 @@ bool Boulet::getFin(){return finTrajectoire;}
 void Boulet::set_v0(float v){v0=v;}
 void Boulet::set_axe(int a){axe=a;}
 
+void Boulet::setTexture(){
+    texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
+}
+
+
+
 GLuint Boulet::draw()
 {
+    this->setTexture();
     boulet = glGenLists(1);
 
     // Calcul des nouvelles coordonnées
@@ -47,17 +55,21 @@ GLuint Boulet::draw()
 
    // qDebug() << "Boulet : " << coord_x << " / " << coord_y;
 
+
+
     glNewList(boulet, GL_COMPILE);
-
         glPushMatrix();
-
             glRotatef(axe-180, 0, 0, 1);
             glTranslatef(0, coord_x, coord_y);
-            glColor3f(.55, .55, .55);
+            //glColor3f(.55, .55, .55);
+
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, texturePierre_);
             GLUquadric* bou = gluNewQuadric();
+            gluQuadricTexture(bou,GL_TRUE);
             glScalef(.1, .1, .1);
             gluSphere(bou, 3, 10, 10);
-
+            glDisable(GL_TEXTURE_2D);
             if(finTrajectoire)
             {
                 glTranslatef(0, 0, -1.9);
@@ -69,7 +81,8 @@ GLuint Boulet::draw()
 
             }
             glScalef(10, 10, 10);
-            gluDeleteQuadric(bou);
+
+
             glColor3f(1, 1, 1);
 
         glPopMatrix();

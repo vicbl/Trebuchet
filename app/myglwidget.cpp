@@ -76,7 +76,7 @@ void MyGLWidget::setValue()
          *
          */
 
-        int z = 100+int(w->getxPosition()*160.0/510);
+        int z = 260+int(w->getxPosition()*160.0/510);
         int f = int(w->getyPosition()*(-40.0)/350);
         bool lancer = w->getOrdreLancer();
         if(!lancer)
@@ -420,7 +420,7 @@ void MyGLWidget::initializeGL()
     grid_->draw();
     cible_->draw();
     pelouse_->draw();
-
+ texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
     qglClearColor(Qt::white);
 
 
@@ -926,9 +926,13 @@ void MyGLWidget::drawCorde(){
         {
             glTranslatef(0, 0, 12);
             glPushMatrix();
-                glColor3f(.55, .55, .55);
+            glColor3f(1, 1, 1);
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texturePierre_);
                 GLUquadric* bou = gluNewQuadric();
+                gluQuadricTexture(bou,GL_TRUE);
                 gluSphere(bou, 5, 10, 10);
+                glDisable(GL_TEXTURE_2D);
                 gluDeleteQuadric(bou);
             glPopMatrix();
 
