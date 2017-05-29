@@ -25,7 +25,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
 {
 
     xRot = 180; // angle de vue
-    yRot = -20; // angle du levier
+    yRot = 0; // angle du levier
     zRot = 180; // axe du trébuchet
     force = -40;
 
@@ -76,7 +76,7 @@ void MyGLWidget::setValue()
          *
          */
 
-        int z = 260+int(w->getxPosition()*160.0/510);
+        int z = 260-int(w->getxPosition()*160.0/510);
         int f = int(w->getyPosition()*(-40.0)/350);
         bool lancer = w->getOrdreLancer();
         if(!lancer)
@@ -220,6 +220,7 @@ void MyGLWidget::lancerBoutonClicked()
         */
 
         // FIN ORIENTATION DE LA CAMERA
+        // recentrer();
 
         delay(400);
 
@@ -279,7 +280,7 @@ void MyGLWidget::lancerBoutonClicked()
         reInitialize();
         delay(1000);
         bouletLance_=false;
-
+        updateGL();
         tempsPartie_.restart();
 
         lancement_=false;
@@ -299,10 +300,10 @@ void MyGLWidget::setForce(int angle)
 {
     delay(6);
     qNormalizeAngle(angle);
-    if (angle/2 != yRot && !lancement_) {
+    if (-20-angle/2 != yRot && !lancement_) {
         yRot = angle/2;
         force = angle;
-        emit yRotationChanged(angle/2);
+        emit yRotationChanged(-20-angle/2);
         emit forceChanged(angle);
 
         gluDeleteQuadric(corde1);
@@ -676,6 +677,7 @@ void MyGLWidget::draw()
     glPushMatrix();
         glRotatef(zRot,0,0,1);
         glPushMatrix();
+            glTranslatef(0, 0, 0.2);
             glScalef(2,2,2);
             glCallList(trebuchet_->draw(corde,yRot));
         glPopMatrix();

@@ -36,9 +36,49 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
     GLuint boxBois=b->getCompleteBox();
     GLuint contrePoids=c->getCompleteBox();
 
+    GLuint texturePierre=((Textures(":/images/pierre.bmp")).getTextures());
+
+    GLuint roulette;
+    roulette = glGenLists(1);
+    glNewList(roulette, GL_COMPILE);
+        glPushMatrix(); // roue arrière gauche
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, texturePierre);
+            GLUquadric* roue = gluNewQuadric();
+            gluQuadricTexture(roue,GL_TRUE);
+            glColor4f (1, 1, 1, 0.8);
+            gluCylinder(roue, .8, .8, .8, 10, 10);
+            glTranslatef(0, 0, .8);
+            gluCylinder(roue, .8, 0, .1, 10, 10);
+            gluDeleteQuadric(roue);
+            glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
+    glEndList();
+
     completeTrebuchet_ = glGenLists(1);
     glNewList(completeTrebuchet_, GL_COMPILE);
-    // socle
+
+
+        // Roues
+    glPushMatrix();
+        glScalef(.1, .1, .1);
+        glTranslatef(0, 0, -0.1);
+        glRotatef(90, 0, 1, 0);
+
+        glTranslatef(0, 4, 2.5);
+        glCallList(roulette);
+        glTranslatef(0, -8, 0);
+        glCallList(roulette);
+        glRotatef(180, 0, 1, 0);
+        glTranslatef(0, 0, 5);
+        glCallList(roulette);
+        glTranslatef(0, 8, 0);
+        glCallList(roulette);
+    glPopMatrix();
+
+    glDeleteLists(texturePierre, 1);
+
+     // socle
     glScalef(0.5,1,0.05);
     glCallList(boxBois);
     glPushMatrix();
@@ -85,83 +125,31 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
                 glPushMatrix ();
                     glTranslatef(0,4,0);
 
+                    //corde relie contrepoids au balancier
+
+
                     //Contre poids
                     glPushMatrix();
-
-                      glTranslatef(3, -8, 0);
-                      int decalageAttache=-4;
-
-                        if (levierRotation>30){
-                            if (levierRotation>40){
-                                if (levierRotation>50){
-                                    if (levierRotation>60){
-                                        if (levierRotation>70){
-                                            if (levierRotation>80){
-                                                if (levierRotation>90){
-                                                    if (levierRotation>100){
-                                                        decalageAttache=-3;
-                                                        if (levierRotation>110){
-                                                            if (levierRotation>120){
-                                                                glTranslatef(0.1,-2,0);
-                                                                glRotatef(-levierRotation*0.1,0,0,1);
-                                                            }else{
-                                                                glTranslatef(0.2,-1.5,0);
-                                                                glRotatef(-levierRotation*0.2,0,0,1);
-                                                            }
-                                                        }else{
-                                                            glTranslatef(0.3,-1.4,0);
-                                                            glRotatef(-levierRotation*0.3,0,0,1);
-                                                        }
-                                                    }else{
-                                                        glTranslatef(0.4,-1.3,0);
-                                                        glRotatef(-levierRotation*0.4,0,0,1);
-                                                    }
-                                                }else{
-                                                    glTranslatef(0.5,-1,0);
-                                                    glRotatef(-levierRotation*0.5,0,0,1);
-                                                }
-                                            }else{
-                                                glTranslatef(0.5,-0.9,0);
-                                                glRotatef(-levierRotation*0.5,0,0,1);
-                                            }
-                                        }else{
-                                            glTranslatef(0.5,-0.8,0);
-                                            glRotatef(-levierRotation*0.6,0,0,1);
-                                        }
-                                    }else{
-                                        glTranslatef(0.5,-0.7,0);
-                                        glRotatef(-levierRotation*0.7,0,0,1);
-                                    }
-                                }else{
-                                    glTranslatef(0.5,-0.6,0);
-                                    glRotatef(-levierRotation*0.8,0,0,1);
-                                }
-                            }else{
-                                glTranslatef(0.5,-0.5,0);
-                                glRotatef(-levierRotation*0.9,0,0,1);
-                            }
-                        }else{
-                            glTranslatef(0.5,-0.4,0);
-                            glRotatef(-levierRotation,0,0,1);
-                        }
-
-
-                        //corde relie contrepoids au balancier
-
-
+                        glTranslatef(0, -8, 0);
+                        glRotatef(-levierRotation, 0, 0, 1);
+                        glRotatef(90, -1, 0, 0);
                         glPushMatrix();
-                            GLUquadric* corde1 = gluNewQuadric();
-                            glTranslatef(decalageAttache,0,0);
                             glScalef(3,0.2,0.2);
+                            glTranslatef(0, 0, .5);
+                            GLUquadric* corde1 = gluNewQuadric();
                             glRotatef(90,0,1,0);
                             glColor4f (1, 1, 1, 0.8);
                             gluCylinder(corde1, 1, 1, 1, 100, 100);
                             gluDeleteQuadric(corde1);
+
+                            glRotatef(-90,0,1,0);
+
+                            glScalef(0.33,5,5);
+                            glScalef(3, 3, 3);
+
+                            glTranslatef(1.6, 0, 0);
+                            glCallList(contrePoids);
                         glPopMatrix();
-
-
-                        glScalef(3, 3, 3);
-                        glCallList(contrePoids);
                     glPopMatrix();
                     glScalef(1,20,1);
                     //glColor3f(0,0,0);
@@ -197,7 +185,5 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
     glDeleteLists(contrePoids, 1);
     glDeleteLists(completeTrebuchet_, 1);
 
-}
-GLuint Trebuchet::getCompleteTrebuchet(){
 }
 

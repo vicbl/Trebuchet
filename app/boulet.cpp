@@ -96,7 +96,7 @@ void Boulet::reset()
 {
     t = 0;
     coord_x = 1.7;
-    coord_y = 7;
+    coord_y = 7.1;
     axe = 180;
     finTrajectoire = false;
 }

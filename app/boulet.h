@@ -6,7 +6,7 @@
 class Boulet
 {
 private:
-    GLfloat coord_y = 7; // hauteur
+    GLfloat coord_y = 7.1; // hauteur
     GLfloat coord_x = 1.7; // distance au trébuchet
     float v0;
     int axe = 180;

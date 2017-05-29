@@ -9,7 +9,6 @@ public:
     Trebuchet();
     GLuint draw(GLuint corde,int levierRotation);
     void setTexture();
-    GLuint getCompleteTrebuchet();
     ~Trebuchet();
 private:
     GLuint textureBois_;
