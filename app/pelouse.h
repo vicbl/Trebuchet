@@ -13,6 +13,7 @@ public:
 private:
     GLuint pelouse_;
     GLuint texturePelouse_;
+    float terrain[1000][1000];
 
 };
 #endif // PELOUSE_H

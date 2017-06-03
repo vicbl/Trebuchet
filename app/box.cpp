@@ -19,6 +19,7 @@ void Box::draw(){
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texture_);
             glBegin(GL_QUADS);
+                glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
@@ -29,6 +30,7 @@ void Box::draw(){
                 glVertex3f(0,1,0);
             glEnd();
             glBegin(GL_QUADS);
+                 glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
@@ -39,6 +41,7 @@ void Box::draw(){
                 glVertex3f(1,0,0);
             glEnd();
             glBegin(GL_QUADS);
+                 glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
@@ -49,6 +52,7 @@ void Box::draw(){
                 glVertex3f(0,0,1);
             glEnd();
             glBegin(GL_QUADS);
+                 glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,1,0);
                 glTexCoord2f(1.0f, 0.0f);
@@ -59,6 +63,7 @@ void Box::draw(){
                 glVertex3f(0,1,1);
             glEnd();
             glBegin(GL_QUADS);
+                 glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 0.0f);
@@ -69,6 +74,7 @@ void Box::draw(){
                 glVertex3f(1,1,0);
             glEnd();
             glBegin(GL_QUADS);
+                 glNormal3f ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(1,0,1);
                 glTexCoord2f(1.0f, 0.0f);

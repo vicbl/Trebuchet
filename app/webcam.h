@@ -4,7 +4,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QtWidgets>
-
+#include <QWidget>
 class Webcam
 {
 
@@ -23,6 +23,7 @@ public:
 private:
     int xPosition_=0;
     int yPosition_=0;
+    bool detection_=false;
     bool active_=false;
     bool ordreLancer_=false;
     bool ordreFermer_ = false;

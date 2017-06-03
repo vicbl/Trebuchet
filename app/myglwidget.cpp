@@ -3,7 +3,6 @@
 
 #include <QtWidgets>
 #include <QtOpenGL>
-//#include <QKeyEvent>
 #include <iostream>
 #include <string>
 #include <QOpenGLTexture>
@@ -24,7 +23,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
 
-    xRot = 180; // angle de vue
+    xRot_ = 180; // angle de vue
     yRot = 0; // angle du levier
     zRot = 180; // axe du trébuchet
     force = -40;
@@ -46,7 +45,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     finCourseCorde_=false;
     vueSuivie_=true;
     // corde1 = gluNewQuadric();
-
+    light_=new Lighting();
     pelouse_=new Pelouse();
     grid_= new Grid(25,75,0.01);
     trebuchet_=new Trebuchet();
@@ -54,8 +53,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     boulet_=new Boulet ();
     logoTelecom_=new LogoTelecom();
     traj_ =new Trajectory();
-
-save_=new Save("D:/Utilisateur/Victor/Bureau/Nouveau dossier/Nouveau dossier/files/BestScores.txt");
+    save_=new Save("D:/Utilisateur/Victor/Bureau/Nouveau dossier/Nouveau dossier/files/BestScores.txt");
 }
 
 MyGLWidget::~MyGLWidget()
@@ -168,13 +166,13 @@ void MyGLWidget::recentrer()    // appeler lors de l'appui sur 'x'
 
     // ORIENTATION DE LA CAMERA
     int final_xRot;       // xRot final pour être derrière le trébuchet
-    int angle = xRot;       // Angle de rotation du trébuchet
+    int angle = xRot_;       // Angle de rotation du trébuchet
 
     final_xRot = 360-zRot;
     //qDebug(" - %d - %d", final_xRot, angle);
     while(final_xRot!=angle)
     {
-        if (xRot<final_xRot)
+        if (xRot_<final_xRot)
         {
             angle++;
         } else
@@ -182,9 +180,9 @@ void MyGLWidget::recentrer()    // appeler lors de l'appui sur 'x'
             angle--;
         }
         qNormalizeAngle(angle);
-        if (angle != xRot)
+        if (angle != xRot_)
         {
-            xRot = angle;
+            xRot_ = angle;
             zScene_=angle;
             emit xRotationChanged(angle);
             gluDeleteQuadric(corde1);
@@ -206,7 +204,7 @@ void MyGLWidget::lancerBoutonClicked()
 
         lancement_=true;
 
-        int angle = xRot;       // Angle de rotation du trébuchet
+        int angle = xRot_;       // Angle de rotation du trébuchet
         boulet_->reset();
         float v0 = float(28+(float(force)/4-10))/8;
         boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
@@ -216,7 +214,7 @@ void MyGLWidget::lancerBoutonClicked()
 
         /*
          * zRot = angle = [100 - 180 - 260]
-         * xRot = zone  = [ 0  - 180 - 360]
+         * xRot_ = zone  = [ 0  - 180 - 360]
         */
 
         // FIN ORIENTATION DE LA CAMERA
@@ -315,17 +313,17 @@ void MyGLWidget::setForce(int angle)
 void MyGLWidget::setXRotation(int angle) // Zone
 {
     qNormalizeAngle(angle);
-    if (angle != xRot) {
-        xRot = angle;
+    if (angle != xRot_) {
+        xRot_ = angle;
         zScene_ = angle;
         if (angle == 361)
         {
-            xRot = 1;
+            xRot_ = 1;
             zScene_=1;
         }
         if (angle == -1)
         {
-            xRot = 359;
+            xRot_ = 359;
             zScene_=359;
         }
         emit xRotationChanged(angle);
@@ -417,24 +415,22 @@ void MyGLWidget::initializeGL()
 {
 
 
-    logoTelecom_->draw();
-    grid_->draw();
-    cible_->draw();
-    pelouse_->draw();
- texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
+    texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
+
     qglClearColor(Qt::white);
-
-
     glEnable(GL_DEPTH_TEST);
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT , GL_NICEST );
+
 
     glShadeModel(GL_SMOOTH);
-    glEnable(GL_TEXTURE_2D);
-    glHint( GL_PERSPECTIVE_CORRECTION_HINT , GL_NICEST );
-    //glEnable(GL_LIGHTING);
-    //glEnable(GL_LIGHT0);
+    light_->draw();
 
-    //static GLfloat lightPosition[4] = { 0, 0, 1, 0 };
-    //glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+    logoTelecom_->draw();
+    grid_->draw();
+    pelouse_->draw();
+    cible_->draw();
+
+
 }
 
 void MyGLWidget::paintGL()
@@ -446,7 +442,7 @@ void MyGLWidget::paintGL()
     double scale=abs(zoomScene_*0.1);
     //qDebug()<<scale;
     glScalef(scale, scale, scale);
-    if(bouletLance_ && vueSuivie_ && abs(360-xRot-zRot)<10)
+    if(bouletLance_ && vueSuivie_ && abs(360-xRot_-zRot)<10)
     {
         glTranslatef(0, boulet_->get_x()/6, boulet_->get_x());
     }
@@ -454,6 +450,14 @@ void MyGLWidget::paintGL()
     glRotatef(xScene_ , 1.0, 0.0, 00);
     glRotatef(yScene_, 0.0, 1.0, 0.0);
     glRotatef(zScene_ , 0.0, 0.0, 1.0);
+
+    //Set Lights positions
+    glLightfv(GL_LIGHT0, GL_POSITION, posLight0);
+    glLightfv(GL_LIGHT1, GL_POSITION, posLight1);
+    glLightfv(GL_LIGHT2, GL_POSITION, posLight2);
+    glLightfv(GL_LIGHT3, GL_POSITION, posLight3);
+
+
     draw();
 }
 
@@ -463,10 +467,10 @@ void MyGLWidget::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
 
     float aspectRatio = width / height;
-       glMatrixMode(GL_PROJECTION);
-       glLoadIdentity();
-       gluPerspective(45.0, aspectRatio, 1.0, 1000.0);
-      /* #ifdef QT_OPENGL_ES_1
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, aspectRatio, 1.0, 1000.0);
+    /* #ifdef QT_OPENGL_ES_1
     glOrthof(-2, +2, -2, +2, 0.0, 20.0);
 #else
    glOrtho(-2, +2, -2, +2, 0.0, 20.0);
@@ -475,6 +479,7 @@ void MyGLWidget::resizeGL(int width, int height)
 
 
     glMatrixMode(GL_MODELVIEW);
+
 }
 
 void MyGLWidget::mousePressEvent(QMouseEvent *event)
@@ -518,8 +523,6 @@ void MyGLWidget::startButton_clicked()
 
 void MyGLWidget::calculScores(){
     if(nbTotalCible_<5){
-        game_->calculScore(boulet_->get_x(),zRot);
-        //qDebug()<<"fin";
 
         if(game_->getCibleTouchee()){
             game_->newPostion();
@@ -529,11 +532,11 @@ void MyGLWidget::calculScores(){
             posYCible_=game_->getCiblePositionY();
             distanceTrebuchet_=game_->getDistanceTrebuchet();
             tempsPartie_.start();
-            setNbCibles(QString::number(game_->getNbTotalCibleTouchee()));
+            setNbCibles(QString::number((5-game_->getNbTotalCibleTouchee())));
         }
 
         nbTotalCible_++;
-        setScore( QString::number(game_->getScore())+" / "+ QString::number(nbTotalCible_));
+        setScore( QString::number(game_->getScore()));
         zRot = 180; // axe du trébuchet
         force = -40;
         yRot = -20;
@@ -567,6 +570,42 @@ void MyGLWidget::calculScores(){
 
 }
 
+void MyGLWidget::nightMode(){
+    GLfloat diffuse[] = { 50.0, 50.0f, 50.0f, 50.0f };
+
+    //Configure light 0
+    glLightfv(GL_LIGHT0, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF,45.0);
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dirLight0);
+
+    //Configure light 1
+    glLightfv(GL_LIGHT1, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF,45.0);
+    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dirLight1);
+
+    //Configure light 2
+    glLightfv(GL_LIGHT2, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF,48.0);
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dirLight2);
+
+    //Configure light 3
+    glLightfv(GL_LIGHT3, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF,48.0);
+    glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, dirLight3);
+
+
+    //Enable all lights
+    glEnable(GL_LIGHTING);
+    glEnable((GL_LIGHT0));
+    glEnable((GL_LIGHT1));
+    glEnable((GL_LIGHT2));
+    glEnable((GL_LIGHT3));
+}
+
+void MyGLWidget::nightModeActived(){
+    nightMode_=!nightMode_;
+    updateGL();
+}
 
 void MyGLWidget::draw()
 {
@@ -574,11 +613,6 @@ void MyGLWidget::draw()
     qglColor(Qt::white);
 
     glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
-
-    drawCorde();
-
-
-
 
     /*
     QTime myTimer;
@@ -588,136 +622,177 @@ void MyGLWidget::draw()
 */
 
 
+    if (nightMode_){
+        nightMode();
+    }else{
+
+        glDisable((GL_LIGHTING));
+        glDisable((GL_LIGHT0));
+        glDisable((GL_LIGHT1));
+        glDisable((GL_LIGHT2));
+        glDisable((GL_LIGHT3));
+    }
 
 
+    drawCorde();
 
     // Debut affichage
     glPushMatrix();
 
-    //************** Draw Gazon ****************
-    for (int colonne=-2; colonne<14; colonne++)
-    {
-        for (int ligne=-3; ligne<3; ligne++)
+        //************** Draw Gazon ****************
+         glPushMatrix();
+       //Pelouse sans bosses
+         for (int colonne=-2; colonne<14; colonne++)
         {
+            for (int ligne=-3; ligne<3; ligne++)
+            {
+                glPushMatrix();
+                     glTranslatef(10*ligne,10*colonne,0);
+                    glCallList(pelouse_->getPelouse());
+                glPopMatrix();
+            }
+        }
+        //Pelouse avec bosses
+              /*  glPushMatrix();
+                     glTranslatef(-50,-50,0);
+                    glCallList(pelouse_->getPelouse());
+                glPopMatrix();
+                */
+        glPopMatrix();
+        //************** End Draw Gazon *************
+
+
+
+        //************** Draw Trajectory ****************
+        if (trajectory_)
+        {
+            float v0 = float(28+(float(force)/4-10))/8;
+            traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
+            traj_->set_axe(zRot);
+            glCallList(traj_->draw());
+        }
+        //************** End Draw Trajectory *************
+
+
+
+        //************** Draw Boulet ****************
+        if (bouletLance_&&start_)
+        {
+            GLuint boulet=boulet_->draw(game_);
+            glCallList(boulet);
+        }
+        //************ End Draw Boulet ***************
+
+
+        //********** Draw Cible ***************
+        if (start_==true) {
+            //qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
+            double angleRotationCible = atan ((posXCible_*1.0/(posYCible_*1.0+distanceTrebuchet_*1.0))) * 180 / PI;
             glPushMatrix();
-                glTranslatef(10*ligne,10*colonne,0);
-                glCallList(pelouse_->getPelouse());
+                glTranslatef(0,distanceTrebuchet_,.65);
+                glPushMatrix();
+                    glTranslatef(posXCible_,posYCible_,0);
+                    glRotatef(-angleRotationCible,0,0,1);
+                   // glScalef(1,1,1);
+                    glCallList(cible_->getCompleteCible());
+                glPopMatrix();
             glPopMatrix();
         }
-    }
-    //************** End Draw Gazon *************
+        //*********** End draw cible **********
 
-
-    //************** Draw Trajectory ****************
-    if (trajectory_)
-    {
-        float v0 = float(28+(float(force)/4-10))/8;
-        traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
-        traj_->set_axe(zRot);
-        glCallList(traj_->draw());
-    }
-    //************** End Draw Trajectory *************
-
-
-
-
-
-    //************** Draw Boulet ****************
-    if (bouletLance_)
-    {
-        GLuint boulet=boulet_->draw();
-        glCallList(boulet);
-    }
-    //************ End Draw Boulet ***************
-
-
-    //********** Draw Cible ***************
-    if (start_==true) {
-        //qDebug()<<"Jouer xx="<<posXCible_<<" et y="<<posYCible_;
-        double angleRotationCible = atan ((posXCible_*1.0/(posYCible_*1.0+distanceTrebuchet_*1.0))) * 180 / PI;
-        glPushMatrix();
-            glTranslatef(0,distanceTrebuchet_,.65);
+        //*************Draw Logo***************
             glPushMatrix();
-                glTranslatef(posXCible_,posYCible_,0);
-                glRotatef(-angleRotationCible,0,0,1);
-                glScalef(1,1,1);
-                glCallList(cible_->getCompleteCible());
+                glTranslatef(-5, -2, 1);
+                glScalef(2,2,2);
+                glCallList(logoTelecom_->getCompleteLogoTelecom());
             glPopMatrix();
-        glPopMatrix();
-    }
-    //*********** End draw cible **********
-
-    //*************Draw Logo***************
-        glPushMatrix();
-            glTranslatef(-5, -2, 1);
-            glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
-        glPopMatrix();
-        glPushMatrix();
-            glTranslatef(-7.6, 0, 1);
-            glRotatef(-60, 0,0,1);
-            glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
-        glPopMatrix();
-        glPushMatrix();
-            glTranslatef(5, -2, 1);
-            glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
-        glPopMatrix();
-        glPushMatrix();
-            glTranslatef(7.6, 0, 1);
-            glRotatef(60, 0,0,1);
-            glScalef(2,2,2);
-            glCallList(logoTelecom_->getCompleteLogoTelecom());
-        glPopMatrix();
-    //*************End Draw Logo***************
-
-
-    //************* Draw TREBUCHET ***************
-    glPushMatrix();
-        glRotatef(zRot,0,0,1);
-        glPushMatrix();
-            glTranslatef(0, 0, 0.2);
-            glScalef(2,2,2);
-            glCallList(trebuchet_->draw(corde,yRot));
-        glPopMatrix();
-    glPopMatrix();
-
-    //************* End Draw TREBUCHET ***************
-
-    //**************** Draw grid *********************
-    glPushMatrix();
-
-        glPushMatrix();
-            glRotatef(90,1,0,0);
             glPushMatrix();
-                glTranslatef(2,0,2);
-                glRotatef(60,0,1,0);
-                glScalef(0.6,0.25,.5);
-                glCallList(grid_->getCompleteGrid());
+                glTranslatef(-7.6, 0, 1);
+                glRotatef(-60, 0,0,1);
+                glScalef(2,2,2);
+                glCallList(logoTelecom_->getCompleteLogoTelecom());
+            glPopMatrix();
+            glPushMatrix();
+                glTranslatef(5, -2, 1);
+                glScalef(2,2,2);
+                glCallList(logoTelecom_->getCompleteLogoTelecom());
+            glPopMatrix();
+            glPushMatrix();
+                glTranslatef(7.6, 0, 1);
+                glRotatef(60, 0,0,1);
+                glScalef(2,2,2);
+                glCallList(logoTelecom_->getCompleteLogoTelecom());
+            glPopMatrix();
+        //*************End Draw Logo***************
+
+
+        //************* Draw TREBUCHET ***************
+        glPushMatrix();
+            glRotatef(zRot,0,0,1);
+            glPushMatrix();
+                glTranslatef(0, 0, 0.2);
+                glScalef(3,3,3);
+                glCallList(trebuchet_->draw(corde,yRot));
             glPopMatrix();
         glPopMatrix();
 
+        //************* End Draw TREBUCHET ***************
+
+        //**************** Draw grid *********************
         glPushMatrix();
-            glRotatef(90,1,0,0);
             glPushMatrix();
-                glTranslatef(-2,0,2);
-                glRotatef(120,0,1,0);
-                glScalef(0.6,0.25,0.5);
-                glCallList(grid_->getCompleteGrid());
+                glRotatef(90,1,0,0);
+                glPushMatrix();
+                    glTranslatef(2,0,2);
+                    glRotatef(60,0,1,0);
+                    glScalef(0.6,0.25,.5);
+                    glCallList(grid_->getCompleteGrid());
+                glPopMatrix();
+            glPopMatrix();
+
+            glPushMatrix();
+                glRotatef(90,1,0,0);
+                glPushMatrix();
+                    glTranslatef(-2,0,2);
+                    glRotatef(120,0,1,0);
+                    glScalef(0.6,0.25,0.5);
+                    glCallList(grid_->getCompleteGrid());
+                glPopMatrix();
             glPopMatrix();
         glPopMatrix();
+        //*************** End Draw grid *********************
+
+
+        //*************** Draw Projectors *********************
+        glPushMatrix();
+            glColor3f(1,1,1);
+            glTranslatef(5,-1,0);
+            glRotatef(45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(-5,-1,0);
+            glRotatef(-45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(-20,25,0);
+            glRotatef(-45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(20,25,0);
+            glRotatef(45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        //*************** End Draw projectors *********************
+
+
+        // glDeleteLists(trebuchetComplet, 1);
+
     glPopMatrix();
-    //*************** End Draw grid *********************
 
-
-
-    glDeleteLists(corde, 100);
-   // glDeleteLists(trebuchetComplet, 1);
-
-    glPopMatrix();
-
-glFlush();
+//glFlush();
 }
 
 
@@ -727,6 +802,7 @@ void MyGLWidget::drawCorde(){
     corde = glGenLists(1);
     glNewList(corde, GL_COMPILE);
     corde1 = gluNewQuadric();
+    gluQuadricTexture(corde1,GL_TRUE);
     glColor4f (1, 1, 1, 0.8);
     glPushMatrix();
 
@@ -922,8 +998,9 @@ void MyGLWidget::drawCorde(){
             glScalef( 1, 1, 10);
             gluCylinder(corde1, 1, 1, 1, 10, 10);
             glScalef( 1, 1, 0.1);
-        glPopMatrix();
 
+        glPopMatrix();
+       // gluDeleteQuadric(corde1);
         if (!bouletLance_)
         {
             glTranslatef(0, 0, 12);
@@ -941,7 +1018,7 @@ void MyGLWidget::drawCorde(){
         }
 
     glPopMatrix();
-    gluDeleteQuadric(corde1);
+
 
     glEndList();
     // Fin corde*/

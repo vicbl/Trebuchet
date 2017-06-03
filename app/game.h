@@ -14,7 +14,7 @@ public:
     bool getCibleTouchee();
     int getScore();
     void newPostion();
-    int calculScore(float distance, float angle);
+    int calculScore(float xPosBoulet, float zPosBoulet);
 
 private:
     int nbTotalCibleTouchee_; // Nombre de cibles touchées

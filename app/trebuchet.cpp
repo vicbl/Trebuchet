@@ -12,7 +12,9 @@ Trebuchet::Trebuchet()
 }
 
 Trebuchet::~Trebuchet(){
-   glDeleteLists(completeTrebuchet_, 1);
+
+
+    glDeleteLists(completeTrebuchet_, 1);
 
 }
 
@@ -155,16 +157,6 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
                     //glColor3f(0,0,0);
                     glCallList(levierBois);
 
-
-
-//                    glScalef(4, 0.05, 1);
-//                    glTranslatef(.5, -9, 0);
-//                    glRotatef(90, 0, 1, 0);
-//                    float angcp = levierRotation;
-//                    glRotatef(angcp, 0, 0, 1);
-//                    GLUquadric *cp= gluNewQuadric();
-//                    gluCylinder(cp, .15, .15, 1, 10, 10);
-//                    gluDeleteQuadric(cp);
                 glPopMatrix();
                 // corde
                 glPushMatrix ();
@@ -179,11 +171,11 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
     glEndList();
 
     return completeTrebuchet_;
-
     glDeleteLists(levierBois, 1);
     glDeleteLists(boxBois, 1);
     glDeleteLists(contrePoids, 1);
-    glDeleteLists(completeTrebuchet_, 1);
+     glDeleteLists(roulette, 1);
+
 
 }
 

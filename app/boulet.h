@@ -2,7 +2,7 @@
 #define BOULET_H
 
 #include <GL/glu.h>
-
+#include "game.h"
 class Boulet
 {
 private:
@@ -14,12 +14,12 @@ private:
     bool finTrajectoire = false;
     GLuint boulet;
     GLuint texturePierre_;
-
+    bool cibleTouchee_=false;
 
 public:
     Boulet();
     void setTexture();
-    GLuint draw();
+    GLuint draw(Game * game_);
     void reset();
 
 
@@ -31,6 +31,7 @@ public:
     float get_x();
     float get_y();
     bool getFin();
+
 
 };
 

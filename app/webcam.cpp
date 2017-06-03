@@ -2,6 +2,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 #include <QDebug>
+#include "math.h"
 using namespace cv;
 using namespace std;
 Webcam::Webcam()
@@ -34,9 +35,7 @@ void Webcam::runWebCam(){
 
     // Init the display window
     namedWindow("WebCam",1);
-
-    // Ask template image
-    cout<<"Put the template image inside the red square and hit a key !"<<endl;
+    namedWindow("Template image",1);
 
     // Definition of the template rectangle
     int templateWidth=128;
@@ -46,27 +45,7 @@ void Webcam::runWebCam(){
     // Acquisition of the template image
     Mat templateImage; // template Mat
     Mat frame;         // frame Mat
-    while (waitKey(10)<0)
-    {
 
-        if (cap.read(frame)) // get a new frame from camera
-        {
-
-            // vertical flip of the image
-            flip(frame,frame,1);
-            // Copy the template rect
-            templateImage=Mat(frame,templateRect).clone();
-            // Draw red rectangle on the frame
-            rectangle(frame,templateRect,Scalar( 0, 0, 255),2,8,0);
-            // Display the frame
-            imshow("WebCam", frame);
-        }
-
-    }
-
-    // Show the template image
-  /*  namedWindow("Template image",1);
-    imshow("Template image", templateImage);*/
 
     // Create the matchTemplate image result
     Mat resultImage;    // to store the matchTemplate result
@@ -75,82 +54,123 @@ void Webcam::runWebCam(){
     resultImage.create( result_cols, result_rows, CV_32FC1 );
     Rect resultRect;    // to store the location of the matched rect
 
-    // Init the window to display the result
-   // namedWindow("matchTemplate result",1);
 
-    // Online template matching
-    cout<<"Online template matching, hit a key to stop"<<endl;
-    while (waitKey(5)<0 && !ordreFermer_)
+    //Variables qui permettent de récupérer les coordonnées de 2 templates
+    double xTemp=0;
+    double yTemp=0;
+    double xTemp2=20;
+    double yTemp2=20;
+
+
+    bool templateOk=false;      // Si 50 images de suite avec la même template passe a true
+    int counterOk=0;            // Permet de compter le nombre d'image où on a la même template
+    int counterBloque=0;        // Permet de détecter si on est bloqué
+    int counterDetection=0;     // Permet de compter le nombre d'image ou le template reconnu se déplace vers le bas
+
+   while (waitKey(5)<0 && !ordreFermer_)
     {
         if (cap.read(frame)) // get a new frame from camera
         {
-            // vertical flip of the image
-            flip(frame,frame,1);
 
-            // Do the Matching between the frame and the templateImage
-            matchTemplate( frame, templateImage, resultImage, TM_CCORR_NORMED );
+            // Si trop de difference on change la template
+            if(fabs(xTemp-xTemp2)>10 && fabs(yTemp-yTemp2)>10 && !templateOk){
+                counterOk=0;
+                counterDetection=0;
 
-            // Localize the best match with minMaxLoc
-            double minVal; double maxVal; Point minLoc; Point maxLoc;
-            minMaxLoc( resultImage, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
-            // Save the location of the matched rect
-            resultRect=Rect(maxLoc.x,maxLoc.y,templateWidth,templateHeight);
+                // vertical flip of the image
+                flip(frame,frame,1);
+                templateImage=Mat(frame,templateRect).clone();
+                // Do the Matching between the frame and the templateImage
+                matchTemplate( frame, templateImage, resultImage, TM_CCORR_NORMED );
 
-            // Show the result
-            Mat normResultImage;
-            // Normalize values
-            normalize(resultImage,normResultImage,1,0,NORM_MINMAX);
-            // Return to RGB to plot the max in red
-            cvtColor(normResultImage,normResultImage,CV_GRAY2RGB);
-            // Draw a red square
-            rectangle(normResultImage,Rect(maxLoc.x,maxLoc.y,3,3),Scalar( 0, 0, 1),2,8,0);
-           // if (firstPassage_==true){
-                active_=true;
-           //     firstPassage_=false;
-           //     xInit=maxLoc.x;
-           //     yInit=maxLoc.y;
-           // }
-            setxPostion(maxLoc.x/*-xInit*/);
-            setyPostion(maxLoc.y/*-yInit*/);
+                // Localize the best match with minMaxLoc
+                double minVal; double maxVal; Point minLoc; Point maxLoc;
+                minMaxLoc( resultImage, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
 
-       //     qDebug()<<"xpos= "<<xPosition_<<" et ypos=  "<<yPosition_;
-            // Show image
-          //  imshow("matchTemplate result",normResultImage);
+                // Show image
+                imshow("Template image", templateImage);
 
-            // Draw green rectangle on the frame
-            rectangle(frame,resultRect,Scalar( 0, 255, 0),2,8,0);
-            // Display the frame
+
+                //si on reste bloque
+                counterBloque++;
+                if (counterBloque>10){
+                    qDebug()<<"Déblocage";
+                    xTemp=maxLoc.x;
+                    yTemp=maxLoc.y;
+
+                }
+                xTemp2=maxLoc.x;
+                yTemp2=maxLoc.y;
+            }else{
+                counterBloque=0;
+                counterOk++;
+                if (counterOk>50){
+                    templateOk=true;
+                }
+
+                flip(frame,frame,1);
+                 // Do the Matching between the frame and the templateImage
+                matchTemplate( frame, templateImage, resultImage, TM_CCORR_NORMED );
+
+                // Localize the best match with minMaxLoc
+                double minValb; double maxValb; Point minLocb; Point maxLocb;
+                minMaxLoc( resultImage, &minValb, &maxValb, &minLocb, &maxLocb, Mat() );
+                // Save the location of the matched rect
+                resultRect=Rect(maxLocb.x,maxLocb.y,templateWidth,templateHeight);
+
+
+                //qDebug()<<"xTemp = "<<xTemp<<" yTemp = "<<yTemp;
+                //qDebug()<<"maxLocx = "<<maxLocb.x<<" maxLocy = "<<maxLocb.y;
+
+
+                // on verifie que l'objet détecté descends
+                if(fabs(xTemp-maxLocb.x)<10 && (maxLocb.y)>yTemp){
+                    counterDetection++;
+                }
+                xTemp=maxLocb.x;
+                yTemp=maxLocb.y;
+            }
+            //*****Si pour 30 image de suite l'objet détecté descend on active la détection
+            if (templateOk==false){
+                rectangle(frame,templateRect,Scalar( 0, 0, 255),2,8,0);
+            }
+            else if(counterDetection<30) {
+                rectangle(frame,resultRect,Scalar( 255, 255, 0),2,8,0);
+            }else{
+                rectangle(frame,resultRect,Scalar( 0, 255, 0),2,8,0);
+                //Modifier position trebuchet
+                active_ = true;
+                setxPostion(xTemp);
+                setyPostion(yTemp);
+                /*
+                 * pour une webcam 640x480
+                 * x -> 510
+                 * y -> 350
+                 *
+                 */
+
+                if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
+                {
+                    ordreLancer_ = true;
+                    xPrev=xInit;
+                    yPrev=yInit;
+                }
+
+                if (xPosition_>500 && yPosition_>330)
+                {
+                    active_ = false;
+                    ordreFermer_=true;
+                    cap.release();
+                    resultImage.release();
+                    templateImage.release();
+                }
+
+                xPrev = xPosition_;
+                yPrev = yPosition_;
+            }
+
             imshow("WebCam", frame);
-
-
         }
-
-        /*
-         * pour une webcam 640x480
-         * x -> 510
-         * y -> 350
-         *
-         */
-
-        if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
-        {
-            ordreLancer_ = true;
-            xPrev=xInit;
-            yPrev=yInit;
-        }
-
-        if (xPosition_>500 && yPosition_>330)
-        {
-            active_ = false;
-            ordreFermer_=true;
-            cap.release();
-            resultImage.release();
-            templateImage.release();
-        }
-
-        xPrev = xPosition_;
-        yPrev = yPosition_;
-
     }
 }
 

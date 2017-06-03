@@ -10,5 +10,7 @@
         <file>images/pierre.bmp</file>
         <file>images/bois3.bmp</file>
         <file>images/bois4.bmp</file>
+        <file>images/concrete.bmp</file>
+        <file>images/aluminium.bmp</file>
     </qresource>
 </RCC>

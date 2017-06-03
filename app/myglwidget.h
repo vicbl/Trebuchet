@@ -16,6 +16,7 @@
 #include "trajectory.h"
 #include "pelouse.h"
 #include "save.h"
+#include"lighting.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -59,13 +60,15 @@ public slots:
     void startButton_clicked();
     void setValue();
     void vueChanged();
-   void trajectoryActived();
+    void trajectoryActived();
+    void nightModeActived();
 
 signals:
     // signaling rotation from mouse movement
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+
     void on_jouer_clicked(int);
     void forceChanged(int angle);
     void chrono1Refresh(QString tpPartie);
@@ -80,10 +83,10 @@ signals:
 
 private:
     void draw();
-   // void loadTextures();
+    // void loadTextures();
     void reInitialize();
 
-  //  void drawPelouse();
+    void nightMode();
     void drawCorde();
 
 
@@ -93,7 +96,7 @@ private:
     int zScene_=180;
     int zoomScene_=2;
 
-    int xRot;
+    int xRot_;
     int yRot;   // angle du levier
     int zRot;
 
@@ -125,15 +128,27 @@ private:
     Trebuchet *trebuchet_;
     Grid *grid_;
     Trajectory *traj_;
+    Lighting *light_;
 
     GLUquadric* corde1;
+
+    //Light
+    float posLight0[4] = {-3.3f, -1.0f, 12.5f,1.0f};
+    float dirLight0[4] = {0.0f, 0.4f,-1.0f};
+    float posLight1[4] = {3.3f, -1.0f, 12.5f,1.0f};
+    float dirLight1[4] = {0.0f, 0.4f,-1.0f};
+    float posLight2[4] = {-21.0f, 24.0f, 12.5f,1.0f};
+    float dirLight2[4] = {0.5f, 0.5f,-1.0f};
+    float posLight3[4] = {21.0f, 24.0f, 12.5f,1.0f};
+    float dirLight3[4] = {-0.5f, 0.5f,-1.0f};
+
 
     boolean bouletLance_;
     boolean lancement_;
     boolean finCourseCorde_;
     boolean vueSuivie_=true;
     boolean trajectory_=false;
-
+    boolean nightMode_=false;
     QPoint lastPos;
 
     //Variable of the game

@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     boulet.cpp \
     trajectory.cpp \
     pelouse.cpp \
-    save.cpp
+    save.cpp \
+    lighting.cpp
 
 HEADERS  += window.h \
     myglwidget.h \
@@ -43,7 +44,8 @@ HEADERS  += window.h \
     boulet.h \
     trajectory.h \
     pelouse.h \
-    save.h
+    save.h \
+    lighting.h
 
 FORMS    += window.ui \
     newgamedialog.ui
@@ -59,5 +61,4 @@ LIBS += -lOpengl32 \
     -lopencv_features2d2413 \
     -lopencv_calib3d2413
 
-RESOURCES += \
-    ressources.qrc
+RESOURCES += ressources.qrc

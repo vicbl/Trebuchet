@@ -27,15 +27,13 @@ signals:
     void on_startButton_clicked();
     void on_vueSuivie_stateChanged();
     void on_trajectory_stateChanged();
+    void on_nightMode_stateChanged();
+
 private slots:
-
-
     void on_forceSlider_valueChanged(int value);
 
 private:
     Ui::Window *ui;
-
-
 
 };
 
