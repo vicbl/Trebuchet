@@ -41,7 +41,13 @@ Pelouse::~Pelouse(){
 }
 
 void Pelouse::setTexture(){
-    texturePelouse_=((Textures(":/images/pelouse.bmp")).getTextures());
+    texturePelouse1_= ((Textures(":/images/pelouse1.bmp")).getTextures());
+    texturePelouse2_= ((Textures(":/images/pelouse2.bmp")).getTextures());
+    texturePelouse3_= ((Textures(":/images/pelouse3.bmp")).getTextures());
+    texturePelouse4_= ((Textures(":/images/pelouse4.bmp")).getTextures());
+    texturePelouse5_=  ((Textures(":/images/pelouse5.bmp")).getTextures());
+
+
 }
 
 
@@ -56,23 +62,105 @@ void Pelouse::draw(){
 
 
 
-    pelouse_ = glGenLists(1);
+    GLuint pelouse1 = glGenLists(1);
+    glNewList(pelouse1, GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse1_);
+        glPushMatrix();
+            glBegin(GL_QUADS);
+                glNormal3f(0,0,1);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(0,0,0);
+                glTexCoord2f(1.0f, 0.0f);
+                glVertex3f(0.25,0,0);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(0.25,0.25,0);
+                glTexCoord2f(0.0f, 1.0f);
+                glVertex3f(0,0.25,0);
+            glEnd();
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+    glEndList();
 
-    glNewList(pelouse_, GL_COMPILE);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texturePelouse_);
-    glPushMatrix();
-        glBegin(GL_QUADS);
-            glNormal3f(0,0,1);
-            glTexCoord2f(0.0f, 0.0f);
-            glVertex3f(0,0,0);
-            glTexCoord2f(10.0f, 0.0f);
-            glVertex3f(10,0,0);
-            glTexCoord2f(10.0f, 10.0f);
-            glVertex3f(10,10,0);
-            glTexCoord2f(0.0f, 10.0f);
-            glVertex3f(0,10,0);
-        glEnd();
+    GLuint pelouse2 = glGenLists(1);
+    glNewList(pelouse2, GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse2_);
+        glPushMatrix();
+            glBegin(GL_QUADS);
+                glNormal3f(0,0,1);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(0,0,0);
+                glTexCoord2f(1.0f, 0.0f);
+                glVertex3f(0.25,0,0);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(0.25,0.25,0);
+                glTexCoord2f(0.0f, 1.0f);
+                glVertex3f(0,0.25,0);
+            glEnd();
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+    glEndList();
+
+    GLuint pelouse3 = glGenLists(1);
+    glNewList(pelouse3, GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse3_);
+        glPushMatrix();
+            glBegin(GL_QUADS);
+                glNormal3f(0,0,1);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(0,0,0);
+                glTexCoord2f(1.0f, 0.0f);
+                glVertex3f(0.25,0,0);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(0.25,0.25,0);
+                glTexCoord2f(0.0f, 1.0f);
+                glVertex3f(0,0.25,0);
+            glEnd();
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+    glEndList();
+
+    GLuint pelouse4 = glGenLists(1);
+    glNewList(pelouse4, GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse4_);
+        glPushMatrix();
+            glBegin(GL_QUADS);
+                glNormal3f(0,0,1);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(0,0,0);
+                glTexCoord2f(1.0f, 0.0f);
+                glVertex3f(0.25,0,0);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(0.25,0.25,0);
+                glTexCoord2f(0.0f, 1.0f);
+                glVertex3f(0,0.25,0);
+            glEnd();
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+    glEndList();
+
+    GLuint pelouse5 = glGenLists(1);
+    glNewList(pelouse5, GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texturePelouse5_);
+        glPushMatrix();
+            glBegin(GL_QUADS);
+                glNormal3f(0,0,1);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(0,0,0);
+                glTexCoord2f(1.0f, 0.0f);
+                glVertex3f(0.25,0,0);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(0.25,0.25,0);
+                glTexCoord2f(0.0f, 1.0f);
+                glVertex3f(0,0.25,0);
+            glEnd();
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+    glEndList();
 
 
    /* int max=0;
@@ -123,11 +211,43 @@ void Pelouse::draw(){
             }
 
         }*/
+  int temp;
+
+    pelouse_ = glGenLists(1);
+
+    glNewList(pelouse_, GL_COMPILE);
+    glPushMatrix();
+    for (int colonne=-100; colonne<300; colonne++)
+    {
+        for (int ligne=-150; ligne<150; ligne++)
+        {
+            glPushMatrix();
+
+        glTranslatef(0.25*ligne,0.25*colonne,0);
+            temp = rand() % (5);
+            //qDebug()<<"temp"<<temp;
+            if (temp==1){
+                glCallList(pelouse1);
+            }else if(temp==2){
+                glCallList(pelouse2);
+            }
+            else if(temp==3){
+                glCallList(pelouse3);
+            }
+            else if(temp==4){
+                glCallList(pelouse4);
+            }
+            else {
+                glCallList(pelouse5);
+            }
+
+            glPopMatrix();
+        }
+    }
+    glPopMatrix();
+    glEndList();
 
 
-   glPopMatrix();
-   glDisable(GL_TEXTURE_2D);
-   glEndList();
 
 }
 GLuint Pelouse::getPelouse(){

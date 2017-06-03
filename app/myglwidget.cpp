@@ -575,23 +575,44 @@ void MyGLWidget::nightMode(){
 
     //Configure light 0
     glLightfv(GL_LIGHT0, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,0.2);
+
     glLightf(GL_LIGHT0, GL_SPOT_CUTOFF,45.0);
     glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dirLight0);
+    glLightf(GL_LIGHT0, GL_SPOT_EXPONENT,2.0);
+
 
     //Configure light 1
     glLightfv(GL_LIGHT1, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION,0.2);
+
     glLightf(GL_LIGHT1, GL_SPOT_CUTOFF,45.0);
     glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dirLight1);
+    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,2.0);
 
     //Configure light 2
     glLightfv(GL_LIGHT2, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION,0.2);
+
     glLightf(GL_LIGHT2, GL_SPOT_CUTOFF,48.0);
     glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dirLight2);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,2.0);
 
     //Configure light 3
     glLightfv(GL_LIGHT3, GL_AMBIENT, diffuse);
+    glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT3, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT3, GL_QUADRATIC_ATTENUATION,0.2);
+
     glLightf(GL_LIGHT3, GL_SPOT_CUTOFF,48.0);
     glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, dirLight3);
+    glLightf(GL_LIGHT3, GL_SPOT_EXPONENT,2.0);
 
 
     //Enable all lights
@@ -642,7 +663,7 @@ void MyGLWidget::draw()
         //************** Draw Gazon ****************
          glPushMatrix();
        //Pelouse sans bosses
-         for (int colonne=-2; colonne<14; colonne++)
+       /*  for (int colonne=-2; colonne<14; colonne++)
         {
             for (int ligne=-3; ligne<3; ligne++)
             {
@@ -651,13 +672,13 @@ void MyGLWidget::draw()
                     glCallList(pelouse_->getPelouse());
                 glPopMatrix();
             }
-        }
+        }*/
         //Pelouse avec bosses
-              /*  glPushMatrix();
-                     glTranslatef(-50,-50,0);
+               glPushMatrix();
+                    // glTranslatef(-50,-50,0);
                     glCallList(pelouse_->getPelouse());
                 glPopMatrix();
-                */
+
         glPopMatrix();
         //************** End Draw Gazon *************
 

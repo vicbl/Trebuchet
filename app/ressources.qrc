@@ -3,7 +3,6 @@
         <file>images/bois.bmp</file>
         <file>images/bois2.bmp</file>
         <file>images/cible.bmp</file>
-        <file>images/pelouse.bmp</file>
         <file>images/TSE.bmp</file>
         <file>images/TSE2.bmp</file>
         <file>images/UJM.bmp</file>
@@ -12,5 +11,10 @@
         <file>images/bois4.bmp</file>
         <file>images/concrete.bmp</file>
         <file>images/aluminium.bmp</file>
+        <file>images/pelouse1.bmp</file>
+        <file>images/pelouse2.bmp</file>
+        <file>images/pelouse3.bmp</file>
+        <file>images/pelouse4.bmp</file>
+        <file>images/pelouse5.bmp</file>
     </qresource>
 </RCC>

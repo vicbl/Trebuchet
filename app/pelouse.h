@@ -12,7 +12,13 @@ public:
     ~Pelouse();
 private:
     GLuint pelouse_;
-    GLuint texturePelouse_;
+    GLuint texturePelouse1_;
+    GLuint texturePelouse2_;
+    GLuint texturePelouse3_;
+    GLuint texturePelouse4_;
+    GLuint texturePelouse5_;
+
+
     float terrain[1000][1000];
 
 };
