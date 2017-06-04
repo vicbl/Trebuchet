@@ -15,6 +15,7 @@ void Game::newPostion(){
     int max;
     int min;
 
+    // Difficulty : 1-5
 
     firstPassage_=true;
     cibleTouchee_=false;
@@ -22,8 +23,8 @@ void Game::newPostion(){
     min=-(difficulty_+1);
     ciblePositionX_ = rand() % 3*((max-min) + 1) + 3*min;   // x in the range 0 to 10
     ciblePositionY_ = rand() % (max-min + 1) + min;   // y in the range 0 to 10
-    distanceTrebuchet_=22+10*difficulty_;   // Cibles générées entre : [[30/34] - [66-78]
-    // Lancer possible du trébuchet: [29 - 80]
+    distanceTrebuchet_=22+14*difficulty_;   // Cibles générées entre : [[34/38] - [86-98]
+    // Lancer possible du trébuchet: [33 - 102]
 
 }
 

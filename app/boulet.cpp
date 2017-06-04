@@ -11,7 +11,7 @@ Boulet::Boulet()
 
 }
 
-float Boulet::get_x() {return (float)coord_x;}  // Boulet entre 29 et 80
+float Boulet::get_x() {return (float)coord_x;}  // Boulet entre 33 et 102
 float Boulet::get_y() {return (float)coord_y;}
 
 void Boulet::set_y(float y){coord_y=y;}

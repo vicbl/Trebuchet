@@ -570,7 +570,7 @@ void MyGLWidget::calculScores(){
         setScore( QString::number(game_->getScore()));
         zRot_ = 180; // axe du trébuchet
         force_ = -40;
-        yRot_ = -20;
+        yRot_ = 0;
         emit zRotationChanged(zRot_);
         emit yRotationChanged(yRot_);
         emit forceChanged(force_);
@@ -607,7 +607,7 @@ void MyGLWidget::calculScores(){
         start_=false;
         zRot_ = 180; // axe du trébuchet
         force_ = -40;
-        yRot_ = -20; // angle levier
+        yRot_ = 0; // angle levier
         emit zRotationChanged(zRot_);
         emit yRotationChanged(yRot_);
         emit forceChanged(force_);
