@@ -83,7 +83,7 @@ void Cible::draw(){
            //************End Draw Support********
         glPopMatrix();
     glEndList();
-    delete a;
+    //delete a;
 
 
 }
