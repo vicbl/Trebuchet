@@ -4,20 +4,13 @@
 #include <QtOpenGL/qgl.h>
 #include <QtOpenGL>
 #include <QtWidgets>
-#include <QtOpenGL>
 #include <iostream>
-#include <QOpenGLTexture>
-#include <QtOpenGL/qgl.h>
-#include "myglwidget.h"
 #include "ui_window.h"
 #include <GL/glu.h>
 #include <QDebug>
 
 Textures::Textures()
 {
-
-}
-void Textures::setTextures(){
     QString chemin[15];
 
     chemin[0]=":/images/bois.bmp";
@@ -38,7 +31,7 @@ void Textures::setTextures(){
 
 
 
-    glGenTextures(15, textureA_);
+    glGenTextures(15, texture_);
 
     QImage img;
     for(int i = 0;i<15;i++){
@@ -59,7 +52,7 @@ void Textures::setTextures(){
 
 
         // glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureA_[i]);
+        glBindTexture(GL_TEXTURE_2D, texture_[i]);
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
                       GL_formatted_image.width(), GL_formatted_image.height(),
                       0, GL_RGBA, GL_UNSIGNED_BYTE, GL_formatted_image.bits() );
@@ -71,7 +64,7 @@ void Textures::setTextures(){
 }
 
 GLuint Textures::getTextures(int numTexture){
-    return textureA_[numTexture];
+    return texture_[numTexture];
 }
 
 

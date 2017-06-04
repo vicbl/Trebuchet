@@ -428,7 +428,6 @@ void MyGLWidget::initializeGL()
 
     glShadeModel(GL_SMOOTH);
     Textures * tex= new Textures();
-    tex->setTextures();
 
     texturePierre_=tex->getTextures(12);
 

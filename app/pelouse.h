@@ -5,7 +5,6 @@
 class Pelouse
 {
 private:
-    bool firstPassage_=true;
     int temp[1000][1000];
     GLuint pelouse_;
     GLuint texturePelouse1_;
@@ -13,9 +12,6 @@ private:
     GLuint texturePelouse3_;
     GLuint texturePelouse4_;
     GLuint texturePelouse5_;
-
-
-    float terrain[1000][1000];
 
 public:
     Pelouse();

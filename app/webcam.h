@@ -7,7 +7,13 @@
 #include <QWidget>
 class Webcam
 {
-
+private:
+    int xPosition_=0;
+    int yPosition_=0;
+    bool detection_=false;
+    bool active_=false;
+    bool ordreLancer_=false;
+    bool ordreFermer_ = false;
 
 public:
     Webcam();
@@ -20,13 +26,6 @@ public:
     void setxPostion(int x);
     void setyPostion(int y);
 
-private:
-    int xPosition_=0;
-    int yPosition_=0;
-    bool detection_=false;
-    bool active_=false;
-    bool ordreLancer_=false;
-    bool ordreFermer_ = false;
 };
 
 #endif // WEBCAM_H

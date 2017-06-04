@@ -10,13 +10,11 @@ using namespace std;
 class Textures
 {
 private:
+    GLuint  texture_[15];
 
-    GLuint  textureA_[15];
-    GLuint  texture_;
 public:
     Textures();
     GLuint getTextures(int numTexture);
-    void setTextures();
    ~Textures();
 };
 

@@ -13,14 +13,13 @@ private:
     GLuint textureUJM_;
     GLuint completeLogoTelecom_;
     GLuint boxBois;
-
+    void drawPartUJM();
+    void drawPartTSE();
 
 public:
     LogoTelecom();
     void draw();
     void setTexture(Textures tex);
-    void drawPartUJM();
-    void drawPartTSE();
     GLuint getCompleteLogoTelecom();
     ~LogoTelecom();
 

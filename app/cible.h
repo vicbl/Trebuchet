@@ -7,6 +7,12 @@
 #include <GL/glu.h>
 class Cible
 {
+private:
+    GLuint cible_;
+    GLuint textureBois_;
+    GLuint textureCible_;
+    GLuint completeCible_;
+
 public:
     Cible();
     void draw();
@@ -14,12 +20,6 @@ public:
     void drawPart();
     GLuint getCompleteCible();
     ~Cible();
-private:
-    GLuint cible_;
-    GLuint textureBois_;
-    GLuint textureCible_;
-    GLuint completeCible_;
-
 };
 
 #endif // CIBLE_H

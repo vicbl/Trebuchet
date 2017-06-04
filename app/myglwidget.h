@@ -25,7 +25,6 @@ public:
     explicit MyGLWidget(QWidget *parent = 0);
     ~MyGLWidget();
 
-
     int getXScene();
     int getYScene();
     int getZScene();

@@ -5,12 +5,12 @@
 
 
 using namespace std;
-Save::Save(QString filename){
-   this->filename_ =filename;
+Save::Save(QString fileName){
+   this->fileName_ =fileName;
 }
 
 void Save::saveBest(int score, int difficulty, QString playerName){
-    QFile file(this->filename_);
+    QFile file(this->fileName_);
     if (file.open(QFile::Append | QFile::Text)) {
         QTextStream myfile(&file);
         myfile <<score<<"|"<<difficulty<<"|"<<playerName<<endl;
@@ -22,7 +22,7 @@ QString Save::getBestName(int difficulty){
     int max=0;//meilleur score temporaire
     QString final="";
     QStringList temp;
-    QFile inputFile(this->filename_);
+    QFile inputFile(this->fileName_);
     if (inputFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&inputFile);
@@ -44,7 +44,7 @@ QString Save::getBestName(int difficulty){
 int Save::getBestScore(int difficulty){
     int max=0;//meilleur score temporaire
     QStringList temp;
-    QFile inputFile(this->filename_);
+    QFile inputFile(this->fileName_);
     if (inputFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&inputFile);

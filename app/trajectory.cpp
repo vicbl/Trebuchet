@@ -9,8 +9,8 @@ Trajectory::Trajectory()
 
 }
 
-void Trajectory::set_v0(float v){v0=v;}
-void Trajectory::set_axe(int a){axe=a;}
+void Trajectory::set_v0(float v){v0_=v;}
+void Trajectory::set_axe(int a){axe_=a;}
 
 GLuint Trajectory::draw()
 {
@@ -25,12 +25,12 @@ GLuint Trajectory::draw()
     glNewList(trajectory_, GL_COMPILE);
         GLUquadric* bou = gluNewQuadric();
         glPushMatrix();
-            glRotatef(axe-180, 0, 0, 1);
+            glRotatef(axe_-180, 0, 0, 1);
             glColor3f(.9, .9, .9);
             while (coord_y>0){
                 glPushMatrix();
-                    coord_x = 2.4 + v0*cosa*i;
-                    coord_y = 10.8 + v0*sina*i-.02*pow(i,2);
+                    coord_x = 2.4 + v0_*cosa*i;
+                    coord_y = 10.8 + v0_*sina*i-.02*pow(i,2);
                     i=i+0.1;
                     glTranslatef(0, coord_x, coord_y);
                     glScalef(.05, .05, .05);

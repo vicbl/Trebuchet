@@ -10,15 +10,14 @@ class NewGameDialog;
 class NewGameDialog : public QDialog
 {
     Q_OBJECT
+private:
+    Ui::NewGameDialog *ui;
 
 public:
     explicit NewGameDialog(QWidget *parent);
     QString getName();
     int getDifficulty();
     ~NewGameDialog();
-
-private:
-    Ui::NewGameDialog *ui;
 };
 
 #endif // NEWGAMEDIALOG_H

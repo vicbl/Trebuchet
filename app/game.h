@@ -4,18 +4,6 @@
 #include <QString>
 class Game
 {
-public:
-    Game(int difficulty, QString name);
-    int getCiblePositionX();
-    int getCiblePositionY();
-    int getDistanceTrebuchet();
-    int getNbTotalCibleTouchee();
-    int getBestScore();
-    bool getCibleTouchee();
-    int getScore();
-    void newPostion();
-    int calculScore(float xPosBoulet, float zPosBoulet);
-
 private:
     int nbTotalCibleTouchee_; // Nombre de cibles touchées
     int difficulty_;
@@ -27,6 +15,18 @@ private:
     QString name_;
     bool cibleTouchee_=false;
     bool firstPassage_=true;
+
+public:
+    Game(int difficulty, QString name);
+    int getCiblePositionX();
+    int getCiblePositionY();
+    int getDistanceTrebuchet();
+    int getNbTotalCibleTouchee();
+    int getBestScore();
+    bool getCibleTouchee();
+    int getScore();
+    void newPostion();
+    int calculScore(float xPosBoulet, float zPosBoulet);
 
 };
 

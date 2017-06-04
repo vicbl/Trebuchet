@@ -5,14 +5,14 @@
 
 class Save
 {
+private:
+    QString fileName_;
+
 public:
-    Save(QString filename);
+    Save(QString fileName);
     void saveBest(int score, int difficulty, QString playerName);
     QString getBestName(int difficulty);
     int getBestScore(int difficulty);
-
-private:
-    QString filename_;
 };
 
 #endif // SAVE_H
