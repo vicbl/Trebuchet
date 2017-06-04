@@ -28,8 +28,6 @@ void Boulet::setTexture(Textures tex){
 
 GLuint Boulet::draw(Game * game_)
 {
-    qDebug()<<"Draw boulet";
-
 
     // Calcul des nouvelles coordonnées
     cibleTouchee_=game_->getCibleTouchee();
@@ -38,8 +36,8 @@ GLuint Boulet::draw(Game * game_)
         float sina = sin(PI*20/180);
 
 
-        float newx = 1.7 + v0*cosa*t;               // x = x0 + v0*cos(a)*t
-        float newy = 7 + v0*sina*t-.02*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
+        float newx = 2.4 + v0*cosa*t;               // x = x0 + v0*cos(a)*t
+        float newy = 10.8 + v0*sina*t-.02*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
 
 
         if(newy>0 && !finTrajectoire )
@@ -53,7 +51,6 @@ GLuint Boulet::draw(Game * game_)
             coord_y = 0.2;
         }
         game_->calculScore(newx,newy);
-
     }
 
 
@@ -101,8 +98,8 @@ GLuint Boulet::draw(Game * game_)
 void Boulet::reset()
 {
     t = 0;
-    coord_x = 1.7;
-    coord_y = 7.1;
+    coord_x = 2.4;
+    coord_y = 10.8;
     axe = 180;
     finTrajectoire = false;
     cibleTouchee_=false;

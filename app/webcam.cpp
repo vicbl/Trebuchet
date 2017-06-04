@@ -35,7 +35,7 @@ void Webcam::runWebCam(){
 
     // Init the display window
     namedWindow("WebCam",1);
-    namedWindow("Template image",1);
+   // namedWindow("Template image",1);
 
     // Definition of the template rectangle
     int templateWidth=128;
@@ -67,7 +67,7 @@ void Webcam::runWebCam(){
     int counterBloque=0;        // Permet de détecter si on est bloqué
     int counterDetection=0;     // Permet de compter le nombre d'image ou le template reconnu se déplace vers le bas
 
-   while (waitKey(5)<0 && !ordreFermer_)
+    while (waitKey(5)<0 && !ordreFermer_)
     {
         if (cap.read(frame)) // get a new frame from camera
         {
@@ -88,10 +88,10 @@ void Webcam::runWebCam(){
                 minMaxLoc( resultImage, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
 
                 // Show image
-                imshow("Template image", templateImage);
+            //    imshow("Template image", templateImage);
 
 
-                //si on reste bloque
+                //si on reste bloqué
                 counterBloque++;
                 if (counterBloque>10){
                     qDebug()<<"Déblocage";
@@ -109,7 +109,7 @@ void Webcam::runWebCam(){
                 }
 
                 flip(frame,frame,1);
-                 // Do the Matching between the frame and the templateImage
+                // Do the Matching between the frame and the templateImage
                 matchTemplate( frame, templateImage, resultImage, TM_CCORR_NORMED );
 
                 // Localize the best match with minMaxLoc
@@ -136,37 +136,45 @@ void Webcam::runWebCam(){
             }
             else if(counterDetection<30) {
                 rectangle(frame,resultRect,Scalar( 255, 255, 0),2,8,0);
-            }else{
-                rectangle(frame,resultRect,Scalar( 0, 255, 0),2,8,0);
-                //Modifier position trebuchet
-                active_ = true;
                 setxPostion(xTemp);
                 setyPostion(yTemp);
+            }else{
+                //Modifier position trebuchet
+                active_ = true;
+
                 /*
                  * pour une webcam 640x480
                  * x -> 510
                  * y -> 350
                  *
                  */
+                if (fabs(xTemp-xPrev)<40){ // si trop grand décalage en x on modifie pas la position
+                    rectangle(frame,resultRect,Scalar( 0, 255, 0),2,8,0);
+                    //Modifier position trebuchet
 
-                if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
-                {
-                    ordreLancer_ = true;
-                    xPrev=xInit;
-                    yPrev=yInit;
+                    setxPostion(xTemp);
+                    setyPostion(yTemp);
+                    if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
+                    {
+                        ordreLancer_ = true;
+                        xPrev=xInit;
+                        yPrev=yInit;
+                    }
+
+                    if (xPosition_>500 && yPosition_>330)
+                    {
+                        active_ = false;
+                        ordreFermer_=true;
+                        cap.release();
+                        resultImage.release();
+                        templateImage.release();
+                    }
+                    xPrev = xPosition_;
+                    yPrev = yPosition_;
+                }else{
+                      rectangle(frame,resultRect,Scalar( 0, 255, 255),2,8,0);
                 }
 
-                if (xPosition_>500 && yPosition_>330)
-                {
-                    active_ = false;
-                    ordreFermer_=true;
-                    cap.release();
-                    resultImage.release();
-                    templateImage.release();
-                }
-
-                xPrev = xPosition_;
-                yPrev = yPosition_;
             }
 
             imshow("WebCam", frame);

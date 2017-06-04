@@ -6,11 +6,11 @@
 
 using namespace std;
 Save::Save(QString filename){
-    filename_ =filename;
+   this->filename_ =filename;
 }
 
 void Save::saveBest(int score, int difficulty, QString playerName){
-    QFile file(filename_);
+    QFile file(this->filename_);
     if (file.open(QFile::Append | QFile::Text)) {
         QTextStream myfile(&file);
         myfile <<score<<"|"<<difficulty<<"|"<<playerName<<endl;
@@ -18,11 +18,11 @@ void Save::saveBest(int score, int difficulty, QString playerName){
     else qDebug() << "Unable to open file";
 }
 
-QString Save::getBest(int difficulty){
+QString Save::getBestName(int difficulty){
     int max=0;//meilleur score temporaire
     QString final="";
     QStringList temp;
-    QFile inputFile(filename_);
+    QFile inputFile(this->filename_);
     if (inputFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&inputFile);
@@ -32,7 +32,7 @@ QString Save::getBest(int difficulty){
             temp=line.split("|");
             if (temp[1].toInt()==difficulty){
                 if (temp[0].toInt()>max){
-                    final=("Joueur :"+temp[2]+", score : "+temp[0]);
+                    final=temp[2];
                     max=temp[0].toInt();
                 }
             }
@@ -40,4 +40,26 @@ QString Save::getBest(int difficulty){
         inputFile.close();
     }
     return final;
+}
+int Save::getBestScore(int difficulty){
+    int max=0;//meilleur score temporaire
+    QStringList temp;
+    QFile inputFile(this->filename_);
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            temp=line.split("|");
+            if (temp[1].toInt()==difficulty){
+                if (temp[0].toInt()>max){
+
+                    max=temp[0].toInt();
+                }
+            }
+        }
+        inputFile.close();
+    }
+    return max;
 }

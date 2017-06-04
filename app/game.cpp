@@ -52,9 +52,9 @@ int Game::calculScore(float xPosBoulet, float zPosBoulet){
 
     float distanceCible=sqrt(pow((distanceTrebuchet_+ciblePositionY_),2)+pow(ciblePositionX_,2));
     xPosBoulet=xPosBoulet-(distanceCible+1.7)+1.22;
-    qDebug()<<"xboulet = "<<xPosBoulet;
+    /*qDebug()<<"xboulet = "<<xPosBoulet;
     qDebug()<<"yboulet = "<<distanceCible;
-    qDebug()<<"zboulet = "<<zPosBoulet<< "yBouletZone cible = "<<zPosBoulet;
+    qDebug()<<"zboulet = "<<zPosBoulet<< "yBouletZone cible = "<<zPosBoulet;*/
 
 
 
@@ -112,34 +112,44 @@ int Game::calculScore(float xPosBoulet, float zPosBoulet){
         if (xPosBoulet<0.1 && xPosBoulet>-0.1) {
             score_=score_+10;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         }
         else if (xPosBoulet<0.2 && xPosBoulet>-0.2) {
             score_=score_+9;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
+
         } else if (xPosBoulet<0.3 && xPosBoulet>-0.3) {
             score_=score_+8;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         } else if (xPosBoulet<0.4 && xPosBoulet>-0.4) {
             score_=score_+7;
             cibleTouchee_=true;
         } else if (xPosBoulet<0.5 && xPosBoulet>-0.5) {
             score_=score_+6;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         } else if (xPosBoulet<0.6 && xPosBoulet>-0.6) {
             score_=score_+5;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         } else if (xPosBoulet<0.7 && xPosBoulet>-0.7) {
             score_=score_+4;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         } else if (xPosBoulet<0.8 && xPosBoulet>-0.8) {
             score_=score_+3;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         }else if(xPosBoulet<0.9&&xPosBoulet>-0.9){
             score_=score_+2;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         }else if(xPosBoulet<1&&xPosBoulet>-1){
             score_=score_+1;
             cibleTouchee_=true;
+            nbTotalCibleTouchee_++;
         }
     }
 

@@ -33,7 +33,7 @@ void Textures::setTextures(){
     chemin[10]=":/images/concrete.bmp";
     chemin[11]=":/images/aluminium.bmp";
     chemin[12]=":/images/pierre.bmp";
-    chemin[13]=":/images/TSE2.bmp";
+    chemin[13]=":/images/TSE.bmp";
     chemin[14]=":/images/UJM.bmp";
 
 

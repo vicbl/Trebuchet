@@ -8,10 +8,11 @@ class Save
 public:
     Save(QString filename);
     void saveBest(int score, int difficulty, QString playerName);
-    QString getBest(int difficulty);
+    QString getBestName(int difficulty);
+    int getBestScore(int difficulty);
 
 private:
-QString filename_;
+    QString filename_;
 };
 
 #endif // SAVE_H

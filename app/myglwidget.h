@@ -97,27 +97,27 @@ private:
     int zoomScene_=2;
 
     int xRot_;
-    int yRot;   // angle du levier
-    int zRot;
+    int yRot_;   // angle du levier
+    int zRot_;
 
-    int force;
-    Webcam *w;
+    int force_;
+    Webcam *w_;
 
-    int xBoulet;
-    int yBoulet;
+    int xBoulet_;
+    int yBoulet_;
 
     QTime tempsPartie_;
     QTime tempsTotal_;
     int angle_;
 
-    double angle1;
-    double angle2;
-    double angle3;
-    double angle4;
-    double angle5;
+    double angle1_;
+    double angle2_;
+    double angle3_;
+    double angle4_;
+    double angle5_;
 
 
-    GLuint corde;
+    GLuint corde_;
     GLuint texturePierre_;
 
 
@@ -130,17 +130,17 @@ private:
     Trajectory *traj_;
     Lighting *light_;
 
-    GLUquadric* corde1;
+    GLUquadric* corde1_;
 
     //Light
-    float posLight0[4] = {-3.3f, -1.0f, 12.5f,1.0f};
-    float dirLight0[4] = {0.0f, 0.4f,-1.0f};
-    float posLight1[4] = {3.3f, -1.0f, 12.5f,1.0f};
-    float dirLight1[4] = {0.0f, 0.4f,-1.0f};
-    float posLight2[4] = {-21.0f, 24.0f, 12.5f,1.0f};
-    float dirLight2[4] = {0.5f, 0.5f,-1.0f};
-    float posLight3[4] = {21.0f, 24.0f, 12.5f,1.0f};
-    float dirLight3[4] = {-0.5f, 0.5f,-1.0f};
+    float posLight0_[4] = {-3.3f, -1.0f, 12.5f,1.0f};
+    float dirLight0_[4] = {0.0f, 0.4f,-1.0f};
+    float posLight1_[4] = {3.3f, -1.0f, 12.5f,1.0f};
+    float dirLight1_[4] = {0.0f, 0.4f,-1.0f};
+    float posLight2_[4] = {-21.0f, 24.0f, 12.5f,1.0f};
+    float dirLight2_[4] = {0.5f, 0.5f,-1.0f};
+    float posLight3_[4] = {21.0f, 24.0f, 12.5f,1.0f};
+    float dirLight3_[4] = {-0.5f, 0.5f,-1.0f};
 
 
     boolean bouletLance_;
@@ -149,9 +149,9 @@ private:
     boolean vueSuivie_=true;
     boolean trajectory_=false;
     boolean nightMode_=false;
-    QPoint lastPos;
+    QPoint lastPos_;
 
-    //Variable of the game
+    //Variable du jeu
     Game *game_;
     int difficulty_=1;
     QString name_;
@@ -159,8 +159,10 @@ private:
     int distanceTrebuchet_;
     int posXCible_;
     int posYCible_;
-    int nbTotalCible_=0;
-
+    int nbTotalCible_=10;
+    int nbCibleTouchee_=0;
+    int nbCiblePassee_=0;
+    int compteurEssai_=0;
     Save *save_;
 };
 

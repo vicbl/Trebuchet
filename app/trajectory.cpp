@@ -15,8 +15,8 @@ void Trajectory::set_axe(int a){axe=a;}
 GLuint Trajectory::draw()
 {
     float i=0;
-    GLfloat coord_y = 7; // hauteur
-    GLfloat coord_x = 1.7; // distance au trébuchet
+    GLfloat coord_y = 10.8; // hauteur
+    GLfloat coord_x = 2.4; // distance au trébuchet
     float cosa = cos(PI*20/180);
     float sina = sin(PI*20/180);
 
@@ -29,8 +29,8 @@ GLuint Trajectory::draw()
             glColor3f(.9, .9, .9);
             while (coord_y>0){
                 glPushMatrix();
-                    coord_x = 1.7 + v0*cosa*i;
-                    coord_y = 7 + v0*sina*i-.02*pow(i,2);
+                    coord_x = 2.4 + v0*cosa*i;
+                    coord_y = 10.8 + v0*sina*i-.02*pow(i,2);
                     i=i+0.1;
                     glTranslatef(0, coord_x, coord_y);
                     glScalef(.05, .05, .05);

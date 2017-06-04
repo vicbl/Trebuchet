@@ -24,18 +24,18 @@ MyGLWidget::MyGLWidget(QWidget *parent)
 {
 
     xRot_ = 180; // angle de vue
-    yRot = 0; // angle du levier
-    zRot = 180; // axe du trébuchet
-    force = -40;
+    yRot_ = 0; // angle du levier
+    zRot_ = 180; // axe du trébuchet
+    force_ = -40;
 
     angle_ = 0;
-    angle1 = 3;
-    angle2 = 5;
-    angle3 = 9;
-    angle4 = 14;
-    angle5 = 19;
+    angle1_ = 3;
+    angle2_ = 5;
+    angle3_ = 9;
+    angle4_ = 14;
+    angle5_ = 19;
 
-    w=new Webcam();
+    w_=new Webcam();
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this, SLOT(setValue()));
     timer->start(10);
@@ -54,7 +54,12 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     boulet_=new Boulet ();
     logoTelecom_=new LogoTelecom();
     traj_ =new Trajectory();
-    save_=new Save("D:/Utilisateur/Victor/Bureau/Nouveau dossier/Nouveau dossier/files/BestScores.txt");
+    QDir dir;
+    qDebug() << "chemin"<<dir.absolutePath();
+    dir.mkdir("Sauvegardes");
+    QString path=dir.absolutePath()+"/Sauvegardes/BestScores.txt";
+    qDebug()<<path;
+    save_=new Save(path);
 }
 
 MyGLWidget::~MyGLWidget()
@@ -63,7 +68,7 @@ MyGLWidget::~MyGLWidget()
 
 void MyGLWidget::setValue()
 {
-    if (w->getActive()){
+    if (w_->getActive()){
 
         /*
          * pour une webcam 640x480
@@ -75,9 +80,9 @@ void MyGLWidget::setValue()
          *
          */
 
-        int z = 260-int(w->getxPosition()*160.0/510);
-        int f = int(w->getyPosition()*(-40.0)/350);
-        bool lancer = w->getOrdreLancer();
+        int z = 260-int(w_->getxPosition()*160.0/510);
+        int f = int(w_->getyPosition()*(-40.0)/350);
+        bool lancer = w_->getOrdreLancer();
         if(!lancer)
         {
             setZRotation(z);
@@ -122,12 +127,12 @@ void MyGLWidget::trajectoryActived()
 
 void MyGLWidget::reInitialize()
 {
-    while (yRot>-20)
+    while (yRot_>-20)
     {
-        yRot--;
-        int angle = yRot;
+        yRot_--;
+        int angle = yRot_;
         emit yRotationChanged(angle);
-        gluDeleteQuadric(corde1);
+        gluDeleteQuadric(corde1_);
         // corde1 = gluNewQuadric();
         updateGL();
 
@@ -169,7 +174,7 @@ void MyGLWidget::recentrer()    // appeler lors de l'appui sur 'x'
     int final_xRot;       // xRot final pour être derrière le trébuchet
     int angle = xRot_;       // Angle de rotation du trébuchet
 
-    final_xRot = 360-zRot;
+    final_xRot = 360-zRot_;
     //qDebug(" - %d - %d", final_xRot, angle);
     while(final_xRot!=angle)
     {
@@ -186,7 +191,7 @@ void MyGLWidget::recentrer()    // appeler lors de l'appui sur 'x'
             xRot_ = angle;
             zScene_=angle;
             emit xRotationChanged(angle);
-            gluDeleteQuadric(corde1);
+            gluDeleteQuadric(corde1_);
             // corde1 = gluNewQuadric();
             updateGL();
         }
@@ -207,11 +212,11 @@ void MyGLWidget::lancerBoutonClicked()
 
         int angle = xRot_;       // Angle de rotation du trébuchet
         boulet_->reset();
-        float v0 = float(28+(float(force)/4-10))/8;
+        float v0 = float(28+(float(force_)/4-10))/8;
         boulet_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
-        boulet_->set_axe(zRot);
-        qDebug() << "Force = " << force << " v0 = " << v0;
-        int pos_treb = 20+yRot;       // position trigonométrique du levier autour de son axe de rotation
+        boulet_->set_axe(zRot_);
+        qDebug() << "Force = " << force_ << " v0 = " << v0;
+        int pos_treb = 20+yRot_;       // position trigonométrique du levier autour de son axe de rotation
 
         /*
          * zRot = angle = [100 - 180 - 260]
@@ -230,8 +235,8 @@ void MyGLWidget::lancerBoutonClicked()
                 {
                     if (pos_treb<172)
                     {
-                        yRot+=3;
-                        if (yRot >= 110)
+                        yRot_+=3;
+                        if (yRot_ >= 110)
                         {
                             bouletLance_=true;
                         }
@@ -239,22 +244,22 @@ void MyGLWidget::lancerBoutonClicked()
                     } else if (pos_treb<266)
                     {
                         aller = false;
-                        yRot-=2;
+                        yRot_-=2;
                     } else if (pos_treb<324)
                     {
-                        yRot+=2;
+                        yRot_+=2;
                     } else if (pos_treb<370)
                     {
-                        yRot-=2;
+                        yRot_-=2;
                     } else if (pos_treb<400)
                     {
-                        yRot+=2;
+                        yRot_+=2;
                     } else if (pos_treb<416)
                     {
-                        yRot-=2;
+                        yRot_-=2;
                     }else
                     {
-                        yRot+=2;
+                        yRot_+=2;
                     }
 
                     if (aller)
@@ -266,9 +271,9 @@ void MyGLWidget::lancerBoutonClicked()
                     }
 
 
-                    angle = yRot;
+                    angle = yRot_;
                     emit yRotationChanged(angle);
-                    gluDeleteQuadric(corde1);
+                    gluDeleteQuadric(corde1_);
 
                     updateGL();
 
@@ -280,10 +285,9 @@ void MyGLWidget::lancerBoutonClicked()
         delay(1000);
         bouletLance_=false;
         updateGL();
-        tempsPartie_.restart();
 
         lancement_=false;
-        w->setOrdreLancer(lancement_);
+        w_->setOrdreLancer(lancement_);
 
         // si la partie a commencée permet de calculé les scores
         if (start_){
@@ -299,13 +303,13 @@ void MyGLWidget::setForce(int angle)
 {
     delay(6);
     qNormalizeAngle(angle);
-    if (-20-angle/2 != yRot && !lancement_) {
-        yRot = angle/2;
-        force = angle;
+    if (-20-angle/2 != yRot_ && !lancement_) {
+        yRot_ = angle/2;
+        force_ = angle;
         emit yRotationChanged(-20-angle/2);
         emit forceChanged(angle);
 
-        gluDeleteQuadric(corde1);
+        gluDeleteQuadric(corde1_);
         // corde1 = gluNewQuadric();
         updateGL();
     }
@@ -329,7 +333,7 @@ void MyGLWidget::setXRotation(int angle) // Zone
         }
         emit xRotationChanged(angle);
 
-        gluDeleteQuadric(corde1);
+        gluDeleteQuadric(corde1_);
         // corde1 = gluNewQuadric();
 
         updateGL();
@@ -340,8 +344,8 @@ void MyGLWidget::setXRotation(int angle) // Zone
 void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 {
     qNormalizeAngle(angle);
-    if (angle != yRot) {
-        yRot = angle;
+    if (angle != yRot_) {
+        yRot_ = angle;
         // emit yRotationChanged(angle);
     }
 
@@ -349,11 +353,11 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
     {
         angle_ = round((angle+20)*3); // angle_ va de 0 à 360, puis lacher de boulet, puis oscille entre 540 et 180 jusquà arrêt
 
-        angle1 = 3 - round(angle_/120); // [3 ; 0] (120 = 360/3)
-        angle2 = 5 - round(angle_/72); // [5 ; 0] (72 = 360/5)
-        angle3 = 9 - round(angle_/40); // [9 ; 0] (40 = 360/9)
-        angle4 = 14 - round(angle_/28); // [14 ; 1] (28 = 360/13)
-        angle5 = 19 - round(angle_/21); // [19 ; 2] (21 = 360/17)
+        angle1_ = 3 - round(angle_/120); // [3 ; 0] (120 = 360/3)
+        angle2_ = 5 - round(angle_/72); // [5 ; 0] (72 = 360/5)
+        angle3_ = 9 - round(angle_/40); // [9 ; 0] (40 = 360/9)
+        angle4_ = 14 - round(angle_/28); // [14 ; 1] (28 = 360/13)
+        angle5_ = 19 - round(angle_/21); // [19 ; 2] (21 = 360/17)
 
         if (angle_ == 510)
         {
@@ -365,28 +369,28 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 
         if (angle_ > 130)
         {
-            angle1 = -1*(angle_-145)/15; // [-1 ; 1]
-            angle2 = -2*(angle_-145)/15; // [-2 ; 2]
-            angle3 = -4*(angle_-145)/15; // [-3 ; 3]
-            angle4 = -6*(angle_-145)/15; // [-5 ; 5] x4
-            angle5 = -25+25*(angle_-145)/15;   // x2  -> de 0 à -50°
+            angle1_ = -1*(angle_-145)/15; // [-1 ; 1]
+            angle2_ = -2*(angle_-145)/15; // [-2 ; 2]
+            angle3_ = -4*(angle_-145)/15; // [-3 ; 3]
+            angle4_ = -6*(angle_-145)/15; // [-5 ; 5] x4
+            angle5_ = -25+25*(angle_-145)/15;   // x2  -> de 0 à -50°
         }
         else {
             if (angle_ > 50)
             {
-                angle1 = 4*(angle_-90)/40; //
-                angle2 = 3*(angle_-90)/40; //
-                angle3 = 2*(angle_-90)/40; //
-                angle4 = 1*(angle_-90)/40; // x4
-                angle5 = -90+(angle_-90); // x2  -> de -50 à -130
+                angle1_ = 4*(angle_-90)/40; //
+                angle2_ = 3*(angle_-90)/40; //
+                angle3_ = 2*(angle_-90)/40; //
+                angle4_ = 1*(angle_-90)/40; // x4
+                angle5_ = -90+(angle_-90); // x2  -> de -50 à -130
 
             } else
             {
-                angle1 = -2*(angle_-25)/50; // [-1 ; 1]
-                angle2 = -4*(angle_-25)/50; // [-2 ; 2]
-                angle3 = -6*(angle_-25)/50; // [-3 ; 3]
-                angle4 = -8*(angle_-25)/50; // [-5 ; 5] x4
-                angle5 = -70-120*(angle_-25)/50; // [de 230 (=-130) à 10] x2 (120° +- 110)
+                angle1_ = -2*(angle_-25)/50; // [-1 ; 1]
+                angle2_ = -4*(angle_-25)/50; // [-2 ; 2]
+                angle3_ = -6*(angle_-25)/50; // [-3 ; 3]
+                angle4_ = -8*(angle_-25)/50; // [-5 ; 5] x4
+                angle5_ = -70-120*(angle_-25)/50; // [de 230 (=-130) à 10] x2 (120° +- 110)
             }
         }
         if (angle_ <= -18)
@@ -403,8 +407,8 @@ void MyGLWidget::setZRotation(int angle) // Axe
 {
     delay(6);
     qNormalizeAngle(angle);
-    if (angle != zRot && !lancement_) {
-        zRot = angle;
+    if (angle != zRot_ && !lancement_) {
+        zRot_ = angle;
 
         emit zRotationChanged(angle);
 
@@ -454,7 +458,7 @@ void MyGLWidget::paintGL()
     double scale=abs(zoomScene_*0.1);
     //qDebug()<<scale;
     glScalef(scale, scale, scale);
-    if(bouletLance_ && vueSuivie_ && abs(360-xRot_-zRot)<10)
+    if(bouletLance_ && vueSuivie_ && abs(360-xRot_-zRot_)<10)
     {
         glTranslatef(0, boulet_->get_x()/6, boulet_->get_x());
     }
@@ -464,10 +468,10 @@ void MyGLWidget::paintGL()
     glRotatef(zScene_ , 0.0, 0.0, 1.0);
 
     //Set Lights positions
-    glLightfv(GL_LIGHT0, GL_POSITION, posLight0);
-    glLightfv(GL_LIGHT1, GL_POSITION, posLight1);
-    glLightfv(GL_LIGHT2, GL_POSITION, posLight2);
-    glLightfv(GL_LIGHT3, GL_POSITION, posLight3);
+    glLightfv(GL_LIGHT0, GL_POSITION, posLight0_);
+    glLightfv(GL_LIGHT1, GL_POSITION, posLight1_);
+    glLightfv(GL_LIGHT2, GL_POSITION, posLight2_);
+    glLightfv(GL_LIGHT3, GL_POSITION, posLight3_);
 
 
     draw();
@@ -496,13 +500,13 @@ void MyGLWidget::resizeGL(int width, int height)
 
 void MyGLWidget::mousePressEvent(QMouseEvent *event)
 {
-    lastPos = event->pos();
+    lastPos_ = event->pos();
 }
 
 
 void MyGLWidget::webcam_clicked()
 {
-    w->runWebCam();
+    w_->runWebCam();
 }
 
 void MyGLWidget::startButton_clicked()
@@ -512,7 +516,9 @@ void MyGLWidget::startButton_clicked()
 
     if (newGame.exec() == QDialog::Accepted )
     {
-        nbTotalCible_=0;
+        nbCibleTouchee_=0;
+        nbCiblePassee_=0;
+        compteurEssai_=0;
         difficulty_=newGame.getDifficulty();
         name_=newGame.getName();
         game_=new Game(difficulty_,name_);
@@ -524,106 +530,137 @@ void MyGLWidget::startButton_clicked()
         tempsPartie_.start();
         tempsTotal_.start();
         setName(name_);
-        if (save_->getBest(difficulty_)!=""){
-            setBestPlayer(save_->getBest(difficulty_));
+        if (save_->getBestName(difficulty_)!=""){
+            setBestPlayer(save_->getBestName(difficulty_)+" Score :"+QString::number(save_->getBestScore(difficulty_)));
         }
         setDifficulty( QString::number(difficulty_));
+        setNbCibles(QString::number(nbTotalCible_));
         updateGL();
+        w_->runWebCam();
     }
     qDebug()<<"start button";
 }
 
 void MyGLWidget::calculScores(){
-    if(nbTotalCible_<5){
-
-        if(game_->getCibleTouchee()){
+    if(nbCiblePassee_<nbTotalCible_){
+        compteurEssai_++;
+        if(compteurEssai_<3){ // Si on fait plus de 3 essai pour une cible
+            if(game_->getCibleTouchee()){
+                compteurEssai_=0;
+                nbCiblePassee_++;
+                nbCibleTouchee_++;
+                game_->newPostion();
+                yBoulet_=true;
+                // nouvelle cible
+                posXCible_=game_->getCiblePositionX();
+                posYCible_=game_->getCiblePositionY();
+                distanceTrebuchet_=game_->getDistanceTrebuchet();
+                tempsPartie_.start();
+                setNbCibles(QString::number(nbTotalCible_-nbCiblePassee_));
+            }
+        }else{
+            nbCiblePassee_++;
+            compteurEssai_=0;
             game_->newPostion();
-            yBoulet=true;
+            yBoulet_=true;
             // nouvelle cible
             posXCible_=game_->getCiblePositionX();
             posYCible_=game_->getCiblePositionY();
             distanceTrebuchet_=game_->getDistanceTrebuchet();
             tempsPartie_.start();
-            setNbCibles(QString::number((5-game_->getNbTotalCibleTouchee())));
+            setNbCibles(QString::number(nbTotalCible_-nbCiblePassee_));
         }
-
-        nbTotalCible_++;
         setScore( QString::number(game_->getScore()));
-        zRot = 180; // axe du trébuchet
-        force = -40;
-        yRot = -20;
-        emit zRotationChanged(zRot);
-        emit yRotationChanged(yRot);
-        emit forceChanged(force);
+        zRot_ = 180; // axe du trébuchet
+        force_ = -40;
+        yRot_ = -20;
+        emit zRotationChanged(zRot_);
+        emit yRotationChanged(yRot_);
+        emit forceChanged(force_);
         updateGL();
-
     }
-    if (nbTotalCible_==5){
+
+    if (nbCiblePassee_==nbTotalCible_){
         qDebug()<<"Partie terminée";
-        QString message="Vous avez marqué "+QString::number(game_->getScore())+" / "+QString::number(nbTotalCible_)+" points pour la difficulté "+QString::number(difficulty_);
+        int meilleurScore=save_->getBestScore(difficulty_);
+        save_->saveBest(game_->getScore(),difficulty_,name_);
+        QString message;
+        if(meilleurScore> game_->getScore() && save_->getBestName(difficulty_)!="" ){
+             message="Vous avez touché "+QString::number(nbCibleTouchee_)+ " cibles  sur "
+                    +QString::number(nbTotalCible_)+" et marqué "+QString::number(game_->getScore())+
+                    " points pour la difficulté "+QString::number(difficulty_)+"\n"+
+                    "Le meilleur score est détenu par "+save_->getBestName(difficulty_)+" avec "+
+                    QString::number(save_->getBestScore(difficulty_))+" points";
+        }else{
+             message="Vous avez touché "+QString::number(nbCibleTouchee_)+ " cibles  sur "
+                    +QString::number(nbTotalCible_)+" et marqué "+QString::number(game_->getScore())+
+                    " points pour la difficulté "+QString::number(difficulty_)+"\n"+
+                    "Bravo vous avez fait le meilleur score";
+        }
         QMessageBox::information(this,tr("Fin de partie"),message);
 
-        save_->saveBest(game_->getScore(),difficulty_,name_);
+
 
         // On réinitialise les valeur et l'affichage
         setScore( QString::number(0));
         setNbCibles(QString::number(0));
         setBestPlayer("Pas de meilleur score");
         setDifficulty( QString::number(0));
+        setNbCibles(QString::number(0));
         start_=false;
-        zRot = 180; // axe du trébuchet
-        force = -40;
-        yRot = -20; // angle levier
-        emit zRotationChanged(zRot);
-        emit yRotationChanged(yRot);
-        emit forceChanged(force);
+        zRot_ = 180; // axe du trébuchet
+        force_ = -40;
+        yRot_ = -20; // angle levier
+        emit zRotationChanged(zRot_);
+        emit yRotationChanged(yRot_);
+        emit forceChanged(force_);
         updateGL();
     }
 
 }
 
 void MyGLWidget::nightMode(){
-    GLfloat diffuse[] = { 50.0, 50.0f, 50.0f, 50.0f };
+    GLfloat ambient[] = { 50.0, 50.0f, 50.0f, 50.0f };
 
     //Configure light 0
-    glLightfv(GL_LIGHT0, GL_AMBIENT, diffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,2.5);
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,0.2);
 
     glLightf(GL_LIGHT0, GL_SPOT_CUTOFF,45.0);
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dirLight0);
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dirLight0_);
     glLightf(GL_LIGHT0, GL_SPOT_EXPONENT,2.0);
 
 
     //Configure light 1
-    glLightfv(GL_LIGHT1, GL_AMBIENT, diffuse);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
     glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION,2.5);
     glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION,0.2);
 
     glLightf(GL_LIGHT1, GL_SPOT_CUTOFF,45.0);
-    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dirLight1);
+    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dirLight1_);
     glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,2.0);
 
     //Configure light 2
-    glLightfv(GL_LIGHT2, GL_AMBIENT, diffuse);
+    glLightfv(GL_LIGHT2, GL_AMBIENT, ambient);
     glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION,2.5);
     glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION,0.2);
 
     glLightf(GL_LIGHT2, GL_SPOT_CUTOFF,48.0);
-    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dirLight2);
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dirLight2_);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,2.0);
 
     //Configure light 3
-    glLightfv(GL_LIGHT3, GL_AMBIENT, diffuse);
+    glLightfv(GL_LIGHT3, GL_AMBIENT, ambient);
     glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION,2.5);
     glLightf(GL_LIGHT3, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT3, GL_QUADRATIC_ATTENUATION,0.2);
 
     glLightf(GL_LIGHT3, GL_SPOT_CUTOFF,48.0);
-    glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, dirLight3);
+    glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, dirLight3_);
     glLightf(GL_LIGHT3, GL_SPOT_EXPONENT,2.0);
 
 
@@ -696,9 +733,9 @@ void MyGLWidget::draw()
         //************** Draw Trajectory ****************
         if (trajectory_)
         {
-            float v0 = float(28+(float(force)/4-10))/8;
+            float v0 = float(28+(float(force_)/4-10))/8;
             traj_->set_v0(v0);   // V0 du boulet, force = [-20 / -10], v0 = [1 / 2.25], coord_x_final = [29 - 99]
-            traj_->set_axe(zRot);
+            traj_->set_axe(zRot_);
             glCallList(traj_->draw());
         }
         //************** End Draw Trajectory *************
@@ -758,11 +795,11 @@ void MyGLWidget::draw()
 
         //************* Draw TREBUCHET ***************
         glPushMatrix();
-            glRotatef(zRot,0,0,1);
+            glRotatef(zRot_,0,0,1);
             glPushMatrix();
                 glTranslatef(0, 0, 0.2);
                 glScalef(3,3,3);
-                glCallList(trebuchet_->draw(corde,yRot));
+                glCallList(trebuchet_->draw(corde_,yRot_));
             glPopMatrix();
         glPopMatrix();
 
@@ -821,7 +858,7 @@ void MyGLWidget::draw()
         // glDeleteLists(trebuchetComplet, 1);
 
     glPopMatrix();
-glDeleteLists(corde, 100);
+glDeleteLists(corde_, 100);
 //glFlush();
 }
 
@@ -829,10 +866,10 @@ glDeleteLists(corde, 100);
 
 void MyGLWidget::drawCorde(){
 
-    corde = glGenLists(1);
-    glNewList(corde, GL_COMPILE);
-    corde1 = gluNewQuadric();
-    gluQuadricTexture(corde1,GL_TRUE);
+    corde_ = glGenLists(1);
+    glNewList(corde_, GL_COMPILE);
+    corde1_ = gluNewQuadric();
+    gluQuadricTexture(corde1_,GL_TRUE);
     glColor4f (1, 1, 1, 0.8);
     glPushMatrix();
 
@@ -840,131 +877,131 @@ void MyGLWidget::drawCorde(){
         glTranslatef(0, 0, -0.5);
         glRotatef( -90, 1, 0, 0);
         glScalef( 0.2, 0.2, 0.4);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle5, 1, 0, 0);
+        glRotatef( angle5_, 1, 0, 0);
         // glRotatef( -9, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle5, 1, 0, 0);
+        glRotatef( angle5_, 1, 0, 0);
         // glRotatef( -9, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle4, 1, 0, 0);
+        glRotatef( angle4_, 1, 0, 0);
         // glRotatef( -7, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle4, 1, 0, 0);
+        glRotatef( angle4_, 1, 0, 0);
         // glRotatef( -7, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle4, 1, 0, 0);
+        glRotatef( angle4_, 1, 0, 0);
         // glRotatef( -7, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle4, 1, 0, 0);
+        glRotatef( angle4_, 1, 0, 0);
 
         // glRotatef( -5, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle3, 1, 0, 0);
+        glRotatef( angle3_, 1, 0, 0);
         // glRotatef( -5, 1, 0 ,0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle3, 1, 0, 0);
+        glRotatef( angle3_, 1, 0, 0);
         // glRotatef( -5, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle3, 1, 0, 0);
+        glRotatef( angle3_, 1, 0, 0);
         // glRotatef( -5, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle3, 1, 0, 0);
+        glRotatef( angle3_, 1, 0, 0);
         // glRotatef( -5, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle2, 1, 0, 0);
+        glRotatef( angle2_, 1, 0, 0);
         // glRotatef( -3, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle2, 1, 0, 0);
+        glRotatef( angle2_, 1, 0, 0);
         // glRotatef( -3, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle2, 1, 0, 0);
+        glRotatef( angle2_, 1, 0, 0);
         // glRotatef( -3, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle2, 1, 0, 0);
+        glRotatef( angle2_, 1, 0, 0);
         // glRotatef( -3, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle2, 1, 0, 0);
+        glRotatef( angle2_, 1, 0, 0);
         // glRotatef( -3, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle1, 1, 0, 0);
+        glRotatef( angle1_, 1, 0, 0);
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
-        glRotatef( angle1, 1, 0, 0);
+        glRotatef( angle1_, 1, 0, 0);
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
@@ -972,45 +1009,45 @@ void MyGLWidget::drawCorde(){
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
         glRotatef( 0, 1, 0, 0);
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
         glRotatef( 0, 1, 0, 0);
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 0.5);
         glScalef( 1, 1, 0.5);
         glRotatef( 0, 1, 0, 0);
         // glRotatef( -2, 1, 0, 0);
         glScalef( 1, 1, 2);
         glTranslatef(0, 0, 0.5);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
         glTranslatef(0, 0, 1);
-        gluCylinder(corde1, 1, 1, 1, 10, 10);
+        gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
         glColor4f (.75, .55, .34, 0.8);
         glScalef( 1, 1, 0.5);
@@ -1019,14 +1056,14 @@ void MyGLWidget::drawCorde(){
             glTranslatef( .5, 0, 2);
             glRotatef( 35, 0, 1, 0);
             glScalef( 1, 1, 10);
-            gluCylinder(corde1, 1, 1, 1, 10, 10);
+            gluCylinder(corde1_, 1, 1, 1, 10, 10);
             glScalef( 1, 1, 0.1);
         glPopMatrix();
         glPushMatrix();
             glTranslatef(-.5, 0, 2);
             glRotatef( -35, 0, 1, 0);
             glScalef( 1, 1, 10);
-            gluCylinder(corde1, 1, 1, 1, 10, 10);
+            gluCylinder(corde1_, 1, 1, 1, 10, 10);
             glScalef( 1, 1, 0.1);
 
         glPopMatrix();
