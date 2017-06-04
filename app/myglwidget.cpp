@@ -671,30 +671,27 @@ void MyGLWidget::draw()
 
     // Debut affichage
     glPushMatrix();
-
-        //************** Draw Gazon ****************
+          //************** Draw Gazon ****************
          glPushMatrix();
        //Pelouse sans bosses
-       /*  for (int colonne=-2; colonne<14; colonne++)
+         for (int colonne=-2; colonne<14; colonne++)
         {
             for (int ligne=-3; ligne<3; ligne++)
             {
                 glPushMatrix();
-                     glTranslatef(10*ligne,10*colonne,0);
+                    glTranslatef(10*ligne,10*colonne,0);
                     glCallList(pelouse_->getPelouse());
                 glPopMatrix();
             }
-        }*/
+        }
         //Pelouse avec bosses
-               glPushMatrix();
+             /*  glPushMatrix();
                     // glTranslatef(-50,-50,0);
                     glCallList(pelouse_->getPelouse());
-                glPopMatrix();
+                glPopMatrix();*/
 
         glPopMatrix();
         //************** End Draw Gazon *************
-
-
 
         //************** Draw Trajectory ****************
         if (trajectory_)

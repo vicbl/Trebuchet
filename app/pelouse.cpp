@@ -5,7 +5,14 @@
 
 Pelouse::Pelouse()
 {
+    for (int colonne=0; colonne<10; colonne++)
+    {
+        for (int ligne=0; ligne<10; ligne++)
+        {
 
+                 temp[colonne][ligne] = rand() % (5);
+        }
+    }
    /* int elems=1000;
     int centre = elems/2;
     int altitude=15;
@@ -66,11 +73,11 @@ void Pelouse::draw(){
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
-                glVertex3f(0.25,0,0);
+                glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 1.0f);
-                glVertex3f(0.25,0.25,0);
+                glVertex3f(1,1,0);
                 glTexCoord2f(0.0f, 1.0f);
-                glVertex3f(0,0.25,0);
+                glVertex3f(0,1,0);
             glEnd();
         glPopMatrix();
         glDisable(GL_TEXTURE_2D);
@@ -86,11 +93,11 @@ void Pelouse::draw(){
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
-                glVertex3f(0.25,0,0);
+                glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 1.0f);
-                glVertex3f(0.25,0.25,0);
+                glVertex3f(1,1,0);
                 glTexCoord2f(0.0f, 1.0f);
-                glVertex3f(0,0.25,0);
+                glVertex3f(0,1,0);
             glEnd();
         glPopMatrix();
         glDisable(GL_TEXTURE_2D);
@@ -106,11 +113,11 @@ void Pelouse::draw(){
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
-                glVertex3f(0.25,0,0);
+                glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 1.0f);
-                glVertex3f(0.25,0.25,0);
+                glVertex3f(1,1,0);
                 glTexCoord2f(0.0f, 1.0f);
-                glVertex3f(0,0.25,0);
+                glVertex3f(0,1,0);
             glEnd();
         glPopMatrix();
         glDisable(GL_TEXTURE_2D);
@@ -126,11 +133,11 @@ void Pelouse::draw(){
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
-                glVertex3f(0.25,0,0);
+                glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 1.0f);
-                glVertex3f(0.25,0.25,0);
+                glVertex3f(1,1,0);
                 glTexCoord2f(0.0f, 1.0f);
-                glVertex3f(0,0.25,0);
+                glVertex3f(0,1,0);
             glEnd();
         glPopMatrix();
         glDisable(GL_TEXTURE_2D);
@@ -146,11 +153,11 @@ void Pelouse::draw(){
                 glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(0,0,0);
                 glTexCoord2f(1.0f, 0.0f);
-                glVertex3f(0.25,0,0);
+                glVertex3f(1,0,0);
                 glTexCoord2f(1.0f, 1.0f);
-                glVertex3f(0.25,0.25,0);
+                glVertex3f(1,1,0);
                 glTexCoord2f(0.0f, 1.0f);
-                glVertex3f(0,0.25,0);
+                glVertex3f(0,1,0);
             glEnd();
         glPopMatrix();
         glDisable(GL_TEXTURE_2D);
@@ -207,28 +214,29 @@ void Pelouse::draw(){
         }*/
 
 
+
+
+
     pelouse_ = glGenLists(1);
     glNewList(pelouse_, GL_COMPILE);
         glPushMatrix();
-        for (int colonne=-100; colonne<300; colonne++)
+        for (int colonne=0; colonne<10; colonne++)
         {
-            for (int ligne=-150; ligne<150; ligne++)
+            for (int ligne=0; ligne<10; ligne++)
             {
                 glPushMatrix();
-                    glTranslatef(0.25*ligne,0.25*colonne,0);
-                    if (firstPassage_){
-                        temp[colonne+100][ligne+150] = rand() % (5);
-                    }
-                    //qDebug()<<"temp"<<temp[colonne+100][ligne+150];
-                    if ( temp[colonne+100][ligne+150]==0){
+                    glTranslatef(1*ligne,1*colonne,0);
+
+                       //qDebug()<<"temp"<<temp[colonne+100][ligne+150];
+                    if ( temp[colonne][ligne]==0){
                         glCallList(pelouse1);
-                    }else if( temp[colonne+100][ligne+150]==1){
+                    }else if( temp[colonne][ligne]==1){
                         glCallList(pelouse2);
                     }
-                    else if( temp[colonne+100][ligne+150]==2){
+                    else if( temp[colonne][ligne]==2){
                         glCallList(pelouse3);
                     }
-                    else if( temp[colonne+100][ligne+150]==3){
+                    else if( temp[colonne][ligne]==3){
                         glCallList(pelouse4);
                     }
                     else {
