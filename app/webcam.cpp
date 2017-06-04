@@ -67,6 +67,7 @@ void Webcam::runWebCam(){
     int counterBloque=0;        // Permet de détecter si on est bloqué
     int counterDetection=0;     // Permet de compter le nombre d'image ou le template reconnu se déplace vers le bas
 
+    ordreFermer_=false;
     while (waitKey(5)<0 && !ordreFermer_)
     {
         if (cap.read(frame)) // get a new frame from camera
@@ -180,6 +181,8 @@ void Webcam::runWebCam(){
             imshow("WebCam", frame);
         }
     }
+    cvDestroyWindow("WebCam");
+
 }
 
 
@@ -204,4 +207,8 @@ void Webcam::setyPostion(int y){
 
 bool Webcam::getActive(){
     return active_;
+}
+
+void Webcam::setOrdreFermer(bool fermer){
+    ordreFermer_=fermer;
 }

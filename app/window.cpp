@@ -23,11 +23,27 @@ Window::Window(QWidget *parent) :
     connect(ui->myGLWidget, SIGNAL(setName(QString)), ui->name, SLOT(setText(QString)));
     connect(ui->myGLWidget, SIGNAL(setDifficulty(QString)), ui->difficulty, SLOT(setText(QString)));
     connect(ui->myGLWidget, SIGNAL(setScore(QString)), ui->score, SLOT(setText(QString)));
-    connect(ui->myGLWidget, SIGNAL(setBestPlayer(QString)), ui->bestPlayer, SLOT(setText(QString)));
     connect(ui->myGLWidget, SIGNAL(setNbCibles(QString)), ui->nbCibles, SLOT(setText(QString)));
 
+
+     connect(ui->myGLWidget, SIGNAL(disableButton(bool)), ui->lancerBouton, SLOT(setEnabled(bool)));
+    //Meilleur scores
+    connect(ui->myGLWidget, SIGNAL(setBestName1(QString)), ui->bestName1, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestName2(QString)), ui->bestName2, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestName3(QString)), ui->bestName3, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestName4(QString)), ui->bestName4, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestName5(QString)), ui->bestName5, SLOT(setText(QString)));
+
+    connect(ui->myGLWidget, SIGNAL(setBestScore1(QString)), ui->bestScore1, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestScore2(QString)), ui->bestScore2, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestScore3(QString)), ui->bestScore3, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestScore4(QString)), ui->bestScore4, SLOT(setText(QString)));
+    connect(ui->myGLWidget, SIGNAL(setBestScore5(QString)), ui->bestScore5, SLOT(setText(QString)));
+
+
+
+
     connect(this, SIGNAL(on_lancerBouton_clicked()), ui->myGLWidget, SLOT(lancerBoutonClicked()));
-    connect(this, SIGNAL(on_Webcam_clicked()), ui->myGLWidget, SLOT(webcam_clicked()));
     connect(this, SIGNAL(on_startButton_clicked()), ui->myGLWidget, SLOT(startButton_clicked()));
     connect(this, SIGNAL(on_vueSuivie_stateChanged()), ui->myGLWidget, SLOT(vueChanged()));
     connect(this, SIGNAL(on_trajectory_stateChanged()), ui->myGLWidget, SLOT(trajectoryActived()));

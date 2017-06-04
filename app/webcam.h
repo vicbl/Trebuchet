@@ -26,6 +26,8 @@ public:
     void setxPostion(int x);
     void setyPostion(int y);
 
+    void setOrdreFermer(bool fermer);
+
 };
 
 #endif // WEBCAM_H

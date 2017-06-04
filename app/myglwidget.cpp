@@ -60,6 +60,10 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     QString path=dir.absolutePath()+"/Sauvegardes/BestScores.txt";
     qDebug()<<path;
     save_=new Save(path);
+
+
+    //On met a jour le classemnt des meilleur score
+    setBestScores();
 }
 
 MyGLWidget::~MyGLWidget()
@@ -97,12 +101,14 @@ void MyGLWidget::setValue()
 
     QTime t1 = QTime(0,0,0,0).addMSecs(tempsPartie_.elapsed());
     QTime t2 = QTime(0,0,0,0).addMSecs(tempsTotal_.elapsed());
-    QString st1 = QString::number(t1.minute()) + ":" + QString::number(t1.second()) + "." + QString::number(round(t1.msec()/100)) ;
-    QString st2 = QString::number(t2.minute()) + ":" + QString::number(t2.second()) ;
-
+    QString st1 ="0:0.0" ;
+    QString st2 ="0:0"  ;
+    if(start_){
+        st1 = QString::number(t1.minute()) + ":" + QString::number(t1.second()) + "." + QString::number(round(t1.msec()/100)) ;
+        st2 = QString::number(t2.minute()) + ":" + QString::number(t2.second()) ;
+    }
     chrono1Refresh(st1);
     chrono2Refresh(st2);
-
 }
 
 
@@ -497,22 +503,54 @@ void MyGLWidget::resizeGL(int width, int height)
 
 }
 
-void MyGLWidget::mousePressEvent(QMouseEvent *event)
-{
-    lastPos_ = event->pos();
+
+void MyGLWidget::setBestScores(){
+    //Meilleur scores
+    if (save_->getBestName(1)!=""){
+        setBestName1(save_->getBestName(1));
+        setBestScore1(QString::number(save_->getBestScore(1)));
+    }else{
+        setBestName1("Aucun");
+        setBestScore1(QString::number(0));
+    }
+    if (save_->getBestName(2)!=""){
+        setBestName2(save_->getBestName(2));
+        setBestScore2(QString::number(save_->getBestScore(2)));
+    }else{
+        setBestName2("Aucun");
+        setBestScore2(QString::number(0));
+    }
+    if (save_->getBestName(3)!=""){
+        setBestName3(save_->getBestName(3));
+        setBestScore3(QString::number(save_->getBestScore(3)));
+    }else{
+        setBestName3("Aucun");
+        setBestScore3(QString::number(0));
+    }
+    if (save_->getBestName(4)!=""){
+        setBestName4(save_->getBestName(4));
+        setBestScore4(QString::number(save_->getBestScore(4)));
+    }else{
+        setBestName4("Aucun");
+        setBestScore4(QString::number(0));
+    }
+    if (save_->getBestName(5)!=""){
+        setBestName5(save_->getBestName(5));
+        setBestScore5(QString::number(save_->getBestScore(5)));
+    }else{
+        setBestName5("Aucun");
+        setBestScore5(QString::number(0));
+    }
 }
 
 
-void MyGLWidget::webcam_clicked()
-{
-    w_->runWebCam();
-}
 
 void MyGLWidget::startButton_clicked()
 {
     NewGameDialog newGame(this);
     if (newGame.exec() == QDialog::Accepted )
     {
+
         nbCibleTouchee_=0;
         nbCiblePassee_=0;
         compteurEssai_=0;
@@ -527,13 +565,13 @@ void MyGLWidget::startButton_clicked()
         tempsPartie_.start();
         tempsTotal_.start();
         setName(name_);
-        if (save_->getBestName(difficulty_)!=""){
-            setBestPlayer(save_->getBestName(difficulty_)+" Score :"+QString::number(save_->getBestScore(difficulty_)));
-        }
+        setBestScores();
+        emit(disableButton(start_));
         setDifficulty( QString::number(difficulty_));
         setNbCibles(QString::number(nbTotalCible_));
         updateGL();
         w_->runWebCam();
+
     }
     qDebug()<<"start button";
 }
@@ -577,22 +615,23 @@ void MyGLWidget::calculScores(){
         updateGL();
     }
 
+    //Si la partie est finie
     if (nbCiblePassee_==nbTotalCible_){
         qDebug()<<"Partie terminée";
         int meilleurScore=save_->getBestScore(difficulty_);
         save_->saveBest(game_->getScore(),difficulty_,name_);
         QString message;
         if(meilleurScore> game_->getScore() && save_->getBestName(difficulty_)!="" ){
-             message="Vous avez touché "+QString::number(nbCibleTouchee_)+ " cibles  sur "
+             message="Vous avez touché "+QString::number(nbCibleTouchee_)+ " cibles sur "
                     +QString::number(nbTotalCible_)+" et marqué "+QString::number(game_->getScore())+
-                    " points pour la difficulté "+QString::number(difficulty_)+"\n"+
+                    " points pour la difficulté "+QString::number(difficulty_)+".\n"+
                     "Le meilleur score est détenu par "+save_->getBestName(difficulty_)+" avec "+
-                    QString::number(save_->getBestScore(difficulty_))+" points";
+                    QString::number(save_->getBestScore(difficulty_))+" points.";
         }else{
              message="Vous avez touché "+QString::number(nbCibleTouchee_)+ " cibles  sur "
                     +QString::number(nbTotalCible_)+" et marqué "+QString::number(game_->getScore())+
-                    " points pour la difficulté "+QString::number(difficulty_)+"\n"+
-                    "Bravo vous avez fait le meilleur score";
+                    " points pour la difficulté "+QString::number(difficulty_)+".\n"+
+                    "Bravo vous avez fait le meilleur score !";
         }
         QMessageBox::information(this,tr("Fin de partie"),message);
 
@@ -601,7 +640,8 @@ void MyGLWidget::calculScores(){
         // On réinitialise les valeur et l'affichage
         setScore( QString::number(0));
         setNbCibles(QString::number(0));
-        setBestPlayer("Pas de meilleur score");
+        setBestScores();
+        setName("Name");
         setDifficulty( QString::number(0));
         setNbCibles(QString::number(0));
         start_=false;
@@ -611,7 +651,9 @@ void MyGLWidget::calculScores(){
         emit zRotationChanged(zRot_);
         emit yRotationChanged(yRot_);
         emit forceChanged(force_);
+        emit disableButton(start_);
         updateGL();
+        w_->setOrdreFermer(true);
     }
 
 }

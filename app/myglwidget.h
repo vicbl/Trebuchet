@@ -36,6 +36,7 @@ public:
     void setZoomScene(int zoom);
     void calculScores();
     void recentrer();
+    bool getStarted(){return start_;}
 
 protected:
     void initializeGL();
@@ -44,7 +45,6 @@ protected:
     //void keyPressEvent ( QKeyEvent * event );
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
-    void mousePressEvent(QMouseEvent *event);
 
 
 public slots:
@@ -54,7 +54,7 @@ public slots:
     void setZRotation(int angle);
     void setForce(int angle);
     void lancerBoutonClicked();
-    void webcam_clicked();
+
 
     void startButton_clicked();
     void setValue();
@@ -75,11 +75,22 @@ signals:
     void setName(QString name);
     void setDifficulty(QString difficulty);
     void setScore(QString score);
-    void setBestPlayer(QString bestPlayer);
     void setNbCibles(QString nbCibles);
 
+//Meilleurs scores
+    void setBestName1(QString);
+    void setBestName2(QString);
+    void setBestName3(QString);
+    void setBestName4(QString);
+    void setBestName5(QString);
 
+    void setBestScore1(QString);
+    void setBestScore2(QString);
+    void setBestScore3(QString);
+    void setBestScore4(QString);
+    void setBestScore5(QString);
 
+    void disableButton(bool);
 private:
     void draw();
     // void loadTextures();
@@ -87,6 +98,8 @@ private:
 
     void nightMode();
     void drawCorde();
+
+    void setBestScores();
 
 
     //Coordonnées de la scène globale
@@ -158,7 +171,7 @@ private:
     int distanceTrebuchet_;
     int posXCible_;
     int posYCible_;
-    int nbTotalCible_=10;
+    int nbTotalCible_=5;
     int nbCibleTouchee_=0;
     int nbCiblePassee_=0;
     int compteurEssai_=0;
