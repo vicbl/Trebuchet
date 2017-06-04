@@ -511,8 +511,6 @@ void MyGLWidget::webcam_clicked()
 void MyGLWidget::startButton_clicked()
 {
     NewGameDialog newGame(this);
-
-
     if (newGame.exec() == QDialog::Accepted )
     {
         nbCibleTouchee_=0;
@@ -520,7 +518,7 @@ void MyGLWidget::startButton_clicked()
         compteurEssai_=0;
         difficulty_=newGame.getDifficulty();
         name_=newGame.getName();
-        game_=new Game(difficulty_,name_);
+        game_=new Game(difficulty_);
         game_->newPostion();
         start_=true;
         posXCible_=game_->getCiblePositionX();

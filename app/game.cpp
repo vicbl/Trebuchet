@@ -4,11 +4,10 @@
 #include <cmath>
 #include"math.h"
 #define PI 3.14159265
-Game::Game(int difficulty, QString name)
+Game::Game(int difficulty)
 {
     this->nbTotalCibleTouchee_=0;
     this->difficulty_=difficulty;
-    this->name_=name;
     this->score_=0;
 }
 

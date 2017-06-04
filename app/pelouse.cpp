@@ -136,6 +136,60 @@ void Pelouse::draw(){
         glDisable(GL_TEXTURE_2D);
     glEndList();
 
+
+   /* int max=0;
+
+        for (int x = 0; x < MAP_X-1; x++)
+        {
+        float i=1;
+
+            for (int y = 0; y < MAP_Y-1; y++)
+            {
+
+              if ((x<500-75 || x>500+75)||(y>100)){
+
+                        i=i+0.001;
+                        glColor3f(i, i, i);
+
+                       // texturePelouse_=((Textures(":/images/pierre.bmp")).getTextures());
+                }else
+                {
+
+
+                   //texturePelouse_=((Textures(":/images/pelouse.bmp")).getTextures());
+                    glColor3f(1.0, 1.0,1.0);
+                }
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texturePelouse_);
+                 glBegin(GL_TRIANGLE_STRIP);
+                // draw vertex 0
+                //glColor3f(terrain[x][z][1]/255.0f, terrain[x][z][1]/255.0f, terrain[x][z][1]/255.0f);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex3f(x, y, terrain[x][y]);
+
+                // draw vertex 1
+                glTexCoord2f(1.0f, 0.0f);
+                //glColor3f(terrain[x+1][z][1]/255.0f, terrain[x+1][z][1]/255.0f, terrain[x+1][z][1]/255.0f);
+                glVertex3f(x+1, y, terrain[x+1][y]);
+
+                // draw vertex 2
+                glTexCoord2f(0.0f, 1.0f);
+                //  glColor3f(terrain[x][z+1][1]/255.0f, terrain[x][z+1][1]/255.0f, terrain[x][z+1][1]/255.0f);
+                glVertex3f(x, y+1, terrain[x][y+1]);
+
+                // draw vertex 3
+                // glColor3f(terrain[x+1][z+1][1]/255.0f, terrain[x+1][z+1][1]/255.0f, terrain[x+1][z+1][1]/255.0f);
+                glTexCoord2f(1.0f, 1.0f);
+                glVertex3f(x+1, y+1, terrain[x+1][y+1]);
+                 glEnd();
+            }
+
+        }*/
+
+
+
+
+
     pelouse_ = glGenLists(1);
     glNewList(pelouse_, GL_COMPILE);
         glPushMatrix();

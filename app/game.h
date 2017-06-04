@@ -11,18 +11,15 @@ private:
     int ciblePositionX_;
     int ciblePositionY_;
     int score_;
-    int bestScore_[3];
-    QString name_;
     bool cibleTouchee_=false;
     bool firstPassage_=true;
 
 public:
-    Game(int difficulty, QString name);
+    Game(int difficulty);
     int getCiblePositionX();
     int getCiblePositionY();
     int getDistanceTrebuchet();
     int getNbTotalCibleTouchee();
-    int getBestScore();
     bool getCibleTouchee();
     int getScore();
     void newPostion();
