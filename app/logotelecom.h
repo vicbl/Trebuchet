@@ -2,16 +2,9 @@
 #define LOGOTELECOM_H
 
 #include <GL/glu.h>
+#include "textures.h"
 class LogoTelecom
 {
-public:
-    LogoTelecom();
-    void draw();
-    void setTexture();
-    void drawPartUJM();
-    void drawPartTSE();
-    GLuint getCompleteLogoTelecom();
-    ~LogoTelecom();
 private:
     GLuint logoTelecom_;
     GLuint logoUJM_;
@@ -20,6 +13,17 @@ private:
     GLuint textureUJM_;
     GLuint completeLogoTelecom_;
     GLuint boxBois;
+
+
+public:
+    LogoTelecom();
+    void draw();
+    void setTexture(Textures tex);
+    void drawPartUJM();
+    void drawPartTSE();
+    GLuint getCompleteLogoTelecom();
+    ~LogoTelecom();
+
 };
 
 #endif // LOGOTELECOM_H

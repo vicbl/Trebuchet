@@ -45,6 +45,7 @@ MyGLWidget::MyGLWidget(QWidget *parent)
     finCourseCorde_=false;
     vueSuivie_=true;
     // corde1 = gluNewQuadric();
+
     light_=new Lighting();
     pelouse_=new Pelouse();
     grid_= new Grid(25,75,0.01);
@@ -415,7 +416,6 @@ void MyGLWidget::initializeGL()
 {
 
 
-    texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
 
     qglClearColor(Qt::white);
     glEnable(GL_DEPTH_TEST);
@@ -423,13 +423,25 @@ void MyGLWidget::initializeGL()
 
 
     glShadeModel(GL_SMOOTH);
-    light_->draw();
+    Textures * tex= new Textures();
+    tex->setTextures();
 
+    texturePierre_=tex->getTextures(12);
+
+
+    pelouse_->setTexture(*tex);
+    boulet_->setTexture(*tex);
+    cible_->setTexture(*tex);
+    light_->setTexture(*tex);
+    logoTelecom_->setTexture(*tex);
+    trebuchet_->setTexture(*tex);
+
+
+    light_->draw();
     logoTelecom_->draw();
     grid_->draw();
     pelouse_->draw();
     cible_->draw();
-
 
 }
 
@@ -812,7 +824,7 @@ void MyGLWidget::draw()
         // glDeleteLists(trebuchetComplet, 1);
 
     glPopMatrix();
-
+glDeleteLists(corde, 100);
 //glFlush();
 }
 

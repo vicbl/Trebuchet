@@ -6,7 +6,6 @@
 class Trajectory
 {
 private:
-
     float v0;
     int axe = 180;
     GLuint trajectory_;

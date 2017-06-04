@@ -1,9 +1,8 @@
 #include "logotelecom.h"
 #include <QOpenGLTexture>
 #include <QtOpenGL/qgl.h>
-#include "textures.h"
-#include <QString>
 #include "box.h"
+#include <QDebug>
 LogoTelecom::LogoTelecom()
 {
 
@@ -15,18 +14,19 @@ LogoTelecom::~LogoTelecom(){
     glDeleteLists(logoUJM_, 1);
 }
 
-void LogoTelecom::setTexture(){
-    textureBois_=((Textures(":/images/bois.bmp")).getTextures());
-    textureTSE_=((Textures(":/images/TSE.bmp")).getTextures());
-    textureUJM_=((Textures(":/images/UJM.bmp")).getTextures());
+void LogoTelecom::setTexture(Textures tex){
+    this->textureBois_=tex.getTextures(0);
+    this->textureTSE_=tex.getTextures(13);
+    this->textureUJM_=tex.getTextures(14);
 }
 
 void LogoTelecom::drawPartTSE(){
+    qDebug()<<"Draw Logotse";
     logoTelecom_ = glGenLists(1);
     glNewList(logoTelecom_, GL_COMPILE);
         glPushMatrix();
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureTSE_);
+            glBindTexture(GL_TEXTURE_2D, this->textureTSE_);
             glBegin(GL_QUADS);
                 glNormal3d ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
@@ -47,7 +47,7 @@ void LogoTelecom::drawPartUJM(){
     glNewList(logoUJM_, GL_COMPILE);
         glPushMatrix();
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureUJM_);
+            glBindTexture(GL_TEXTURE_2D, this->textureUJM_);
             glBegin(GL_QUADS);
                 glNormal3d ( 0,0,1 );
                 glTexCoord2f(0.0f, 0.0f);
@@ -65,12 +65,10 @@ void LogoTelecom::drawPartUJM(){
 }
 
 void LogoTelecom::draw(){
-
-    setTexture();
     drawPartTSE();
     drawPartUJM();
 
-    Box *a=new  Box(1,1,1, textureBois_);
+    Box *a=new  Box(1,1,1, this->textureBois_);
     boxBois=a->getCompleteBox();
     completeLogoTelecom_ = glGenLists(1);
     glNewList(completeLogoTelecom_, GL_COMPILE);
@@ -110,6 +108,7 @@ void LogoTelecom::draw(){
         glPopMatrix();
     glEndList();
     //return completeLogoTelecom_;
+    //delete a;
 }
 GLuint LogoTelecom::getCompleteLogoTelecom(){
     return completeLogoTelecom_;

@@ -2,6 +2,7 @@
 #define BOULET_H
 
 #include <GL/glu.h>
+#include "textures.h"
 #include "game.h"
 class Boulet
 {
@@ -18,7 +19,7 @@ private:
 
 public:
     Boulet();
-    void setTexture();
+    void setTexture(Textures tex);
     GLuint draw(Game * game_);
     void reset();
 

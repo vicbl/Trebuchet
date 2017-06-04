@@ -1,12 +1,11 @@
 #include "pelouse.h"
-#include<QString>
-#include <QOpenGLTexture>
-#include <QtOpenGL/qgl.h>
-#include "textures.h"
 #include"math.h"
+#include <GL/gl.h>
 #include <QDebug>
+
 Pelouse::Pelouse()
 {
+
    /* int elems=1000;
     int centre = elems/2;
     int altitude=15;
@@ -40,22 +39,17 @@ Pelouse::~Pelouse(){
     glDeleteLists(pelouse_, 1);
 }
 
-void Pelouse::setTexture(){
-    texturePelouse1_= ((Textures(":/images/pelouse1.bmp")).getTextures());
-    texturePelouse2_= ((Textures(":/images/pelouse2.bmp")).getTextures());
-    texturePelouse3_= ((Textures(":/images/pelouse3.bmp")).getTextures());
-    texturePelouse4_= ((Textures(":/images/pelouse4.bmp")).getTextures());
-    texturePelouse5_=  ((Textures(":/images/pelouse5.bmp")).getTextures());
-
-
+void Pelouse::setTexture(Textures tex){
+    this->texturePelouse1_= tex.getTextures(4);
+    this->texturePelouse2_= tex.getTextures(5);
+    this->texturePelouse3_= tex.getTextures(6);
+    this->texturePelouse4_= tex.getTextures(7);
+    this->texturePelouse5_= tex.getTextures(8);
 }
 
 
 void Pelouse::draw(){
-    this->setTexture();
-
-
-
+     qDebug()<<"Draw Pelouse";
     int MAP_Y=500;
     int MAP_X=500;
 
@@ -65,7 +59,7 @@ void Pelouse::draw(){
     GLuint pelouse1 = glGenLists(1);
     glNewList(pelouse1, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse1_);
+        glBindTexture(GL_TEXTURE_2D, this->texturePelouse1_);
         glPushMatrix();
             glBegin(GL_QUADS);
                 glNormal3f(0,0,1);
@@ -85,7 +79,7 @@ void Pelouse::draw(){
     GLuint pelouse2 = glGenLists(1);
     glNewList(pelouse2, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse2_);
+        glBindTexture(GL_TEXTURE_2D, this->texturePelouse2_);
         glPushMatrix();
             glBegin(GL_QUADS);
                 glNormal3f(0,0,1);
@@ -105,7 +99,7 @@ void Pelouse::draw(){
     GLuint pelouse3 = glGenLists(1);
     glNewList(pelouse3, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse3_);
+        glBindTexture(GL_TEXTURE_2D, this->texturePelouse3_);
         glPushMatrix();
             glBegin(GL_QUADS);
                 glNormal3f(0,0,1);
@@ -125,7 +119,7 @@ void Pelouse::draw(){
     GLuint pelouse4 = glGenLists(1);
     glNewList(pelouse4, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse4_);
+        glBindTexture(GL_TEXTURE_2D, this->texturePelouse4_);
         glPushMatrix();
             glBegin(GL_QUADS);
                 glNormal3f(0,0,1);
@@ -145,7 +139,7 @@ void Pelouse::draw(){
     GLuint pelouse5 = glGenLists(1);
     glNewList(pelouse5, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texturePelouse5_);
+        glBindTexture(GL_TEXTURE_2D, this->texturePelouse5_);
         glPushMatrix();
             glBegin(GL_QUADS);
                 glNormal3f(0,0,1);
@@ -172,7 +166,7 @@ void Pelouse::draw(){
             for (int y = 0; y < MAP_Y-1; y++)
             {
 
-              /*  if ((x<500-75 || x>500+75)||(y>100)){
+              if ((x<500-75 || x>500+75)||(y>100)){
 
                         i=i+0.001;
                         glColor3f(i, i, i);
@@ -211,42 +205,46 @@ void Pelouse::draw(){
             }
 
         }*/
-  int temp;
+
 
     pelouse_ = glGenLists(1);
-
     glNewList(pelouse_, GL_COMPILE);
-    glPushMatrix();
-    for (int colonne=-100; colonne<300; colonne++)
-    {
-        for (int ligne=-150; ligne<150; ligne++)
+        glPushMatrix();
+        for (int colonne=-100; colonne<300; colonne++)
         {
-            glPushMatrix();
-
-        glTranslatef(0.25*ligne,0.25*colonne,0);
-            temp = rand() % (5);
-            //qDebug()<<"temp"<<temp;
-            if (temp==1){
-                glCallList(pelouse1);
-            }else if(temp==2){
-                glCallList(pelouse2);
+            for (int ligne=-150; ligne<150; ligne++)
+            {
+                glPushMatrix();
+                    glTranslatef(0.25*ligne,0.25*colonne,0);
+                    if (firstPassage_){
+                        temp[colonne+100][ligne+150] = rand() % (5);
+                    }
+                    //qDebug()<<"temp"<<temp[colonne+100][ligne+150];
+                    if ( temp[colonne+100][ligne+150]==0){
+                        glCallList(pelouse1);
+                    }else if( temp[colonne+100][ligne+150]==1){
+                        glCallList(pelouse2);
+                    }
+                    else if( temp[colonne+100][ligne+150]==2){
+                        glCallList(pelouse3);
+                    }
+                    else if( temp[colonne+100][ligne+150]==3){
+                        glCallList(pelouse4);
+                    }
+                    else {
+                        glCallList(pelouse5);
+                    }
+                glPopMatrix();
             }
-            else if(temp==3){
-                glCallList(pelouse3);
-            }
-            else if(temp==4){
-                glCallList(pelouse4);
-            }
-            else {
-                glCallList(pelouse5);
-            }
-
-            glPopMatrix();
         }
-    }
-    glPopMatrix();
+        firstPassage_=false;
+        glPopMatrix();
     glEndList();
-
+    /*glDeleteLists(pelouse1,1);
+    glDeleteLists(pelouse2,1);
+    glDeleteLists(pelouse3,1);
+    glDeleteLists(pelouse4,1);
+    glDeleteLists(pelouse5,1);*/
 
 
 }

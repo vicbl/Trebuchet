@@ -20,7 +20,7 @@ void Grid::drawGridPart(){
     glNewList(gridPart_, GL_COMPILE);
         glPushMatrix();
             glScalef(1,1,0.05);
-            glColor3f(0,0,0);
+            glColor3f(1,1,1);
             glBegin(GL_QUADS);
                 glNormal3f ( 0,0,1 );
                 glVertex3f(0,0,0);

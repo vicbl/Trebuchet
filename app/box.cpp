@@ -1,5 +1,6 @@
 #include "box.h"
-
+#include <QOpenGLTexture>
+#include <QtOpenGL/qgl.h>
 Box::Box(double width, double height, double thickness, GLuint texture)
 {
     this->width_=width;

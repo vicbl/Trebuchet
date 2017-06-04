@@ -18,34 +18,29 @@ Trebuchet::~Trebuchet(){
 
 }
 
-void Trebuchet::setTexture(){
-    textureBois_=((Textures(":/images/bois.bmp")).getTextures());
-    textureLevier_=((Textures(":/images/bois2.bmp")).getTextures());
-    textureContrePoids_=((Textures(":/images/bois4.bmp")).getTextures());
+void Trebuchet::setTexture(Textures tex){
+    this->textureBois_=tex.getTextures(0);
+       this->textureLevier_=tex.getTextures(1);
+       this->textureContrePoids_=tex.getTextures(3);
+       this->texturePierre_=tex.getTextures(12);
 }
 
 
 
 GLuint Trebuchet::draw(GLuint corde,int levierRotation){
-
-
-    this->setTexture();
-
-    Box *a=new Box(1,1,1, textureLevier_);
-    Box *b=new Box(1,1,1, textureBois_);
-    Box *c=new Box(1,1,1, textureContrePoids_);
+    Box *a=new Box(1,1,1, this->textureLevier_);
+    Box *b=new Box(1,1,1, this->textureBois_);
+    Box *c=new Box(1,1,1, this->textureContrePoids_);
     GLuint levierBois=a->getCompleteBox();
     GLuint boxBois=b->getCompleteBox();
     GLuint contrePoids=c->getCompleteBox();
 
-    GLuint texturePierre=((Textures(":/images/pierre.bmp")).getTextures());
-
-    GLuint roulette;
+     GLuint roulette;
     roulette = glGenLists(1);
     glNewList(roulette, GL_COMPILE);
         glPushMatrix(); // roue arrière gauche
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, texturePierre);
+            glBindTexture(GL_TEXTURE_2D, this->texturePierre_);
             GLUquadric* roue = gluNewQuadric();
             gluQuadricTexture(roue,GL_TRUE);
             glColor4f (1, 1, 1, 0.8);
@@ -78,9 +73,7 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
         glCallList(roulette);
     glPopMatrix();
 
-    glDeleteLists(texturePierre, 1);
-
-     // socle
+       // socle
     glScalef(0.5,1,0.05);
     glCallList(boxBois);
     glPushMatrix();

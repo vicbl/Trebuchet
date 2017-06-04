@@ -1,9 +1,9 @@
 #include "lighting.h"
+
 #include <GL/glu.h>
-#include<QString>
 #include <QOpenGLTexture>
 #include <QtOpenGL/qgl.h>
-#include "textures.h"
+#include <QDebug>
 Lighting::Lighting()
 {
 
@@ -12,16 +12,16 @@ Lighting::Lighting()
 Lighting::~Lighting(){
     glDeleteLists(lighting_,1);
 }
-void Lighting::setTexture(){
-     textureCiment_=((Textures(":/images/concrete.bmp")).getTextures());
-     textureProjecteur_=((Textures(":/images/aluminium.bmp")).getTextures());
+void Lighting::setTexture(Textures tex){
+     this->textureCiment_=tex.getTextures(10);
+     this->textureProjecteur_=tex.getTextures(11);
 }
 
 void Lighting::draw(){
-    this->setTexture();
-    Box *a=new Box(1,1,1, textureCiment_);
+     qDebug()<<"Draw Lighting";
+    Box *a=new Box(1,1,1, this->textureCiment_);
     GLuint piedProjecteur=a->getCompleteBox();
-    Box *b=new Box(1,1,1, textureProjecteur_);
+    Box *b=new Box(1,1,1, this->textureProjecteur_);
     GLuint projecteur=b->getCompleteBox();
 
     lighting_ = glGenLists(1);
@@ -41,7 +41,7 @@ void Lighting::draw(){
                 glPopMatrix();
 
                 GLUquadric* bou = gluNewQuadric();
-                gluQuadricTexture(bou,GL_FILL);
+                gluQuadricTexture(bou,GL_TRUE);
                 glColor3f(1, 1, 1);
                 //On dessine les ampoule du projecteur
                 for(float i =0.80;i>=-0.81;i=i-0.40){
@@ -56,7 +56,8 @@ void Lighting::draw(){
             glPopMatrix();
         glPopMatrix();
     glEndList();
-
+    //delete a;
+   // delete b;
 }
 
 

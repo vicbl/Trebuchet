@@ -1,10 +1,10 @@
 #include "boulet.h"
+#include <QOpenGLTexture>
 
-#include <GL/glu.h>
 #include <QtOpenGL/qgl.h>
 #include <QDebug>
-#include "textures.h"
 #include "game.h"
+
 #define PI 3.14159265
 Boulet::Boulet()
 {
@@ -22,18 +22,14 @@ bool Boulet::getFin(){return finTrajectoire;}
 void Boulet::set_v0(float v){v0=v;}
 void Boulet::set_axe(int a){axe=a;}
 
-void Boulet::setTexture(){
-    texturePierre_=((Textures(":/images/pierre.bmp")).getTextures());
+void Boulet::setTexture(Textures tex){
+    this->texturePierre_=tex.getTextures(12);
 }
-
-
 
 GLuint Boulet::draw(Game * game_)
 {
+    qDebug()<<"Draw boulet";
 
-    this->setTexture();
-
-    boulet = glGenLists(1);
 
     // Calcul des nouvelles coordonnées
     cibleTouchee_=game_->getCibleTouchee();
@@ -64,7 +60,7 @@ GLuint Boulet::draw(Game * game_)
     // qDebug() << "Boulet : " << coord_x << " / " << coord_y;
 
 
-
+    boulet = glGenLists(1);
     glNewList(boulet, GL_COMPILE);
     glPushMatrix();
     glRotatef(axe-180, 0, 0, 1);
@@ -72,7 +68,7 @@ GLuint Boulet::draw(Game * game_)
     //glColor3f(.55, .55, .55);
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texturePierre_);
+    glBindTexture(GL_TEXTURE_2D, this->texturePierre_);
     GLUquadric* bou = gluNewQuadric();
     gluQuadricTexture(bou,GL_TRUE);
     glScalef(.1, .1, .1);
@@ -99,6 +95,7 @@ GLuint Boulet::draw(Game * game_)
     glEndList();
 
     return boulet;
+    glDeleteLists(boulet,1);
 }
 
 void Boulet::reset()

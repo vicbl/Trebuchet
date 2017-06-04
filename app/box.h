@@ -4,10 +4,6 @@
 #include <GL/glu.h>
 class Box
 {
-public:
-    Box(double width, double height, double thickness, GLuint texture);
-    GLuint getCompleteBox();
-    ~Box();
 private:
     void draw();
     double width_;
@@ -15,6 +11,11 @@ private:
     double thickness_;
     GLuint texture_;
     GLuint completeBox_;
+
+public:
+    Box(double width, double height, double thickness, GLuint texture);
+    GLuint getCompleteBox();
+    ~Box();
 };
 
 

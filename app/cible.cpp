@@ -1,8 +1,8 @@
 #include "cible.h"
-#include<QString>
 #include <QOpenGLTexture>
 #include <QtOpenGL/qgl.h>
-#include "textures.h"
+
+#include <QDebug>
 Cible::Cible()
 {
 
@@ -13,9 +13,9 @@ Cible::~Cible(){
     glDeleteLists(cible_, 1);
 }
 
-void Cible::setTexture(){
-    textureBois_=((Textures(":/images/bois.bmp")).getTextures());
-    textureCible_=((Textures(":/images/cible.bmp")).getTextures());
+void Cible::setTexture(Textures tex){
+    this->textureBois_=tex.getTextures(0);
+    this->textureCible_=tex.getTextures(9);
 }
 
 void Cible::drawPart(){
@@ -23,7 +23,7 @@ void Cible::drawPart(){
     glNewList(cible_, GL_COMPILE);
         glPushMatrix();
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureCible_);
+            glBindTexture(GL_TEXTURE_2D, this->textureCible_);
             glBegin(GL_QUADS);
             glTexCoord2f(0.0f, 0.0f);
             glVertex3f(0,0,0);
@@ -41,9 +41,9 @@ void Cible::drawPart(){
 }
 
 void Cible::draw(){
-    this->setTexture();
+     qDebug()<<"Draw Cible";
     this->drawPart();
-    Box *a=new Box(1,1,1, textureBois_);
+    Box *a=new Box(1,1,1, this->textureBois_);
     GLuint boxBois=a->getCompleteBox();
 
     completeCible_ = glGenLists(1);
@@ -83,6 +83,8 @@ void Cible::draw(){
            //************End Draw Support********
         glPopMatrix();
     glEndList();
+    delete a;
+
 
 }
 GLuint Cible::getCompleteCible(){

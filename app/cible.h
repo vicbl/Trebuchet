@@ -1,8 +1,8 @@
 #ifndef CIBLE_H
 #define CIBLE_H
 
-
 #include "box.h"
+#include "textures.h"
 
 #include <GL/glu.h>
 class Cible
@@ -10,7 +10,7 @@ class Cible
 public:
     Cible();
     void draw();
-    void setTexture();
+    void setTexture(Textures tex);
     void drawPart();
     GLuint getCompleteCible();
     ~Cible();
