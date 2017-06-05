@@ -2,6 +2,7 @@
 #define GRID_H
 
 #include <GL/glu.h>
+#include "textures.h"
 
 class Grid
 {
@@ -10,12 +11,17 @@ private:
     double width_;//width of the grid between 0 and 1
     int nbLines_;
     int nbColumns_;
-    GLuint completeGrid_;
+    GLuint texturePilier_;
     GLuint gridPart_;
+    GLuint pilier_;
+    GLuint completeGrid_;
+
+
 
 public:
     Grid(int nbLines,int nbColumns, double width);
     void draw();
+    void setTexture(Textures tex);
     GLuint getCompleteGrid();
     ~Grid();
 };

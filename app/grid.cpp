@@ -2,6 +2,7 @@
 #include <QOpenGLTexture>
 #include <QtOpenGL/qgl.h>
 #include <QtOpenGL>
+
 Grid::Grid(int nbLines,int nbColumns, double width)
 {
     this->nbLines_=nbLines;
@@ -13,7 +14,28 @@ Grid::~Grid(){
     glDeleteLists(completeGrid_, 1);
 }
 
+void Grid::setTexture(Textures tex){
+    this->texturePilier_=tex.getTextures(11);
+}
+
 void Grid::drawGridPart(){
+
+    pilier_ = glGenLists(1);
+    glNewList(pilier_, GL_COMPILE);
+        glPushMatrix();
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, this->texturePilier_);
+            GLUquadric* pilierQ = gluNewQuadric();
+            gluQuadricTexture(pilierQ,GL_TRUE);
+            glColor4f (1, 1, 1, 0.8);
+            gluCylinder(pilierQ, 1, 1, 1, 10, 10);
+            glTranslatef(0, 0, .8);
+            gluCylinder(pilierQ, 1, 0, .0, 10, 10);
+            gluDeleteQuadric(pilierQ);
+            glDisable(GL_TEXTURE_2D);
+        glPopMatrix();
+    glEndList();
+
     double smallWidth=width_;
     double longWidth=1-width_;
     gridPart_ = glGenLists(1);
@@ -140,20 +162,31 @@ void Grid::drawGridPart(){
 
 void Grid::draw(){
     this->drawGridPart();
+
     completeGrid_ = glGenLists(1);
     glNewList(completeGrid_, GL_COMPILE);
-        glPushMatrix();
+
             for (int column=0; column<nbColumns_; column++)
             {
                 for (int line=0; line<nbLines_; line++)
                 {
-                    glPushMatrix();
-                    glTranslatef(column,line,0);
-                    glCallList(gridPart_);
+                   glPushMatrix();
+                        if (column%15==0 || column==0 || column==nbColumns_-1){//15 = espacement en piquet
+                            glPushMatrix();
+                                glTranslatef(column,0,0);
+                                glRotatef(-90,1,0,0);
+                                glScalef(0.3,0.3,26);
+                                glCallList(pilier_);
+                            glPopMatrix();
+                        }
+                        glPushMatrix();
+                            glTranslatef(column,line,0);
+                            glCallList(gridPart_);
+                        glPopMatrix();
                     glPopMatrix();
                 }
             }
-        glPopMatrix();
+
     glEndList();
 }
 

@@ -444,6 +444,7 @@ void MyGLWidget::initializeGL()
     light_->setTexture(*tex);
     logoTelecom_->setTexture(*tex);
     trebuchet_->setTexture(*tex);
+    grid_->setTexture(*tex);
 
 
     light_->draw();
@@ -477,8 +478,6 @@ void MyGLWidget::paintGL()
     glLightfv(GL_LIGHT1, GL_POSITION, posLight1_);
     glLightfv(GL_LIGHT2, GL_POSITION, posLight2_);
     glLightfv(GL_LIGHT3, GL_POSITION, posLight3_);
-
-
     draw();
 }
 
@@ -730,7 +729,6 @@ void MyGLWidget::draw()
     qDebug("temps de PELOUSE' : %d", t5);
 */
 
-
     if (nightMode_){
         nightMode();
     }else{
@@ -749,23 +747,16 @@ void MyGLWidget::draw()
     glPushMatrix();
           //************** Draw Gazon ****************
          glPushMatrix();
-       //Pelouse sans bosses
-         for (int colonne=-2; colonne<14; colonne++)
-        {
-            for (int ligne=-3; ligne<3; ligne++)
+             for (int colonne=-2; colonne<14; colonne++)
             {
-                glPushMatrix();
-                    glTranslatef(10*ligne,10*colonne,0);
-                    glCallList(pelouse_->getPelouse());
-                glPopMatrix();
+                for (int ligne=-4; ligne<4; ligne++)
+                {
+                    glPushMatrix();
+                        glTranslatef(10*ligne,10*colonne,0);
+                        glCallList(pelouse_->getPelouse());
+                    glPopMatrix();
+                }
             }
-        }
-        //Pelouse avec bosses
-             /*  glPushMatrix();
-                    // glTranslatef(-50,-50,0);
-                    glCallList(pelouse_->getPelouse());
-                glPopMatrix();*/
-
         glPopMatrix();
         //************** End Draw Gazon *************
 

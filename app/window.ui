@@ -255,7 +255,7 @@
           <number>360</number>
          </property>
          <property name="singleStep">
-          <number>13</number>
+          <number>1</number>
          </property>
          <property name="pageStep">
           <number>15</number>
@@ -288,16 +288,16 @@
        <item>
         <widget class="QSlider" name="rotZSlider">
          <property name="minimum">
-          <number>100</number>
+          <number>145</number>
          </property>
          <property name="maximum">
-          <number>260</number>
+          <number>215</number>
          </property>
          <property name="singleStep">
-          <number>16</number>
+          <number>1</number>
          </property>
          <property name="pageStep">
-          <number>15</number>
+          <number>10</number>
          </property>
          <property name="value">
           <number>180</number>
@@ -345,7 +345,7 @@
           <number>1</number>
          </property>
          <property name="pageStep">
-          <number>4</number>
+          <number>2</number>
          </property>
          <property name="value">
           <number>-40</number>
