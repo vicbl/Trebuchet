@@ -85,8 +85,8 @@ void MyGLWidget::setValue()
 
         int z = 260-int(w_->getxPosition()*160.0/510);
         int f;
-        if (w_->getyPosition()<250) {
-            f = int(w_->getyPosition()*(-40.0)/250);
+        if (w_->getyPosition()<200) {
+            f = int(w_->getyPosition()*(-40.0)/200);
         } else {
             f = -40;
         }
@@ -272,7 +272,7 @@ void MyGLWidget::lancerBoutonClicked()
                         yRot_+=2;
                     }
 
-                    if (pos_treb>=370)
+                    if (pos_treb<=370)
                     {
                         pos_treb+=3;
                     } else

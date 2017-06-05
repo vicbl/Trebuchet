@@ -38,8 +38,8 @@ void Webcam::runWebCam(){
    // namedWindow("Template image",1);
 
     // Definition of the template rectangle
-    int templateWidth=128;
-    int templateHeight=128;
+    int templateWidth=128*1.3;
+    int templateHeight=128*1.3;
     Rect templateRect((frameWidth-templateWidth)/2,2*(frameHeight-templateHeight)/3,templateWidth,templateHeight);
 
     // Acquisition of the template image
