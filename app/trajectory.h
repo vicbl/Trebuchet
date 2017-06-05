@@ -1,8 +1,10 @@
+//trajectory.h
+
 #ifndef Trajectory_H
 #define Trajectory_H
 
 
-/* classe : Trajectory
+/** classe : Trajectory
  * Ecrite par Victor Blanchard,
  * Gère le calcul et l'affichage de la trajectoire
  * future du boulet, avant son lancement

@@ -1,7 +1,9 @@
+//game.h
+
 #ifndef GAME_H
 #define GAME_H
 
-/* classe : game
+/** classe : game
  * Ecrite par Victor Blanchard,
  * Diverses améliorations par Louis Berger et Victor Blanchard
  * Gère le déroulement de la partie,
@@ -33,7 +35,7 @@ public:
     bool getCibleTouchee();
     int getScore();
     void newPostion();
-    int calculScore(float xPosBoulet, float zPosBoulet);
+    void calculScore(float xPosBoulet, float zPosBoulet);
 
 };
 

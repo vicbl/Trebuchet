@@ -1,8 +1,10 @@
+//webcam.h
+
 #ifndef WEBCAM_H
 #define WEBCAM_H
 
 
-/* classe : Webcam
+/** classe : Webcam
  * Ecrite par Victor Blanchard et Louis Berger
  * Génère une fenêtre d'acquisition de la webcam
  * Gère la position de la main et envoie des données en conséquence

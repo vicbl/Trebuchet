@@ -16,5 +16,6 @@
         <file>images/pelouse3.bmp</file>
         <file>images/pelouse4.bmp</file>
         <file>images/pelouse5.bmp</file>
+        <file>images/trebuchet.ico</file>
     </qresource>
 </RCC>

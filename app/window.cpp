@@ -48,6 +48,7 @@ Window::Window(QWidget *parent) :
     connect(this, SIGNAL(on_vueSuivie_stateChanged()), ui->myGLWidget, SLOT(vueChanged()));
     connect(this, SIGNAL(on_trajectory_stateChanged()), ui->myGLWidget, SLOT(trajectoryActived()));
     connect(this, SIGNAL(on_nightMode_stateChanged()), ui->myGLWidget, SLOT(nightModeActived()));
+    connect(this, SIGNAL(on_slowMode_stateChanged()), ui->myGLWidget, SLOT(slowModeActived()));
 }
 
 Window::~Window()

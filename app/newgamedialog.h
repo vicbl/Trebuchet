@@ -1,9 +1,11 @@
+//newgamedialog.h
+
 #ifndef NEWGAMEDIALOG_H
 #define NEWGAMEDIALOG_H
 #include<QString>
 #include <QDialog>
 
-/* classe : NewGameDialog
+/** classe : NewGameDialog
  * Ecrite par Victor Blanchard
  * Gère le contenu et les actions de la fenêtre de nouvelle partie
  */

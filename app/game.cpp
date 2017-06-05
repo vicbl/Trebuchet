@@ -2,7 +2,8 @@
 #include <cstdlib>
 #include <QDebug>
 #include <cmath>
-#include"math.h"
+#include "math.h"
+
 #define PI 3.14159265
 Game::Game(int difficulty)
 {
@@ -21,7 +22,7 @@ void Game::newPostion(){
     cibleTouchee_=false;
     max=difficulty_+1;
     min=-(difficulty_+1);
-    ciblePositionX_ = rand() % 3*((max-min) + 1) + 3*min;   // x in the range 0 to 10
+      ciblePositionX_ = rand() % 3*((max-min) + 1) + 3*min;   // x in the range 0 to 10
     ciblePositionY_ = rand() % (max-min + 1) + min;   // y in the range 0 to 10
     distanceTrebuchet_=22+14*difficulty_;   // Cibles générées entre : [[34/38] - [86-98]
     // Lancer possible du trébuchet: [33 - 102]
@@ -48,24 +49,24 @@ int Game::getNbTotalCibleTouchee(){
     return nbTotalCibleTouchee_;
 }
 
-int Game::calculScore(float xPosBoulet, float zPosBoulet){
+void Game::calculScore(float xPosBoulet, float zPosBoulet){
 
     float distanceCible=sqrt(pow((distanceTrebuchet_+ciblePositionY_),2)+pow(ciblePositionX_,2));
-    xPosBoulet=xPosBoulet-(distanceCible+1.7)+1.22;
-    /*qDebug()<<"xboulet = "<<xPosBoulet;
-    qDebug()<<"yboulet = "<<distanceCible;
-    qDebug()<<"zboulet = "<<zPosBoulet<< "yBouletZone cible = "<<zPosBoulet;*/
+    xPosBoulet=xPosBoulet-(distanceCible+2.4)+1.22;
+         /*qDebug()<<"yboulet = "<<distanceCible;
+    qDebug()<<"zboulet = "<<zPosBoulet<< "yBouletZone cible = "<<zPosBoulet;
+    */
 
-
-
-
+//xPosBoulet=1.22-fabs(xPosBoulet);
+ qDebug()<<"xboulet = "<<xPosBoulet;
+ qDebug()<<"zboulet = "<<zPosBoulet;
     /* float distance=10;
     int angle =100;
     float xBoulet= sin((180-angle)*PI/180)*distance;
-    float yBoulet= cos((180-angle)*PI/180)*distance;
-    /*qDebug()<<"Distance ="<<distance<<" Angle ="<<angle;
+    float yBoulet= cos((180-angle)*PI/180)*distance;**
+    qDebug()<<"Distance ="<<distance<<" Angle ="<<angle;
     qDebug()<<"Y théorique"<<yBoulet<<"xreel="<<(distanceTrebuchet_+ciblePositionY_);
-    qDebug()<<"X théorique"<<xBoulet<<"yreel="<<ciblePositionX_;
+    qDebug()<<"X théorique"<<xBoulet<<"yreel="<<ciblePositionX_;/*
 
 
     float yZoneCible=distanceTrebuchet_+ciblePositionY_-yBoulet;
@@ -109,12 +110,12 @@ int Game::calculScore(float xPosBoulet, float zPosBoulet){
 
 
     if (zPosBoulet<0.65){
+
         if (xPosBoulet<0.1 && xPosBoulet>-0.1) {
             score_=score_+10;
             cibleTouchee_=true;
             nbTotalCibleTouchee_++;
-        }
-        else if (xPosBoulet<0.2 && xPosBoulet>-0.2) {
+        } else if (xPosBoulet<0.2 && xPosBoulet>-0.2) {
             score_=score_+9;
             cibleTouchee_=true;
             nbTotalCibleTouchee_++;

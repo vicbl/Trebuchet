@@ -1,6 +1,6 @@
 // myglwidget.h
 
-/* Classe principale de gestion de l'affichage
+/** Classe principale de gestion de l'affichage
  * co-écrite par Louis Berger et Victor Blanchard,
  * Gère l'affichage des différents éléments de la fenêtre               (Victor+Louis)
  * Gère les actions sur les sliders                                     (Victor+Louis)
@@ -85,6 +85,7 @@ public slots:
     void vueChanged();
     void trajectoryActived();
     void nightModeActived();
+    void slowModeActived();
 
 signals:
     // signaling rotation from mouse movement
@@ -101,7 +102,7 @@ signals:
     void setScore(QString score);
     void setNbCibles(QString nbCibles);
 
-//Meilleurs scores
+    //Meilleurs scores
     void setBestName1(QString);
     void setBestName2(QString);
     void setBestName3(QString);
@@ -189,6 +190,7 @@ private:
     boolean vueSuivie_=true;
     boolean trajectory_=false;
     boolean nightMode_=false;
+    boolean slowMode_=false;
     QPoint lastPos_;
 
     //Variable du jeu

@@ -1,8 +1,9 @@
+//boulet.h
+
 #ifndef BOULET_H
 #define BOULET_H
 
-
-/* classe : Boulet
+/** classe : Boulet
  * Ecrite par Louis Berger,
  * Diverses améliorations par Louis Berger et Victor Blanchard
  * Gère la trajectoire du boulet après son lancer
@@ -16,8 +17,8 @@
 class Boulet
 {
 private:
-    GLfloat coord_y = 7.1; // hauteur
-    GLfloat coord_x = 1.7; // distance au trébuchet
+    GLfloat coord_y = 10.8; // hauteur
+    GLfloat coord_x = 2.4; // distance au trébuchet
     float v0;
     int axe = 180;
     float t = 0;
@@ -29,7 +30,7 @@ private:
 public:
     Boulet();
     void setTexture(Textures tex);
-    GLuint draw(Game * game_);
+    GLuint draw(Game * game_, bool slowMode);
     void reset();
 
 

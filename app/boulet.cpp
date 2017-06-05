@@ -26,11 +26,12 @@ void Boulet::setTexture(Textures tex){
     this->texturePierre_=tex.getTextures(12);
 }
 
-GLuint Boulet::draw(Game * game_)
+GLuint Boulet::draw(Game * game_, bool slowMode)
 {
 
     // Calcul des nouvelles coordonnées
     cibleTouchee_=game_->getCibleTouchee();
+    // qDebug()<<"cible toucheeeeeee"<<cibleTouchee_;
     if(!cibleTouchee_){
         float cosa = cos(PI*20/180);
         float sina = sin(PI*20/180);
@@ -44,13 +45,22 @@ GLuint Boulet::draw(Game * game_)
         {
             coord_x = newx;
             coord_y = newy;
-            t=t+1;
+            if(slowMode){
+                t=t+0.3;
+            }else{
+                t=t+1;
+            }
+            if (newy<3){
+                 game_->calculScore(coord_x,coord_y);
+            }
+
         } else
         {
             finTrajectoire = true;
-            coord_y = 0.2;
+
         }
-        game_->calculScore(newx,newy);
+
+
     }
 
 

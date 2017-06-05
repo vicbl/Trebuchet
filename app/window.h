@@ -4,7 +4,7 @@
 #define WINDOW_H
 
 
-/* classe : Window
+/** classe : Window
  * Ecrite par Victor Blanchard et Louis Berger
  * Génère l'interface graphique
  * Associe les action sur chaque bouton aux fonctions correspondante dans myGlWidget
@@ -43,6 +43,7 @@ signals:
     void on_vueSuivie_stateChanged();
     void on_trajectory_stateChanged();
     void on_nightMode_stateChanged();
+    void on_slowMode_stateChanged();
 
 private slots:
     void on_forceSlider_valueChanged(int value);

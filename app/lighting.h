@@ -1,7 +1,9 @@
+//lighting.h
+
 #ifndef LIGHTING_H
 #define LIGHTING_H
 
-/* classe : Lighting
+/** classe : Lighting
  * Ecrite par Victor Blanchard,
  * Génère une liste d'affichage d'un projecteur
  */

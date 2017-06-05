@@ -1,7 +1,9 @@
+//textures.h
+
 #ifndef TEXTURES_H
 #define TEXTURES_H
 
-/* classe : Textures
+/** classe : Textures
  * Ecrite par Victor Blanchard et Louis Berger
  * Charge les différentes textures utiles à la scène
  */

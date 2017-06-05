@@ -1,7 +1,9 @@
+//trebuchet.h
+
 #ifndef TREBUCHET_H
 #define TREBUCHET_H
 
-/* classe : Trebuchet
+/** classe : Trebuchet
  * Ecrite par Victor Blanchard et Louis Berger
  * Crée une liste affichant le trébuchet
  * on lui passe en paramètre la corde (calculée dans myGlWidget)

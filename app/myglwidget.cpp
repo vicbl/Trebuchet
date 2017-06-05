@@ -1,4 +1,3 @@
-
 // myglwidget.cpp
 
 #include <QtWidgets>
@@ -571,7 +570,7 @@ void MyGLWidget::startButton_clicked()
         setDifficulty( QString::number(difficulty_));
         setNbCibles(QString::number(nbTotalCible_));
         updateGL();
-        w_->runWebCam();
+       // w_->runWebCam();
 
     }
     qDebug()<<"start button";
@@ -658,6 +657,9 @@ void MyGLWidget::calculScores(){
     }
 
 }
+void MyGLWidget::slowModeActived(){
+    slowMode_=!slowMode_;
+}
 
 void MyGLWidget::nightMode(){
     GLfloat ambient[] = { 50.0, 50.0f, 50.0f, 50.0f };
@@ -732,19 +734,30 @@ void MyGLWidget::nightMode(){
     glEnable((GL_LIGHT3));
     glEnable((GL_LIGHT4));
     glEnable((GL_LIGHT5));
+
+
 }
 
 void MyGLWidget::nightModeActived(){
     nightMode_=!nightMode_;
-    updateGL();
+    if (nightMode_){
+        glClearColor(0.1f, 0.1375f, 0.25f, 0.0f);
+    }else{
+        glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
+    }
+      updateGL();
 }
 
 void MyGLWidget::draw()
 {
 
-    qglColor(Qt::white);
-
-    glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
+    if (nightMode_){
+        nightMode();
+        glClearColor(0.1f, 0.1375f, 0.25f, 0.0f);
+    }else{
+        glDisable((GL_LIGHTING));
+        glClearColor(0.4f, 0.55f, 1.0f, 0.0f);
+    }
 
     /*
     QTime myTimer;
@@ -753,16 +766,7 @@ void MyGLWidget::draw()
     qDebug("temps de PELOUSE' : %d", t5);
 */
 
-    if (nightMode_){
-        nightMode();
-    }else{
 
-        glDisable((GL_LIGHTING));
-        glDisable((GL_LIGHT0));
-        glDisable((GL_LIGHT1));
-        glDisable((GL_LIGHT2));
-        glDisable((GL_LIGHT3));
-    }
 
 
     drawCorde();
@@ -799,7 +803,7 @@ void MyGLWidget::draw()
         //************** Draw Boulet ****************
         if (bouletLance_&&start_)
         {
-            GLuint boulet=boulet_->draw(game_);
+            GLuint boulet=boulet_->draw(game_, slowMode_);
             glCallList(boulet);
         }
         //************ End Draw Boulet ***************
@@ -1113,7 +1117,7 @@ void MyGLWidget::drawCorde(){
         glTranslatef(0, 0, 1);
         gluCylinder(corde1_, 1, 1, 1, 10, 10);
 
-        glColor4f (.75, .55, .34, 0.8);
+        glColor3f (.75, .55, .34);
         glScalef( 1, 1, 0.5);
 
         glPushMatrix();
@@ -1145,7 +1149,6 @@ void MyGLWidget::drawCorde(){
                 glDisable(GL_TEXTURE_2D);
                 gluDeleteQuadric(bou);
             glPopMatrix();
-
         }
 
     glPopMatrix();

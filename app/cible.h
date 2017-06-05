@@ -1,8 +1,10 @@
+//cible.h
+
 #ifndef CIBLE_H
 #define CIBLE_H
 
 
-/* classe : Cible
+/** classe : Cible
  * Ecrite par Victor Blanchard
  * Crée une liste affichant une cible (texture)
  * avec deux pieds en bois

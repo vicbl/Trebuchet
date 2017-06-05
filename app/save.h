@@ -1,7 +1,9 @@
+//save.h
+
 #ifndef SAVE_H
 #define SAVE_H
 
-/* classe : Save
+/** classe : Save
  * Ecrite par Victor Blanchard
  * Sauvegarde les scores dans le fichier fileName
  * Permet de modifier et d'afficher les meilleurs scores
