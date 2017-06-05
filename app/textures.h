@@ -1,6 +1,11 @@
 #ifndef TEXTURES_H
 #define TEXTURES_H
 
+/* classe : Textures
+ * Ecrite par Victor Blanchard et Louis Berger
+ * Charge les différentes textures utiles à la scène
+ */
+
 #include <GL/glu.h>
 #include<QString>
 

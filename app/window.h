@@ -3,6 +3,22 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+
+/* classe : Window
+ * Ecrite par Victor Blanchard et Louis Berger
+ * Génère l'interface graphique
+ * Associe les action sur chaque bouton aux fonctions correspondante dans myGlWidget
+ * Associe les demande d'affichage de myGlWidget aux label de l'interface
+ * Gère les différents appuie sur les touches et le associe aux fonctions correspondantes de myGlWidget:
+ * A : zoom arrière
+ * E : zoom avant
+ * Z : rotation + autour de xScene (angle de vue de plongée)
+ * S : rotation - autour de xScene (angle de vue de plongée)
+ * Q : rotation horaire autour de zScene (angle de vue latérale)
+ * D : rotation trigonométrique autour de zScene (angle de vue latérale)
+ * C : Recentrage derrière le trébuchet
+ */
+
 #include <QWidget>
 #include <QSlider>
 

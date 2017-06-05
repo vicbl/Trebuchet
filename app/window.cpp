@@ -98,7 +98,7 @@ void Window::keyPressEvent(QKeyEvent *event)
         ui->myGLWidget-> updateGL();
     }
     // Recentrer derrière le trébuchet
-    if (event->key() == Qt::Key_X){
+    if (event->key() == Qt::Key_C){
         ui->myGLWidget->recentrer();
     }
 }

@@ -1,5 +1,13 @@
 #ifndef TREBUCHET_H
 #define TREBUCHET_H
+
+/* classe : Trebuchet
+ * Ecrite par Victor Blanchard et Louis Berger
+ * Crée une liste affichant le trébuchet
+ * on lui passe en paramètre la corde (calculée dans myGlWidget)
+ * et l'angle du levier de rotation
+ */
+
 #include "box.h"
 #include "textures.h"
 #include <GL/glu.h>

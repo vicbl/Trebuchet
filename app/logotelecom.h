@@ -1,6 +1,11 @@
 #ifndef LOGOTELECOM_H
 #define LOGOTELECOM_H
 
+/* classe : Logotelecom
+ * Ecrite par Victor Blanchard,
+ * Génère une liste affichant un panneau d'affichage "Telecom Saint Etienne"
+ */
+
 #include <GL/glu.h>
 #include "textures.h"
 class LogoTelecom

@@ -3,6 +3,11 @@
 #include<QString>
 #include <QDialog>
 
+/* classe : NewGameDialog
+ * Ecrite par Victor Blanchard
+ * Gère le contenu et les actions de la fenêtre de nouvelle partie
+ */
+
 namespace Ui {
 class NewGameDialog;
 }

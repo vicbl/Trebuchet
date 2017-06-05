@@ -307,7 +307,7 @@ void MyGLWidget::lancerBoutonClicked()
 
 void MyGLWidget::setForce(int angle)
 {
-    delay(6);
+    delay(2);
     qNormalizeAngle(angle);
     if (-20-angle/2 != yRot_ && !lancement_) {
         yRot_ = angle/2;
@@ -411,7 +411,7 @@ void MyGLWidget::setYRotation(int angle) // bascule trébuchet
 
 void MyGLWidget::setZRotation(int angle) // Axe
 {
-    delay(6);
+    delay(2);
     qNormalizeAngle(angle);
     if (angle != zRot_ && !lancement_) {
         zRot_ = angle;
