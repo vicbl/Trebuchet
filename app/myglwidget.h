@@ -1,5 +1,29 @@
 // myglwidget.h
 
+/* Classe principale de gestion de l'affichage
+ * co-écrite par Louis Berger et Victor Blanchard,
+ * Gère l'affichage des différents éléments de la fenêtre               (Victor+Louis)
+ * Gère les actions sur les sliders                                     (Victor+Louis)
+ * Gère les changements de position de la main à partir de la webcam    (Louis)
+ * Gère le temps d'actualisation de la caméra                           (Louis)
+ * Gère le lancement du boulet                                          (Louis)
+ * Gère les mouvements du levier et de la corde du trébuchet            (Louis)
+ * Gère les appels des différentes classes                              (Victor+Louis)
+ * Gère les timer et chrono                                             (Louis)
+ * Gère l'anticipation et l'affichage de la trajectoire du boulet       (Victor)
+ * Gère les différents angles de vue de la scène (touches Q,D,S,Z)      (Victor+Louis)
+ * Gère le zoom de la scène (touches A,E)                               (Victor+Louis)
+ * Gère les différents mouvements du trébuchet (force et axe)           (Victor+Louis)
+ * Gère la réinitialisation du trébuchet                                (Victor+Louis)
+ * Permet de recentrer la caméra derrière le trébuchet (touche C)       (Louis)
+ * Gère l'éclairage de la scène lorsqu'en mode nuit                     (Victor+Louis)
+ * Gère l'affichage des meilleurs scores                                (Victor)
+ * Gère l'action lors de l'appuie sur chaque bouton de l'interface      (Victor+Louis)
+ * Gère le calcul des scores et détecte la fin de partie                (Victor)
+ * Gère les angles de la courbure de la corde                           (Louis)
+ *
+ */
+
 #ifndef MYGLWIDGET_H
 #define MYGLWIDGET_H
 
@@ -146,13 +170,17 @@ private:
 
     //Light
     float posLight0_[4] = {-3.3f, -1.0f, 12.5f,1.0f};
-    float dirLight0_[4] = {0.0f, 0.4f,-1.0f};
+    float dirLight0_[4] = {0.1f, 0.4f,-1.0f};
     float posLight1_[4] = {3.3f, -1.0f, 12.5f,1.0f};
-    float dirLight1_[4] = {0.0f, 0.4f,-1.0f};
+    float dirLight1_[4] = {0.1f, 0.4f,-1.0f};
     float posLight2_[4] = {-21.0f, 24.0f, 12.5f,1.0f};
-    float dirLight2_[4] = {0.5f, 0.5f,-1.0f};
+    float dirLight2_[4] = {0.9f, 0.5f,-1.0f};
     float posLight3_[4] = {21.0f, 24.0f, 12.5f,1.0f};
-    float dirLight3_[4] = {-0.5f, 0.5f,-1.0f};
+    float dirLight3_[4] = {-0.9f, 0.5f,-1.0f};
+    float posLight4_[4] = {-31.0f, 64.0f, 12.5f,1.0f};
+    float dirLight4_[4] = {0.9f, 0.5f,-1.0f};
+    float posLight5_[4] = {31.0f, 64.0f, 12.5f,1.0f};
+    float dirLight5_[4] = {-0.9f, 0.5f,-1.0f};
 
 
     boolean bouletLance_;

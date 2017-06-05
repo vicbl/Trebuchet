@@ -1,6 +1,11 @@
 #ifndef GRID_H
 #define GRID_H
 
+/* classe : Grid
+ * Ecrite par Victor Blanchard,
+ * Génère une liste d'affichage du grillage de protection
+ */
+
 #include <GL/glu.h>
 #include "textures.h"
 

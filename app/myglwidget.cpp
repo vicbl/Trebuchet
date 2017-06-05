@@ -250,13 +250,13 @@ void MyGLWidget::lancerBoutonClicked()
                     } else if (pos_treb<266)
                     {
                         aller = false;
-                        yRot_-=2;
+                        yRot_-=3;
                     } else if (pos_treb<324)
                     {
-                        yRot_+=2;
+                        yRot_+=3;
                     } else if (pos_treb<370)
                     {
-                        yRot_-=2;
+                        yRot_-=3;
                     } else if (pos_treb<400)
                     {
                         yRot_+=2;
@@ -268,7 +268,7 @@ void MyGLWidget::lancerBoutonClicked()
                         yRot_+=2;
                     }
 
-                    if (aller)
+                    if (pos_treb>=370)
                     {
                         pos_treb+=3;
                     } else
@@ -478,6 +478,8 @@ void MyGLWidget::paintGL()
     glLightfv(GL_LIGHT1, GL_POSITION, posLight1_);
     glLightfv(GL_LIGHT2, GL_POSITION, posLight2_);
     glLightfv(GL_LIGHT3, GL_POSITION, posLight3_);
+    glLightfv(GL_LIGHT4, GL_POSITION, posLight4_);
+    glLightfv(GL_LIGHT5, GL_POSITION, posLight5_);
     draw();
 }
 
@@ -666,7 +668,7 @@ void MyGLWidget::nightMode(){
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,0.2);
 
-    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF,45.0);
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF,50.0);
     glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dirLight0_);
     glLightf(GL_LIGHT0, GL_SPOT_EXPONENT,2.0);
 
@@ -677,7 +679,7 @@ void MyGLWidget::nightMode(){
     glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION,0.2);
 
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF,45.0);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF,50.0);
     glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dirLight1_);
     glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,2.0);
 
@@ -687,7 +689,7 @@ void MyGLWidget::nightMode(){
     glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION,0.2);
 
-    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF,48.0);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF,80.0);
     glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dirLight2_);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,2.0);
 
@@ -697,9 +699,29 @@ void MyGLWidget::nightMode(){
     glLightf(GL_LIGHT3, GL_LINEAR_ATTENUATION,0.8);
     glLightf(GL_LIGHT3, GL_QUADRATIC_ATTENUATION,0.2);
 
-    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF,48.0);
+    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF,80.0);
     glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, dirLight3_);
     glLightf(GL_LIGHT3, GL_SPOT_EXPONENT,2.0);
+
+    //Configure light 4
+    glLightfv(GL_LIGHT4, GL_AMBIENT, ambient);
+    glLightf(GL_LIGHT4, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT4, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT4, GL_QUADRATIC_ATTENUATION,0.2);
+
+    glLightf(GL_LIGHT4, GL_SPOT_CUTOFF,80.0);
+    glLightfv(GL_LIGHT4, GL_SPOT_DIRECTION, dirLight4_);
+    glLightf(GL_LIGHT4, GL_SPOT_EXPONENT,2.0);
+
+    //Configure light 5
+    glLightfv(GL_LIGHT5, GL_AMBIENT, ambient);
+    glLightf(GL_LIGHT5, GL_CONSTANT_ATTENUATION,2.5);
+    glLightf(GL_LIGHT5, GL_LINEAR_ATTENUATION,0.8);
+    glLightf(GL_LIGHT5, GL_QUADRATIC_ATTENUATION,0.2);
+
+    glLightf(GL_LIGHT5, GL_SPOT_CUTOFF,80.0);
+    glLightfv(GL_LIGHT5, GL_SPOT_DIRECTION, dirLight5_);
+    glLightf(GL_LIGHT5, GL_SPOT_EXPONENT,2.0);
 
 
     //Enable all lights
@@ -708,6 +730,8 @@ void MyGLWidget::nightMode(){
     glEnable((GL_LIGHT1));
     glEnable((GL_LIGHT2));
     glEnable((GL_LIGHT3));
+    glEnable((GL_LIGHT4));
+    glEnable((GL_LIGHT5));
 }
 
 void MyGLWidget::nightModeActived(){
@@ -879,6 +903,16 @@ void MyGLWidget::draw()
         glPopMatrix();
         glPushMatrix();
             glTranslatef(20,25,0);
+            glRotatef(45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(-30,65,0);
+            glRotatef(-45,0,0,1);
+            glCallList(light_->getCompleteLighting());
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(30,65,0);
             glRotatef(45,0,0,1);
             glCallList(light_->getCompleteLighting());
         glPopMatrix();

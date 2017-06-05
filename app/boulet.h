@@ -1,6 +1,15 @@
 #ifndef BOULET_H
 #define BOULET_H
 
+
+/* classe : Boulet
+ * Ecrite par Louis Berger,
+ * Diverses améliorations par Louis Berger et Victor Blanchard
+ * Gère la trajectoire du boulet après son lancer
+ * Crée une liste affichant le boulet lors de sa course et après son atterissage
+ */
+
+
 #include <GL/glu.h>
 #include "textures.h"
 #include "game.h"

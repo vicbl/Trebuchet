@@ -1,6 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
+/* classe : game
+ * Ecrite par Victor Blanchard,
+ * Diverses améliorations par Louis Berger et Victor Blanchard
+ * Gère le déroulement de la partie,
+ * Détermine si le boulet touche la cible
+ * Calcul le score en conséquence
+ * Envoie le signal de fin de partie
+ * Compte le nombre de cible touchées et le nombre de cibles restantes
+ */
+
 #include <QString>
 class Game
 {

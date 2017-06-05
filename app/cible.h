@@ -1,6 +1,13 @@
 #ifndef CIBLE_H
 #define CIBLE_H
 
+
+/* classe : Cible
+ * Ecrite par Victor Blanchard
+ * Crée une liste affichant une cible (texture)
+ * avec deux pieds en bois
+ */
+
 #include "box.h"
 #include "textures.h"
 
