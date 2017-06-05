@@ -145,8 +145,8 @@ void Webcam::runWebCam(){
 
                 /*
                  * pour une webcam 640x480
-                 * x -> 510
-                 * y -> 350
+                 * x -> 465
+                 * y -> 310
                  *
                  */
                 if (fabs(xTemp-xPrev)<40){ // si trop grand décalage en x on modifie pas la position
@@ -155,14 +155,15 @@ void Webcam::runWebCam(){
 
                     setxPostion(xTemp);
                     setyPostion(yTemp);
-                    if (xPrev && yPrev && yPosition_-yPrev>50 && ordreLancer_ == false)
+                    if (xPrev && yPrev && yPosition_-yPrev>40 && ordreLancer_ == false)
                     {
                         ordreLancer_ = true;
                         xPrev=xInit;
                         yPrev=yInit;
                     }
+                    qDebug() << xPosition_ << " ++++ " << yPosition_;
 
-                    if (xPosition_>500 && yPosition_>330)
+                    if (xPosition_>455 && yPosition_>300)
                     {
                         active_ = false;
                         ordreFermer_=true;
