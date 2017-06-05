@@ -133,9 +133,18 @@ void Webcam::runWebCam(){
             }
             //*****Si pour 30 image de suite l'objet détecté descend on active la détection
             if (templateOk==false){
+                putText(frame, "Placer votre main dans le rectangle rouge,", cvPoint(10,20),
+                        FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                putText(frame, "attendez que celui ci devienne turquoise.", cvPoint(10,40),
+                        FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+
                 rectangle(frame,templateRect,Scalar( 0, 0, 255),2,8,0);
             }
             else if(counterDetection<30) {
+                putText(frame, "Deplacer lentement votre main vers le bas", cvPoint(10,20),
+                        FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255,255,0), 1, CV_AA);
+                putText(frame, "jusqu'a ce que le rectangle devienne vert.", cvPoint(10,40),
+                        FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255,255,0), 1, CV_AA);
                 rectangle(frame,resultRect,Scalar( 255, 255, 0),2,8,0);
                 setxPostion(xTemp);
                 setyPostion(yTemp);
@@ -151,6 +160,9 @@ void Webcam::runWebCam(){
                  */
                 if (fabs(xTemp-xPrev)<40){ // si trop grand décalage en x on modifie pas la position
                     rectangle(frame,resultRect,Scalar( 0, 255, 0),2,8,0);
+                    putText(frame, "Deplacement rapide vers le bas pour tirer.", cvPoint(10,20),
+                            FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,255,0), 1, CV_AA);
+
                     //Modifier position trebuchet
 
                     setxPostion(xTemp);
@@ -161,7 +173,7 @@ void Webcam::runWebCam(){
                         xPrev=xInit;
                         yPrev=yInit;
                     }
-                    qDebug() << xPosition_ << " ++++ " << yPosition_;
+                    //qDebug() << xPosition_ << " ++++ " << yPosition_;
 
                     if (xPosition_>455 && yPosition_>300)
                     {
