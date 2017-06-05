@@ -6,7 +6,7 @@
 
 using namespace std;
 Save::Save(QString fileName){
-   this->fileName_ =fileName;
+    this->fileName_ =fileName;
 }
 
 void Save::saveBest(int score, int difficulty, QString playerName){

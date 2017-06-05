@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     Window window;
     window.resize(window.sizeHint());
     int desktopArea = QApplication::desktop()->width() *
-                     QApplication::desktop()->height();
+            QApplication::desktop()->height();
     int widgetArea = window.width() * window.height();
     window.setWindowIcon(QIcon(":/images/trebuchet.png"));
     window.setWindowTitle("Trébuchet");

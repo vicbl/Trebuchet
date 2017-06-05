@@ -158,14 +158,8 @@ GLuint pelouse1 = glGenLists(1);
         }
         glPopMatrix();
     glEndList();
-    /*glDeleteLists(pelouse1,1);
-    glDeleteLists(pelouse2,1);
-    glDeleteLists(pelouse3,1);
-    glDeleteLists(pelouse4,1);
-    glDeleteLists(pelouse5,1);*/
-
-
 }
+
 GLuint Pelouse::getPelouse(){
     return pelouse_;
 }

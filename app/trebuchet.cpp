@@ -167,7 +167,7 @@ GLuint Trebuchet::draw(GLuint corde,int levierRotation){
     glDeleteLists(levierBois, 1);
     glDeleteLists(boxBois, 1);
     glDeleteLists(contrePoids, 1);
-     glDeleteLists(roulette, 1);
+    glDeleteLists(roulette, 1);
 
 
 }

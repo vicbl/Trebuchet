@@ -56,8 +56,6 @@ void Lighting::draw(){
             glPopMatrix();
         glPopMatrix();
     glEndList();
-    //delete a;
-   // delete b;
 }
 
 

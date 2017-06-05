@@ -107,9 +107,8 @@ void LogoTelecom::draw(){
             //***********End Banderole***********
         glPopMatrix();
     glEndList();
-    //return completeLogoTelecom_;
-    //delete a;
 }
+
 GLuint LogoTelecom::getCompleteLogoTelecom(){
     return completeLogoTelecom_;
 }

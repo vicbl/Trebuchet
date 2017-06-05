@@ -53,14 +53,10 @@ GLuint Boulet::draw(Game * game_, bool slowMode)
             if (newy<3){
                  game_->calculScore(coordX_,coordY_);
             }
-
         } else
         {
             finTrajectoire_ = true;
-
         }
-
-
     }
 
 

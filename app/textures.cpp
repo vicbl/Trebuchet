@@ -39,7 +39,6 @@ Textures::Textures()
         if( ! img.load(chemin[i]) )
         {
             std::cerr << "error loading " <<  std::endl ;
-            exit( 1 );
         }
 
         QImage GL_formatted_image;
@@ -47,11 +46,8 @@ Textures::Textures()
         if( GL_formatted_image.isNull() )
         {
             std::cerr << "error GL_formatted_image" << std::endl ;
-            //   exit( 1 );
         }
 
-
-        // glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_[i]);
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA,
                       GL_formatted_image.width(), GL_formatted_image.height(),
