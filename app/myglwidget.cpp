@@ -84,7 +84,12 @@ void MyGLWidget::setValue()
          */
 
         int z = 260-int(w_->getxPosition()*160.0/510);
-        int f = int(w_->getyPosition()*(-40.0)/350);
+        int f;
+        if (w_->getyPosition()<250) {
+            f = int(w_->getyPosition()*(-40.0)/250);
+        } else {
+            f = -40;
+        }
         bool lancer = w_->getOrdreLancer();
         if(!lancer)
         {
