@@ -69,7 +69,7 @@ void LogoTelecom::draw(){
     drawPartUJM();
 
     Box *a=new  Box(1,1,1, this->textureBois_);
-    boxBois=a->getCompleteBox();
+    boxBois_=a->getCompleteBox();
     completeLogoTelecom_ = glGenLists(1);
     glNewList(completeLogoTelecom_, GL_COMPILE);
 
@@ -79,12 +79,12 @@ void LogoTelecom::draw(){
                 glPushMatrix();
                     glTranslatef( 0.525, 0, 0);
                     glScalef( .06 ,.06 ,1);
-                    glCallList(boxBois);
+                    glCallList(boxBois_);
                     glPopMatrix();
                     glPushMatrix();
                     glTranslatef( -0.525,0, 0);
                     glScalef( .06 ,.06 ,1);
-                    glCallList(boxBois);
+                    glCallList(boxBois_);
                 glPopMatrix();
             glPopMatrix();
             //***********End Support***********

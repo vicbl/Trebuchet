@@ -17,13 +17,13 @@
 class Boulet
 {
 private:
-    GLfloat coord_y = 10.8; // hauteur
-    GLfloat coord_x = 2.4; // distance au trébuchet
-    float v0;
-    int axe = 180;
-    float t = 0;
-    bool finTrajectoire = false;
-    GLuint boulet;
+    GLfloat coordY_= 10.8; // hauteur
+    GLfloat coordX_ = 2.4; // distance au trébuchet
+    float v0_;
+    int axe_ = 180;
+    float t_ = 0;
+    bool finTrajectoire_ = false;
+    GLuint boulet_;
     GLuint texturePierre_;
     bool cibleTouchee_=false;
 

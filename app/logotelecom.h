@@ -19,7 +19,7 @@ private:
     GLuint textureTSE_;
     GLuint textureUJM_;
     GLuint completeLogoTelecom_;
-    GLuint boxBois;
+    GLuint boxBois_;
     void drawPartUJM();
     void drawPartTSE();
 

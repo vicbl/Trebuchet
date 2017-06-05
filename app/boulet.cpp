@@ -11,16 +11,16 @@ Boulet::Boulet()
 
 }
 
-float Boulet::get_x() {return (float)coord_x;}  // Boulet entre 33 et 102
-float Boulet::get_y() {return (float)coord_y;}
+float Boulet::get_x() {return (float)coordX_;}  // Boulet entre 33 et 102
+float Boulet::get_y() {return (float)coordY_;}
 
-void Boulet::set_y(float y){coord_y=y;}
-void Boulet::set_x(float x){coord_x=x;}
+void Boulet::set_y(float y){coordY_=y;}
+void Boulet::set_x(float x){coordX_=x;}
 
-bool Boulet::getFin(){return finTrajectoire;}
+bool Boulet::getFin(){return finTrajectoire_;}
 
-void Boulet::set_v0(float v){v0=v;}
-void Boulet::set_axe(int a){axe=a;}
+void Boulet::set_v0(float v){v0_=v;}
+void Boulet::set_axe(int a){axe_=a;}
 
 void Boulet::setTexture(Textures tex){
     this->texturePierre_=tex.getTextures(12);
@@ -37,26 +37,26 @@ GLuint Boulet::draw(Game * game_, bool slowMode)
         float sina = sin(PI*20/180);
 
 
-        float newx = 2.4 + v0*cosa*t;               // x = x0 + v0*cos(a)*t
-        float newy = 10.8 + v0*sina*t-.02*pow(t,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
+        float newx = 2.4 + v0_*cosa*t_;               // x = x0 + v0*cos(a)*t
+        float newy = 10.8 + v0_*sina*t_-.02*pow(t_,2);     // y = y0 + v0*sin(a)*t + 1/2*g*t²
 
 
-        if(newy>0 && !finTrajectoire )
+        if(newy>0 && !finTrajectoire_ )
         {
-            coord_x = newx;
-            coord_y = newy;
+            coordX_ = newx;
+            coordY_ = newy;
             if(slowMode){
-                t=t+0.3;
+                t_=t_+0.3;
             }else{
-                t=t+1;
+                t_=t_+1;
             }
             if (newy<3){
-                 game_->calculScore(coord_x,coord_y);
+                 game_->calculScore(coordX_,coordY_);
             }
 
         } else
         {
-            finTrajectoire = true;
+            finTrajectoire_ = true;
 
         }
 
@@ -64,14 +64,14 @@ GLuint Boulet::draw(Game * game_, bool slowMode)
     }
 
 
-    // qDebug() << "Boulet : " << coord_x << " / " << coord_y;
+    // qDebug() << "Boulet : " << coordX_ << " / " << coordY_;
 
 
-    boulet = glGenLists(1);
-    glNewList(boulet, GL_COMPILE);
+    boulet_ = glGenLists(1);
+    glNewList(boulet_, GL_COMPILE);
     glPushMatrix();
-    glRotatef(axe-180, 0, 0, 1);
-    glTranslatef(0, coord_x, coord_y);
+    glRotatef(axe_-180, 0, 0, 1);
+    glTranslatef(0, coordX_, coordY_);
     //glColor3f(.55, .55, .55);
 
     glEnable(GL_TEXTURE_2D);
@@ -82,7 +82,7 @@ GLuint Boulet::draw(Game * game_, bool slowMode)
     gluSphere(bou, 3, 10, 10);
     gluDeleteQuadric(bou);
     glDisable(GL_TEXTURE_2D);
-    if(finTrajectoire)
+    if(finTrajectoire_)
     {
         glTranslatef(0, 0, -1.9);
         glColor3f(1, 0, 0);
@@ -101,16 +101,16 @@ GLuint Boulet::draw(Game * game_, bool slowMode)
 
     glEndList();
 
-    return boulet;
-    glDeleteLists(boulet,1);
+    return boulet_;
+    glDeleteLists(boulet_,1);
 }
 
 void Boulet::reset()
 {
-    t = 0;
-    coord_x = 2.4;
-    coord_y = 10.8;
-    axe = 180;
-    finTrajectoire = false;
+    t_ = 0;
+    coordX_ = 2.4;
+    coordY_ = 10.8;
+    axe_ = 180;
+    finTrajectoire_ = false;
     cibleTouchee_=false;
 }

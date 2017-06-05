@@ -14,7 +14,7 @@
 class Pelouse
 {
 private:
-    int temp[1000][1000];
+    int texAleatoire_[1000][1000];
     GLuint pelouse_;
     GLuint texturePelouse1_;
     GLuint texturePelouse2_;

@@ -10,7 +10,7 @@ Pelouse::Pelouse()
     {
         for (int ligne=0; ligne<10; ligne++)
         {
-                 temp[colonne][ligne] = rand() % (5);
+                 texAleatoire_[colonne][ligne] = rand() % (5);
         }
     }
 }
@@ -30,13 +30,7 @@ void Pelouse::setTexture(Textures tex){
 
 void Pelouse::draw(){
      qDebug()<<"Draw Pelouse";
-    int MAP_Y=500;
-    int MAP_X=500;
-
-
-
-
-    GLuint pelouse1 = glGenLists(1);
+GLuint pelouse1 = glGenLists(1);
     glNewList(pelouse1, GL_COMPILE);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, this->texturePelouse1_);
@@ -145,15 +139,15 @@ void Pelouse::draw(){
             {
                 glPushMatrix();
                     glTranslatef(1*ligne,1*colonne,0);
-                    if ( temp[colonne][ligne]==0){
+                    if ( texAleatoire_[colonne][ligne]==0){
                         glCallList(pelouse1);
-                    }else if( temp[colonne][ligne]==1){
+                    }else if( texAleatoire_[colonne][ligne]==1){
                         glCallList(pelouse2);
                     }
-                    else if( temp[colonne][ligne]==2){
+                    else if( texAleatoire_[colonne][ligne]==2){
                         glCallList(pelouse3);
                     }
-                    else if( temp[colonne][ligne]==3){
+                    else if( texAleatoire_[colonne][ligne]==3){
                         glCallList(pelouse4);
                     }
                     else {

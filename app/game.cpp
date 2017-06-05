@@ -58,8 +58,8 @@ void Game::calculScore(float xPosBoulet, float zPosBoulet){
     */
 
 //xPosBoulet=1.22-fabs(xPosBoulet);
- qDebug()<<"xboulet = "<<xPosBoulet;
- qDebug()<<"zboulet = "<<zPosBoulet;
+/* qDebug()<<"xboulet = "<<xPosBoulet;
+ qDebug()<<"zboulet = "<<zPosBoulet;*/
     /* float distance=10;
     int angle =100;
     float xBoulet= sin((180-angle)*PI/180)*distance;
