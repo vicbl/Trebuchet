@@ -570,7 +570,7 @@ void MyGLWidget::startButton_clicked()
         setDifficulty( QString::number(difficulty_));
         setNbCibles(QString::number(nbTotalCible_));
         updateGL();
-       // w_->runWebCam();
+        w_->runWebCam();
 
     }
     qDebug()<<"start button";

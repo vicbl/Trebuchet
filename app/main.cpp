@@ -2,7 +2,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-
+#include <QIcon>
 #include "window.h"
 
 int main(int argc, char *argv[])
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     int desktopArea = QApplication::desktop()->width() *
                      QApplication::desktop()->height();
     int widgetArea = window.width() * window.height();
-
+    window.setWindowIcon(QIcon(":/images/trebuchet.ico"));
     window.setWindowTitle("Trébuchet");
 
     if (((float)widgetArea / (float)desktopArea) < 0.75f)

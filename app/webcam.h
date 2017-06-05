@@ -11,7 +11,7 @@
  * Fermeture de la fenêtre lors du placement de la main en bas à droite de l'écran
  * Rectangle rouge: acquisition
  * Rectagle turquoise: demande de validation de la main
- * (actif lorsque la main reste plus de 50 image d'affilé sur le ractangle rouge)
+ * (actif lorsque la main reste plus de 50 image d'affilé sur le rectangle rouge)
  * Si abaissement de la main détectée dans le rectangle turquoise: main validée
  * Rectangle vert: main validée, attente des ordres
  * Rectangle jaune: erreur de détection: replacer la main à la position précédente
