@@ -243,7 +243,7 @@ void MyGLWidget::lancerBoutonClicked()
         bool aller = true;
         while (pos_treb<420)
                 {
-                    if (pos_treb<172)
+                    if (pos_treb<170)
                     {
                         yRot_+=3;
                         if (yRot_ >= 110)

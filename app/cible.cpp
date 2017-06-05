@@ -22,6 +22,7 @@ void Cible::drawPart(){
     cible_ = glGenLists(1);
     glNewList(cible_, GL_COMPILE);
         glPushMatrix();
+            glScaled(2,2,2);
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, this->textureCible_);
             glBegin(GL_QUADS);
@@ -35,6 +36,7 @@ void Cible::drawPart(){
             glVertex3f(0,1,0);
             glEnd();
             glDisable(GL_TEXTURE_2D);
+            glScaled(.5,.5,.5);
         glPopMatrix();
     glEndList();
    // glDeleteLists(cible_, 1);
