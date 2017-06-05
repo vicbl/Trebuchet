@@ -35,7 +35,7 @@ void Webcam::runWebCam(){
 
     // Init the display window
     namedWindow("WebCam",1);
-   // namedWindow("Template image",1);
+    // namedWindow("Template image",1);
 
     // Definition of the template rectangle
     int templateWidth=128*1.3;
@@ -89,7 +89,7 @@ void Webcam::runWebCam(){
                 minMaxLoc( resultImage, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
 
                 // Show image
-            //    imshow("Template image", templateImage);
+                //    imshow("Template image", templateImage);
 
 
                 //si on reste bloqué
@@ -186,7 +186,13 @@ void Webcam::runWebCam(){
                     xPrev = xPosition_;
                     yPrev = yPosition_;
                 }else{
-                      rectangle(frame,resultRect,Scalar( 0, 255, 255),2,8,0);
+                    putText(frame, "x", cvPoint((xPrev+templateWidth/2),(yPrev+templateHeight/2)),
+                            FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,255,0), 1, CV_AA);
+                    rectangle(frame,resultRect,Scalar( 0, 255, 255),2,8,0);
+                    putText(frame, "Revenez sur la croix verte jusqu'a que", cvPoint(10,20),
+                            FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,255,255), 1, CV_AA);
+                    putText(frame, "le rectangle repasse au vert.", cvPoint(10,40),
+                            FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,255,255), 1, CV_AA);
                 }
 
             }
