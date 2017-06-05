@@ -17,15 +17,17 @@
 class Boulet
 {
 private:
+    // coordX_ et coordY_ sont les coordonnées du boulet
     GLfloat coordY_= 10.8; // hauteur
     GLfloat coordX_ = 2.4; // distance au trébuchet
-    float v0_;
-    int axe_ = 180;
+    float v0_; // vitesse initiale lors du lancer du boulet
+    int axe_ = 180; // angle de direction du lancer
     float t_ = 0;
-    bool finTrajectoire_ = false;
-    GLuint boulet_;
+    bool finTrajectoire_ = false; // Permet de détecter quand le boulet atteint le sol
+    GLuint boulet_; // List contenant le boulet
     GLuint texturePierre_;
-    bool cibleTouchee_=false;
+    bool cibleTouchee_=false; // Permet de savoir si la cible à été touchée par le boulet
+
 
 public:
     Boulet();

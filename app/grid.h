@@ -15,13 +15,13 @@ class Grid
 {
 private:
     void drawGridPart();
-    double width_;//width of the grid between 0 and 1
+    double width_; //epaisseur du grillage entre 0 et 1
     int nbLines_;
     int nbColumns_;
     GLuint texturePilier_;
     GLuint gridPart_;
     GLuint pilier_;
-    GLuint completeGrid_;
+    GLuint completeGrid_; // List contenant le grillage former des pilier et d'une grille de nbLines_ et nbColumns
 
 
 

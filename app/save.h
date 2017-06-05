@@ -18,7 +18,7 @@ private:
 
 public:
     Save(QString fileName);
-    void saveBest(int score, int difficulty, QString playerName);
+    void saveBest(int score, int difficulty, QString playerName); //On sauvegarde le score à la fin de la partie dans un fichier texte
     QString getBestName(int difficulty);
     int getBestScore(int difficulty);
 };

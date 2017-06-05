@@ -18,7 +18,7 @@ private:
     GLuint textureBois_;
     GLuint textureTSE_;
     GLuint textureUJM_;
-    GLuint completeLogoTelecom_;
+    GLuint completeLogoTelecom_; // List contenant un panneau d'affichage
     GLuint boxBois_;
     void drawPartUJM();
     void drawPartTSE();

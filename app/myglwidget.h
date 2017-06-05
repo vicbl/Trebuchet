@@ -58,15 +58,15 @@ public:
     void setYScene(int y);
     void setZScene(int z);
     void setZoomScene(int zoom);
+
     void calculScores();
     void recentrer();
     bool getStarted(){return start_;}
 
 protected:
-    void initializeGL();
+    void initializeGL(); // ¨Permet d'initialiser la scène 3D
     void paintGL();
     void resizeGL(int width, int height);
-    //void keyPressEvent ( QKeyEvent * event );
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
@@ -80,21 +80,22 @@ public slots:
     void lancerBoutonClicked();
 
 
-    void startButton_clicked();
+    void startButton_clicked(); // bouton start pour lancer une partie
     void setValue();
-    void vueChanged();
-    void trajectoryActived();
-    void nightModeActived();
-    void slowModeActived();
+    void vueChanged(); // Activé ou non la vue de suivie du boulet
+    void trajectoryActived(); // Activé ou non la trajectoire du boulet
+    void nightModeActived(); // Activé ou non le mode nuit du boulet + gestion de l'éclairage
+    void slowModeActived(); // Activé ou non la vue de suivie du boulet au ralenti
 
 signals:
     // signaling rotation from mouse movement
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+    void forceChanged(int angle); // Modifier la force de lancer
 
-    void on_jouer_clicked(int);
-    void forceChanged(int angle);
+
+    //Modifier les paramètres de l'interface "Partie en cours"
     void chrono1Refresh(QString tpPartie);
     void chrono2Refresh(QString tpTotal);
     void setName(QString name);
@@ -102,7 +103,7 @@ signals:
     void setScore(QString score);
     void setNbCibles(QString nbCibles);
 
-    //Meilleurs scores
+    //Modifier les paramètres de l'interface "Meilleurs scores"
     void setBestName1(QString);
     void setBestName2(QString);
     void setBestName3(QString);
@@ -115,14 +116,14 @@ signals:
     void setBestScore4(QString);
     void setBestScore5(QString);
 
-    void disableButton(bool);
+    void disableButton(bool); // Désactive le bouton "Lancer" tant qu'une partie n'est pas commencée
+
 private:
     void draw();
-    // void loadTextures();
     void reInitialize();
-
     void nightMode();
     void drawCorde();
+
 
     void setBestScores();
 
@@ -137,37 +138,36 @@ private:
     int yRot_;   // angle du levier
     int zRot_;
 
-    int force_;
-    Webcam *w_;
+    int force_;  // force pour le lancer du boulet
 
     int xBoulet_;
     int yBoulet_;
 
-    QTime tempsPartie_;
-    QTime tempsTotal_;
+    // Variable pour dessiner la corde
     int angle_;
-
     double angle1_;
     double angle2_;
     double angle3_;
     double angle4_;
     double angle5_;
-
-
     GLuint corde_;
+    GLUquadric* corde1_;
+
     GLuint texturePierre_;
 
 
-    Pelouse * pelouse_;
-    Cible * cible_;
     Boulet* boulet_;
-    LogoTelecom * logoTelecom_;
-    Trebuchet *trebuchet_;
+    Cible * cible_;
     Grid *grid_;
-    Trajectory *traj_;
     Lighting *light_;
+    LogoTelecom * logoTelecom_;
+    Pelouse * pelouse_;
+    Save *save_;
+    Trajectory *traj_;
+    Trebuchet *trebuchet_;
+    Webcam *w_;
 
-    GLUquadric* corde1_;
+
 
     //Light
     float posLight0_[4] = {-3.3f, -1.0f, 12.5f,1.0f};
@@ -191,7 +191,7 @@ private:
     boolean trajectory_=false;
     boolean nightMode_=false;
     boolean slowMode_=false;
-    QPoint lastPos_;
+
 
     //Variable du jeu
     Game *game_;
@@ -205,7 +205,11 @@ private:
     int nbCibleTouchee_=0;
     int nbCiblePassee_=0;
     int compteurEssai_=0;
-    Save *save_;
+
+
+    QTime tempsPartie_;
+    QTime tempsTotal_;
+
 };
 
 #endif // MYGLWIDGET_H

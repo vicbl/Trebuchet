@@ -15,7 +15,7 @@
 class Lighting
 {
 private:
-    GLuint lighting_;
+    GLuint lighting_; // List contenant un projecteur
     GLuint textureCiment_;
     GLuint textureProjecteur_;
 

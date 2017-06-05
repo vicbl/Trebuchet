@@ -20,7 +20,7 @@ private:
     GLuint texturePierre_;
     GLuint textureLevier_;
     GLuint textureContrePoids_;
-    GLuint completeTrebuchet_;
+    GLuint completeTrebuchet_; // List contenant le trébuchet
 
 public:
     Trebuchet();

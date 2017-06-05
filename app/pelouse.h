@@ -14,7 +14,7 @@
 class Pelouse
 {
 private:
-    int texAleatoire_[1000][1000];
+    int texAleatoire_[1000][1000];//tableau contenant le numéro de la texture a afficher
     GLuint pelouse_;
     GLuint texturePelouse1_;
     GLuint texturePelouse2_;

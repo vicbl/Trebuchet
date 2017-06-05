@@ -32,10 +32,10 @@ class Webcam
 private:
     int xPosition_=0;
     int yPosition_=0;
-    bool detection_=false;
-    bool active_=false;
-    bool ordreLancer_=false;
-    bool ordreFermer_ = false;
+    bool detection_=false;      //Savoir si la main est détecté
+    bool active_=false;         //Savoir si la webCam est active (utile pour myGLWidget)
+    bool ordreLancer_=false;    //Savoir si le lancement doit être effectuer
+    bool ordreFermer_ = false;  //Savoir si on doit fermer la fenêtre de la webcam
 
 public:
     Webcam();
@@ -44,12 +44,15 @@ public:
     bool getOrdreLancer();
     void setOrdreLancer(bool ol);
     bool getActive();
+
+    // Principale méthode de la classe qui permet de détecter la main et modifier les variables
+    // xPosition et yPositon pour ineragir avec le trebuchet
     void runWebCam();
+
     void setxPostion(int x);
     void setyPostion(int y);
 
     void setOrdreFermer(bool fermer);
-
 };
 
 #endif // WEBCAM_H
